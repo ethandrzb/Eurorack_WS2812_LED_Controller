@@ -24,6 +24,7 @@
 #include "../../Drivers/ssd1306/ssd1306.h"
 #include <stdio.h>
 #include "WS2812.h"
+#include "WS2812FX.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -218,24 +219,8 @@ int main(void)
 	ssd1306_UpdateScreen();
 
 	// Basic LED effect
-	for(int i = 0; i < 128; i++)
-	{
-		for(int led = 0; led < NUM_LOGICAL_LEDS; led++)
-		{
-			WS2812_SetLED(led, i, i, i);
-		}
-		WS2812_SendAll();
-		HAL_Delay(10);
-	}
-	for(int i = 128; i >= 0; i--)
-	{
-		for(int led = 0; led < NUM_LOGICAL_LEDS; led++)
-		{
-			WS2812_SetLED(led, i, i, i);
-		}
-		WS2812_SendAll();
-		HAL_Delay(10);
-	}
+	WS2812FX_SimpleBreathingEffect();
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
