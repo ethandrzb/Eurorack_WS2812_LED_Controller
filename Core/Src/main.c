@@ -77,11 +77,33 @@ static void MX_TIM2_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_SPI3_Init(void);
 /* USER CODE BEGIN PFP */
-
+void updateMenu();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+void updateMenu()
+{
+	// Show LED states on screen
+	for(uint8_t i = 0; i < 4; i++)
+	{
+	  // Display menu item
+	  uint8_t y = i * 12 + 18;
+	  ssd1306_SetCursor(1, y);
+	  sprintf(OLED_buffer, "%d: LED %d state", i, i);
+
+	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
+	  ssd1306_DrawRectangle(0, y - 1, 99, y + 9, ((i == LEDIndex) && (menu_layer == ROOT)) ? White : Black);
+
+	  // Display item value
+	  ssd1306_SetCursor(100, y);
+	  sprintf(OLED_buffer, "%-3s", (LEDStates[i] == GPIO_PIN_SET) ? "ON" : "OFF");
+	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == LEDIndex) && (menu_layer == LEVEL_1)) ? Black : White);
+	}
+
+	ssd1306_UpdateScreen();
+}
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
@@ -95,6 +117,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 		// Toggle menu layer
 		menu_layer = (menu_layer == ROOT) ? LEVEL_1 : ROOT;
+
+		updateMenu();
 	}
 }
 
@@ -105,6 +129,45 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 		// Re-enable button interrupt after debounce period
 		HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 		HAL_TIM_Base_Stop_IT(&htim6);
+	}
+}
+
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
+{
+	if(htim == &htim2)
+	{
+		enc_count_prev = enc_count;
+		enc_count = TIM2->CNT >> 2;
+
+		encoderLastDirectionForward = !(htim2.Instance->CR1 & TIM_CR1_DIR);
+
+		// Check if encoder moved
+		if(enc_count != enc_count_prev)
+		{
+			// Handle encoder movement
+			switch(menu_layer)
+			{
+				case ROOT:
+					// Use last encoder movement direction to determine whether to increment or decrement the current value
+					if(encoderLastDirectionForward)
+					{
+						LEDIndex++;
+						LEDIndex %= 4;
+					}
+					else
+					{
+						LEDIndex--;
+						LEDIndex %= 4;
+					}
+					break;
+				case LEVEL_1:
+					LEDStates[LEDIndex] = (encoderLastDirectionForward) ? GPIO_PIN_SET : GPIO_PIN_RESET;
+					HAL_GPIO_WritePin(LEDPorts[LEDIndex], LEDPins[LEDIndex], LEDStates[LEDIndex]);
+					break;
+			}
+
+			updateMenu();
+		}
 	}
 }
 
@@ -155,71 +218,23 @@ int main(void)
 
   ssd1306_UpdateScreen();
 
-  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
 
   // Initialize all LEDs to off
   WS2812_ClearLEDs();
   WS2812_SetBackgroundColor(0, 0, 0);
   WS2812_SendAll();
 
+  updateMenu();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	enc_count_prev = enc_count;
-	enc_count = TIM2->CNT >> 2;
-
-	encoderLastDirectionForward = !(htim2.Instance->CR1 & TIM_CR1_DIR);
-
-	// Check if encoder moved
-	if(enc_count != enc_count_prev)
-	{
-		// Handle encoder movement
-		switch(menu_layer)
-		{
-			case ROOT:
-				// Use last encoder movement direction to determine whether to increment or decrement the current value
-				if(encoderLastDirectionForward)
-				{
-					LEDIndex++;
-					LEDIndex %= 4;
-				}
-				else
-				{
-					LEDIndex--;
-					LEDIndex %= 4;
-				}
-				break;
-			case LEVEL_1:
-				LEDStates[LEDIndex] = (encoderLastDirectionForward) ? GPIO_PIN_SET : GPIO_PIN_RESET;
-				HAL_GPIO_WritePin(LEDPorts[LEDIndex], LEDPins[LEDIndex], LEDStates[LEDIndex]);
-				break;
-		}
-	}
-
-	// Show LED states on screen
-	for(uint8_t i = 0; i < 4; i++)
-	{
-	  // Display menu item
-	  uint8_t y = i * 12 + 18;
-	  ssd1306_SetCursor(1, y);
-	  sprintf(OLED_buffer, "%d: LED %d state", i, i);
-
-	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
-	  ssd1306_DrawRectangle(0, y - 1, 99, y + 9, ((i == LEDIndex) && (menu_layer == ROOT)) ? White : Black);
-
-	  // Display item value
-	  ssd1306_SetCursor(100, y);
-	  sprintf(OLED_buffer, "%-3s", (LEDStates[i] == GPIO_PIN_SET) ? "ON" : "OFF");
-	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == LEDIndex) && (menu_layer == LEVEL_1)) ? Black : White);
-	}
-
-	ssd1306_UpdateScreen();
-
 	// Basic LED effect
-	WS2812FX_SimpleBreathingEffect();
+	colorRGB white = {.red = 128, .green = 128, .blue = 128};
+	WS2812FX_SimpleBreathingEffect(10, white);
 
     /* USER CODE END WHILE */
 
@@ -375,11 +390,11 @@ static void MX_TIM2_Init(void)
   sConfig.IC1Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC1Filter = 0;
+  sConfig.IC1Filter = 10;
   sConfig.IC2Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC2Filter = 0;
+  sConfig.IC2Filter = 10;
   if (HAL_TIM_Encoder_Init(&htim2, &sConfig) != HAL_OK)
   {
     Error_Handler();
