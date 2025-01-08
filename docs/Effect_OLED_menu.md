@@ -2,8 +2,8 @@
 - Name: Breathing
   - Index: 0
   - Parameters
-    - Speed
-    - RGB color
+    - Speed (delay between steps, step size)
+    - HSV color
 - Name: Simple meter
   - Index: 1
   - Parameters
@@ -21,6 +21,7 @@
   - Parameters
     - Delta hue
     - Scroll hue
+    - Delay between steps
 - **TODO:** Strobe effect
 
 ## Effect template
