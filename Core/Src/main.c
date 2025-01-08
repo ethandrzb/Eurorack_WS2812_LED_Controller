@@ -132,6 +132,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 	}
 }
 
+// TODO: Move button from external interrupt and timer to timer input capture interrupt
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 {
 	if(htim == &htim2)
@@ -233,8 +234,8 @@ int main(void)
   while (1)
   {
 	// Basic LED effect
-	colorRGB white = {.red = 128, .green = 128, .blue = 128};
-	WS2812FX_SimpleBreathingEffect(10, white);
+	colorHSV color = {.hue = 140, .saturation = 1.0, .value = 1.0};
+	WS2812FX_SimpleBreathingEffect(10, 0.005, color, 1.0);
 
     /* USER CODE END WHILE */
 

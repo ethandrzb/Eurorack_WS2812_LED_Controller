@@ -1,24 +1,22 @@
 #include "WS2812FX.h"
 #include "main.h"
 
-void WS2812FX_SimpleBreathingEffect(uint8_t speed, colorRGB color)
+void WS2812FX_SimpleBreathingEffect(uint8_t stepDelay, float stepSize, colorHSV color, float maxValue)
 {
-	for(int i = 0; i < 128; i++)
+	colorRGB rgb = WS2812_HSVToRGB(color.hue, color.saturation, color.value);
+
+	for(float i = 0.0; i < maxValue; i += stepSize)
 	{
-		for(int led = 0; led < NUM_LOGICAL_LEDS; led++)
-		{
-			WS2812_SetLED(led, i, i, i);
-		}
+		rgb = WS2812_HSVToRGB(color.hue, color.saturation, i);
+		WS2812_SetAllLEDs(rgb.red, rgb.green, rgb.blue);
 		WS2812_SendAll();
-		HAL_Delay(speed);
+		HAL_Delay(stepDelay);
 	}
-	for(int i = 128; i >= 0; i--)
+	for(float i = maxValue; i >= 0; i -= stepSize)
 	{
-		for(int led = 0; led < NUM_LOGICAL_LEDS; led++)
-		{
-			WS2812_SetLED(led, i, i, i);
-		}
+		rgb = WS2812_HSVToRGB(color.hue, color.saturation, i);
+		WS2812_SetAllLEDs(rgb.red, rgb.green, rgb.blue);
 		WS2812_SendAll();
-		HAL_Delay(speed);
+		HAL_Delay(stepDelay);
 	}
 }

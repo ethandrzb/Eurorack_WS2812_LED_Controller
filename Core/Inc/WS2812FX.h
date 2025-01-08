@@ -10,6 +10,6 @@
 
 #include "WS2812.h"
 
-void WS2812FX_SimpleBreathingEffect(uint8_t speed, colorRGB color);
+void WS2812FX_SimpleBreathingEffect(uint8_t stepDelay, float stepSize, colorHSV color, float maxValue);
 
 #endif /* INC_WS2812FX_H_ */
