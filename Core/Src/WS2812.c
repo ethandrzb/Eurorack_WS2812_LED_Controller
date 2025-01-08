@@ -27,7 +27,7 @@ extern volatile uint16_t WS2812FramesSent;
 #endif
 
 // Sets the color of the LED at index to the specified RGB values in the LEDData buffer
-void WS2812_SetLED(uint16_t index, uint8_t red, uint8_t green, uint8_t blue)
+void WS2812_SetLED(uint16_t index, uint8_t red, uint8_t green, uint8_t blue, bool additive)
 {
 	if(index >= NUM_LOGICAL_LEDS)
 	{
@@ -35,21 +35,24 @@ void WS2812_SetLED(uint16_t index, uint8_t red, uint8_t green, uint8_t blue)
 	}
 
 	// These LEDs are supposed to use GRB color ordering, but RGB seems to be the real answer
-	LEDData[index][0] = red;
-	LEDData[index][1] = green;
-	LEDData[index][2] = blue;
-
-//	LEDData[index][0] = green;
-//	LEDData[index][1] = red;
-//	LEDData[index][2] = blue;
+	if(additive)
+	{
+		LEDData[index][0] = (LEDData[index][0] + red) > UINT8_MAX ? 255 : (LEDData[index][0] + red);
+		LEDData[index][1] = (LEDData[index][1] + green) > UINT8_MAX ? 255 : (LEDData[index][1] + green);
+		LEDData[index][2] = (LEDData[index][2] + blue) > UINT8_MAX ? 255 : (LEDData[index][2] + blue);
+	}
+	else
+	{
+		LEDData[index][0] = red;
+		LEDData[index][1] = green;
+		LEDData[index][2] = blue;
+	}
 }
 
 // Adds the RGB color values to the LED at index in the LEDData buffer
 void WS2812_SetLEDAdditive(uint16_t index, uint8_t red, uint8_t green, uint8_t blue)
 {
-	LEDData[index][0] = (LEDData[index][0] + red) > UINT8_MAX ? 255 : (LEDData[index][0] + red);
-	LEDData[index][1] = (LEDData[index][1] + green) > UINT8_MAX ? 255 : (LEDData[index][1] + green);
-	LEDData[index][2] = (LEDData[index][2] + blue) > UINT8_MAX ? 255 : (LEDData[index][2] + blue);
+	WS2812_SetLED(index, red, green, blue, true);
 }
 
 // Sets the color of all LEDs to the specified RGB color
@@ -57,7 +60,7 @@ void WS2812_SetAllLEDs(uint32_t red, uint32_t green, uint32_t blue)
 {
 	for(int i = 0; i < NUM_LOGICAL_LEDS; i++)
 	{
-		WS2812_SetLED(i, red, green, blue);
+		WS2812_SetLED(i, red, green, blue, false);
 	}
 }
 
@@ -288,7 +291,7 @@ void WS2812_MultiCometEffect(void)
 				// Draw comet
 				for(int j = 0; j < comets[i].size; j++)
 				{
-					WS2812_SetLED(j + comets[i].position, comets[i].color.red, comets[i].color.green, comets[i].color.blue);
+					WS2812_SetLED(j + comets[i].position, comets[i].color.red, comets[i].color.green, comets[i].color.blue, false);
 				}
 
 				comets[i].position++;
@@ -317,7 +320,7 @@ void WS2812_CometEffect(void)
 	// Draw comet
 	for(int i = 0; i < cometSize; i++)
 	{
-		WS2812_SetLED(i + position, 64, 64, 64);
+		WS2812_SetLED(i + position, 64, 64, 64, false);
 	}
 
 	// Fade LEDs one step
@@ -446,7 +449,7 @@ void WS2812_FillRainbow(colorHSV startingColor, int8_t deltaHue)
 		{
 			colorRGB rgb = WS2812_HSVToRGB(startingColor.hue, startingColor.saturation, startingColor.value);
 
-			WS2812_SetLED(i, rgb.red, rgb.green, rgb.blue);
+			WS2812_SetLED(i, rgb.red, rgb.green, rgb.blue, false);
 
 			startingColor.hue += deltaHue;
 
@@ -462,7 +465,7 @@ void WS2812_FillRainbow(colorHSV startingColor, int8_t deltaHue)
 		{
 			colorRGB rgb = WS2812_HSVToRGB(startingColor.hue, startingColor.saturation, startingColor.value);
 
-			WS2812_SetLED(i, rgb.red, rgb.green, rgb.blue);
+			WS2812_SetLED(i, rgb.red, rgb.green, rgb.blue, false);
 
 			startingColor.hue += deltaHue;
 
