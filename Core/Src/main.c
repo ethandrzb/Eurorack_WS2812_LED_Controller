@@ -238,8 +238,8 @@ int main(void)
 	  switch(LEDIndex)
 	  {
 	  	  case 0:
-	  			colorHSV hsv = {.hue = 140, .saturation = 1.0, .value = 1.0};
-	  			WS2812FX_SimpleBreathingEffect(10, 0.005, hsv, 1.0);
+	  			colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 1.0};
+	  			WS2812FX_SimpleBreathingEffect(10, 0.005, hsv, 0.25);
 				break;
 	  	  case 1:
 				rgb.red = 32;
