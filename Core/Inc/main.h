@@ -79,9 +79,8 @@ void Error_Handler(void);
 #define TCK_GPIO_Port GPIOA
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
-#define ENC_BTN_Pin GPIO_PIN_5
+#define ENC_BTN_Pin GPIO_PIN_4
 #define ENC_BTN_GPIO_Port GPIOB
-#define ENC_BTN_EXTI_IRQn EXTI9_5_IRQn
 #define LED4_Pin GPIO_PIN_6
 #define LED4_GPIO_Port GPIOB
 

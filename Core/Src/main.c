@@ -49,6 +49,7 @@ SPI_HandleTypeDef hspi3;
 DMA_HandleTypeDef hdma_spi3_tx;
 
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim6;
 
 UART_HandleTypeDef huart2;
@@ -78,6 +79,7 @@ static void MX_I2C1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_SPI3_Init(void);
+static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
 void updateMenu();
 /* USER CODE END PFP */
@@ -107,16 +109,10 @@ void updateMenu()
 	ssd1306_UpdateScreen();
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	if(GPIO_Pin == ENC_BTN_Pin)
+	if(htim == &htim3 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
 	{
-		// Disable button interrupts
-		HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
-
-		// Start debounce period
-		HAL_TIM_Base_Start_IT(&htim6);
-
 		// Toggle menu layer
 		menu_layer = (menu_layer == ROOT) ? LEVEL_1 : ROOT;
 
@@ -124,17 +120,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	}
 }
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
-{
-	if(htim == &htim6)
-	{
-		// Re-enable button interrupt after debounce period
-		HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
-		HAL_TIM_Base_Stop_IT(&htim6);
-	}
-}
-
-// TODO: Move button from external interrupt and timer to timer input capture interrupt
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 {
 	if(htim == &htim2)
@@ -211,7 +196,10 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM6_Init();
   MX_SPI3_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+
+  // Initialize OLED
   ssd1306_Init();
   ssd1306_Fill(Black);
   ssd1306_UpdateScreen();
@@ -222,6 +210,9 @@ int main(void)
   ssd1306_UpdateScreen();
 
   HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
+
+  // Start debounce timer for encoder button
+  HAL_TIM_OnePulse_Start_IT(&htim3, TIM_CHANNEL_1);
 
   // Initialize all LEDs to off
   WS2812_ClearLEDs();
@@ -440,6 +431,58 @@ static void MX_TIM2_Init(void)
 }
 
 /**
+  * @brief TIM3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM3_Init(void)
+{
+
+  /* USER CODE BEGIN TIM3_Init 0 */
+
+  /* USER CODE END TIM3_Init 0 */
+
+  TIM_SlaveConfigTypeDef sSlaveConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM3_Init 1 */
+
+  /* USER CODE END TIM3_Init 1 */
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 80-1;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 1000-1;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_OnePulse_Init(&htim3, TIM_OPMODE_SINGLE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sSlaveConfig.SlaveMode = TIM_SLAVEMODE_TRIGGER;
+  sSlaveConfig.InputTrigger = TIM_TS_TI1FP1;
+  sSlaveConfig.TriggerPolarity = TIM_TRIGGERPOLARITY_FALLING;
+  sSlaveConfig.TriggerFilter = 10;
+  if (HAL_TIM_SlaveConfigSynchro(&htim3, &sSlaveConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM3_Init 2 */
+
+  /* USER CODE END TIM3_Init 2 */
+
+}
+
+/**
   * @brief TIM6 Initialization Function
   * @param None
   * @retval None
@@ -457,7 +500,7 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 270-1;
+  htim6.Init.Prescaler = 80-1;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim6.Init.Period = 50000-1;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
@@ -562,22 +605,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : ENC_BTN_Pin */
-  GPIO_InitStruct.Pin = ENC_BTN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(ENC_BTN_GPIO_Port, &GPIO_InitStruct);
-
   /*Configure GPIO pin : LED4_Pin */
   GPIO_InitStruct.Pin = LED4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED4_GPIO_Port, &GPIO_InitStruct);
-
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
