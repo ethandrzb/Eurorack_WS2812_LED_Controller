@@ -8,6 +8,11 @@
 #ifndef INC_WS2812_H_
 #define INC_WS2812_H_
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -90,5 +95,9 @@ void WS2812_FillRainbow(colorHSV startingColor, int8_t deltaHue);
 // Utility functions
 void WS2812_SetBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
 colorRGB WS2812_HSVToRGB(uint16_t hue, float saturation, float value);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* INC_WS2812_H_ */
