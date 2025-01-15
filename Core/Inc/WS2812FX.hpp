@@ -24,13 +24,13 @@ namespace WS2812FX
 class EffectParameterBase
 {
 	public:
-		virtual ~EffectParameterBase();
+		virtual ~EffectParameterBase() {}
 };
 
 template <typename T> class EffectParameter : public EffectParameterBase
 {
 	public:
-		virtual ~EffectParameter();
+		virtual ~EffectParameter() {}
 		char name[WS2812FX_EFFECT_PARAM_LEN];
 		char valueString[WS2812FX_PARAMETER_VALUE_STRING_LEN];
 		T value;

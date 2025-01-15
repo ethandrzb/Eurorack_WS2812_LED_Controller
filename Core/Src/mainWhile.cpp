@@ -1,4 +1,5 @@
 #include "mainWhile.hpp"
+#include "WS2812FX/SimpleBreathingEffect.hpp"
 
 extern "C"
 {
@@ -11,15 +12,18 @@ extern "C"
 extern uint8_t LEDIndex;
 
 colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
+colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 1.0};
+
 
 void mainWhileCpp(void)
 {
+	SimpleBreathingEffect sbe = SimpleBreathingEffect(10, 0.005, hsv, 0.25);
 	while(1)
 	{
 		switch(LEDIndex)
 		{
 //			case 0:
-//				colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 1.0};
+//
 ////				WS2812FX_SimpleBreathingEffect(10, 0.005, hsv, 0.25);
 //				break;
 			case 1:
