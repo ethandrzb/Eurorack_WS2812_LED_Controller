@@ -11,18 +11,26 @@
 #include <main.h>
 #include <WS2812.h>
 #include <stdio.h>
-#include <any>
 
 #define WS2812FX_EFFECT_NAME_LEN 11
 #define WS2812FX_EFFECT_PARAM_LEN 11
 #define WS2812FX_EFFECT_NUM_PARAMS 5
-#define WS2812FX_PARAMETER_VALUE_STRING_LEN 3
+// 3 chars + null char
+#define WS2812FX_PARAMETER_VALUE_STRING_LEN 4
 
 namespace WS2812FX
 {
-template <typename T> class EffectParameter
+
+class EffectParameterBase
 {
 	public:
+		virtual ~EffectParameterBase();
+};
+
+template <typename T> class EffectParameter : public EffectParameterBase
+{
+	public:
+		virtual ~EffectParameter();
 		char name[WS2812FX_EFFECT_PARAM_LEN];
 		char valueString[WS2812FX_PARAMETER_VALUE_STRING_LEN];
 		T value;
@@ -56,6 +64,16 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 			this->value = (this->value > this->minValue) ? this->value - this->tickAmount : this->minValue;
 		}
 
+		T getMinValue()
+		{
+			return this->minValue;
+		}
+
+		T getMaxValue()
+		{
+			return this->maxValue;
+		}
+
 		template <typename U> char *getValueString();
 
 	private:
@@ -66,14 +84,14 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 
 template <> template <> char *NumericEffectParameter<uint8_t>::getValueString<uint8_t>()
 {
-	sprintf(this->valueString, "%3d", this->value);
+	snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", this->getValue());
 
 	return this->valueString;
 }
 
 template <> template <> char *NumericEffectParameter<float>::getValueString<float>()
 {
-	sprintf(this->valueString, "%3f", this->value);
+	snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3f", this->getValue());
 
 	return this->valueString;
 }
@@ -84,12 +102,6 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 		ColorHSVEffectParameter(colorHSV hsv) : EffectParameter<colorHSV>(hsv) {}
 
 		//TODO: Increment and decrement functions for hue, saturation, and value
-
-		colorHSV getHSV()
-		{
-			colorHSV hsv = {.hue = this->value.hue, .saturation = this->value.saturation, .value = this->value.saturation};
-			return hsv;
-		}
 
 		// Shouldn't I need an override here?
 		char *getValueString()
@@ -105,21 +117,20 @@ class WS2812Effect
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
 		virtual void updateEffect() = 0;
+		EffectParameterBase *params[WS2812FX_EFFECT_NUM_PARAMS];
 
-		//TODO: Use polymorphism instead of std::any
-		std::any params[WS2812FX_EFFECT_NUM_PARAMS];
+		EffectParameterBase *getParameter(uint16_t index)
+		{
+			return (index < WS2812FX_EFFECT_NUM_PARAMS) ? params[index]: NULL;
+		}
 
-//		std::any getParam(unsigned int index)
-//		{
-//			if(index < WS2812FX_EFFECT_NUM_PARAMS)
-//			{
-//				return this->params[index];
-//			}
-//			else
-//			{
-//				return NULL;
-//			}
-//		}
+		void setParameter(EffectParameterBase newParam, uint16_t index)
+		{
+			if(index < WS2812FX_EFFECT_NUM_PARAMS)
+			{
+				*(this->params[index]) = newParam;
+			}
+		}
 };
 }
 #endif
