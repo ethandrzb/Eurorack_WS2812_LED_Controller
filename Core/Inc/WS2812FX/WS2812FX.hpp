@@ -34,7 +34,6 @@ template <typename T> class EffectParameter : public EffectParameterBase
 		char name[WS2812FX_EFFECT_PARAM_LEN];
 		char valueString[WS2812FX_PARAMETER_VALUE_STRING_LEN];
 		T value;
-		virtual char *getValueString();
 
 		EffectParameter(T value) : value(value) {}
 
@@ -46,6 +45,13 @@ template <typename T> class EffectParameter : public EffectParameterBase
 		T getValue()
 		{
 			return this->value;
+		}
+
+		char *getValueString()
+		{
+			snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "XXX");
+
+			return this->valueString;
 		}
 };
 
@@ -82,19 +88,9 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 		T tickAmount;
 };
 
-template <> template <> char *NumericEffectParameter<uint8_t>::getValueString<uint8_t>()
-{
-	snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", this->getValue());
+template <> template <> char *NumericEffectParameter<uint8_t>::getValueString<uint8_t>();
 
-	return this->valueString;
-}
-
-template <> template <> char *NumericEffectParameter<float>::getValueString<float>()
-{
-	snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3f", this->getValue());
-
-	return this->valueString;
-}
+template <> template <> char *NumericEffectParameter<float>::getValueString<float>();
 
 class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 {

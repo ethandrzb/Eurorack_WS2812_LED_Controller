@@ -8,7 +8,7 @@
 #ifndef INC_WS2812FX_SIMPLEBREATHINGEFFECT_HPP_
 #define INC_WS2812FX_SIMPLEBREATHINGEFFECT_HPP_
 
-#include <WS2812FX.hpp>
+#include <WS2812FX/WS2812FX.hpp>
 #include <main.h>
 
 using namespace WS2812FX;

@@ -22,10 +22,10 @@ void mainWhileCpp(void)
 	{
 		switch(LEDIndex)
 		{
-//			case 0:
-//
-////				WS2812FX_SimpleBreathingEffect(10, 0.005, hsv, 0.25);
-//				break;
+			case 0:
+
+//				WS2812FX_SimpleBreathingEffect(10, 0.005, hsv, 0.25);
+				break;
 			case 1:
 				rgb.red = 32;
 				rgb.green = 0;
