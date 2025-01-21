@@ -23,7 +23,7 @@ void mainWhileCpp(void)
 		switch(LEDIndex)
 		{
 			case 0:
-
+				sbe.updateEffect();
 //				WS2812FX_SimpleBreathingEffect(10, 0.005, hsv, 0.25);
 				break;
 			case 1:

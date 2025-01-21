@@ -9,6 +9,7 @@
 #define INC_WS2812FX_HPP_
 
 #include <main.h>
+#include <memory>
 #include <WS2812.h>
 #include <stdio.h>
 
@@ -113,9 +114,9 @@ class WS2812Effect
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
 		virtual void updateEffect() = 0;
-		EffectParameterBase *params[WS2812FX_EFFECT_NUM_PARAMS];
+		std::shared_ptr<EffectParameterBase> params[WS2812FX_EFFECT_NUM_PARAMS];
 
-		EffectParameterBase *getParameter(uint16_t index)
+		std::shared_ptr<EffectParameterBase>getParameter(uint16_t index)
 		{
 			return (index < WS2812FX_EFFECT_NUM_PARAMS) ? params[index]: NULL;
 		}

@@ -18,6 +18,8 @@ class SimpleBreathingEffect : public WS2812Effect
 	public:
 		SimpleBreathingEffect(uint8_t stepDelay, float stepSize, colorHSV hsv, float maxValue)
 		{
+			snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Breathing");
+
 			// Parameter 0: Step delay
 			this->setParameter(NumericEffectParameter<uint8_t>(stepDelay, 0, 100, 1), 0);
 
