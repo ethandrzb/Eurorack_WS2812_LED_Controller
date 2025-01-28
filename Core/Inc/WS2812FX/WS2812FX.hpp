@@ -114,19 +114,40 @@ class WS2812Effect
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
 		virtual void updateEffect() = 0;
-		std::shared_ptr<EffectParameterBase> params[WS2812FX_EFFECT_NUM_PARAMS];
+		std::unique_ptr<EffectParameterBase> params[WS2812FX_EFFECT_NUM_PARAMS];
 
-		std::shared_ptr<EffectParameterBase>getParameter(uint16_t index)
-		{
-			return (index < WS2812FX_EFFECT_NUM_PARAMS) ? params[index]: NULL;
-		}
-
-		void setParameter(EffectParameterBase newParam, uint16_t index)
+		template <typename T> T *getParameter(uint16_t index) const
 		{
 			if(index < WS2812FX_EFFECT_NUM_PARAMS)
 			{
-				*(this->params[index]) = newParam;
+				if constexpr(std::is_same_v<T, ColorHSVEffectParameter>)
+				{
+					auto retVal = dynamic_cast<ColorHSVEffectParameter *>(this->params[index].get());
+					return retVal;
+				}
+				else
+				{
+					auto retVal = dynamic_cast<T *>(this->params[index].get());
+					return retVal;
+				}
 			}
+			return NULL;
+		}
+
+		template <typename T> void setParameter(const T &newParam, uint16_t index)
+		{
+			if(index < WS2812FX_EFFECT_NUM_PARAMS)
+			{
+				if constexpr(std::is_same_v<T, ColorHSVEffectParameter>)
+				{
+					this->params[index] = std::make_unique<ColorHSVEffectParameter>(newParam);
+				}
+				else
+				{
+					this->params[index] = std::make_unique<T>(newParam);
+				}
+			}
+
 		}
 };
 }
