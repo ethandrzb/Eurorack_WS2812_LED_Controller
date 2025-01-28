@@ -19,13 +19,13 @@ void SimpleBreathingEffect::updateEffect()
 		rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, i);
 		WS2812_SetAllLEDs(rgb.red, rgb.green, rgb.blue);
 		WS2812_SendAll();
-		HAL_Delay(this->getParameter<NumericEffectParameter<float>>(0)->getValue());
+		HAL_Delay(this->getParameter<NumericEffectParameter<uint8_t>>(0)->getValue());
 	}
 	for(float i = this->getParameter<NumericEffectParameter<float>>(3)->getValue(); i >= 0; i -= this->getParameter<NumericEffectParameter<float>>(1)->getValue())
 	{
 		rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, i);
 		WS2812_SetAllLEDs(rgb.red, rgb.green, rgb.blue);
 		WS2812_SendAll();
-		HAL_Delay(this->getParameter<NumericEffectParameter<float>>(0)->getValue());
+		HAL_Delay(this->getParameter<NumericEffectParameter<uint8_t>>(0)->getValue());
 	}
 }

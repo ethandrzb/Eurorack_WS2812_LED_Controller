@@ -147,7 +147,6 @@ class WS2812Effect
 					this->params[index] = std::make_unique<T>(newParam);
 				}
 			}
-
 		}
 };
 }
