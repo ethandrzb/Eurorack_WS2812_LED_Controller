@@ -22,11 +22,11 @@ extern GPIO_PinState LEDStates[4];
 
 colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 1.0};
-
+SimpleBreathingEffect sbe = SimpleBreathingEffect(10, 0.005, hsv, 0.25);
 
 void mainWhileCpp(void)
 {
-	SimpleBreathingEffect sbe = SimpleBreathingEffect(10, 0.005, hsv, 0.25);
+
 	while(1)
 	{
 		switch(LEDIndex)
@@ -69,14 +69,16 @@ void updateMenuCpp()
 	  // Display menu item
 	  uint8_t y = i * 12 + 18;
 	  ssd1306_SetCursor(1, y);
-	  sprintf(OLED_buffer, "%d: LED %d state", i, i);
+//	  sprintf(OLED_buffer, "%d: LED %d state", i, i);
+	  sprintf(OLED_buffer, "%d: %s", i, sbe.getParameter<EffectParameterBase>(i)->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
 	  ssd1306_DrawRectangle(0, y - 1, 99, y + 9, ((i == LEDIndex) && (menu_layer == ROOT)) ? White : Black);
 
 	  // Display item value
 	  ssd1306_SetCursor(100, y);
-	  sprintf(OLED_buffer, "%-3s", (LEDStates[i] == GPIO_PIN_SET) ? "ON" : "OFF");
+//	  sprintf(OLED_buffer, "%-3s", (LEDStates[i] == GPIO_PIN_SET) ? "ON" : "OFF");
+	  sprintf(OLED_buffer, "%-3s", sbe.getParameter<EffectParameterBase>(i)->getValueString());
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == LEDIndex) && (menu_layer == LEVEL_1)) ? Black : White);
 	}
 

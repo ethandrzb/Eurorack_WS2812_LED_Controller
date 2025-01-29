@@ -26,19 +26,22 @@ namespace WS2812FX
 class EffectParameterBase
 {
 	public:
+		std::string name;
+		char valueString[WS2812FX_PARAMETER_VALUE_STRING_LEN];
+
+		EffectParameterBase(std::string name) : name(name) {}
 		virtual ~EffectParameterBase() {}
+		virtual char *getValueString() = 0;
 };
 
 template <typename T> class EffectParameter : public EffectParameterBase
 {
 	public:
+		T value;
+
+		EffectParameter(T value, std::string name) : value(value), EffectParameterBase(name) {}
 		virtual ~EffectParameter() {}
 
-		T value;
-		std::string name;
-		char valueString[WS2812FX_PARAMETER_VALUE_STRING_LEN];
-
-		EffectParameter(T value, std::string name) : value(value), name(name) {}
 
 		void setValue(T newValue)
 		{
@@ -50,7 +53,7 @@ template <typename T> class EffectParameter : public EffectParameterBase
 			return this->value;
 		}
 
-		char *getValueString()
+		char *getValueString() override
 		{
 			snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "XXX");
 
