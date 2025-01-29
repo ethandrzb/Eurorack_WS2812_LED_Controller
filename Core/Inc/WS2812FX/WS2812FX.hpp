@@ -12,6 +12,7 @@
 #include <memory>
 #include <WS2812.h>
 #include <stdio.h>
+#include <string>
 
 #define WS2812FX_EFFECT_NAME_LEN 11
 #define WS2812FX_EFFECT_PARAM_LEN 11
@@ -32,11 +33,12 @@ template <typename T> class EffectParameter : public EffectParameterBase
 {
 	public:
 		virtual ~EffectParameter() {}
-		char name[WS2812FX_EFFECT_PARAM_LEN];
-		char valueString[WS2812FX_PARAMETER_VALUE_STRING_LEN];
-		T value;
 
-		EffectParameter(T value) : value(value) {}
+		T value;
+		std::string name;
+		char valueString[WS2812FX_PARAMETER_VALUE_STRING_LEN];
+
+		EffectParameter(T value, std::string name) : value(value), name(name) {}
 
 		void setValue(T newValue)
 		{
@@ -59,7 +61,7 @@ template <typename T> class EffectParameter : public EffectParameterBase
 template <typename T> class NumericEffectParameter : public EffectParameter<T>
 {
 	public:
-		NumericEffectParameter(T value, T minValue, T maxValue, T tickAmount) : EffectParameter<T>(value), minValue(minValue), maxValue(maxValue), tickAmount(tickAmount) {}
+		NumericEffectParameter(T value, std::string name, T minValue, T maxValue, T tickAmount) : EffectParameter<T>(value, name), minValue(minValue), maxValue(maxValue), tickAmount(tickAmount) {}
 
 		void incrementValue()
 		{
@@ -96,7 +98,7 @@ template <> template <> char *NumericEffectParameter<float>::getValueString<floa
 class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 {
 	public:
-		ColorHSVEffectParameter(colorHSV hsv) : EffectParameter<colorHSV>(hsv) {}
+		ColorHSVEffectParameter(colorHSV hsv, std::string name) : EffectParameter<colorHSV>(hsv, name) {}
 
 		//TODO: Increment and decrement functions for hue, saturation, and value
 
