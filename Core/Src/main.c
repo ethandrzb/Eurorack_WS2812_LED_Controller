@@ -81,33 +81,10 @@ static void MX_TIM6_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
-void updateMenu();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-void updateMenu()
-{
-	// Show LED states on screen
-	for(uint8_t i = 0; i < 4; i++)
-	{
-	  // Display menu item
-	  uint8_t y = i * 12 + 18;
-	  ssd1306_SetCursor(1, y);
-	  sprintf(OLED_buffer, "%d: LED %d state", i, i);
-
-	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
-	  ssd1306_DrawRectangle(0, y - 1, 99, y + 9, ((i == LEDIndex) && (menu_layer == ROOT)) ? White : Black);
-
-	  // Display item value
-	  ssd1306_SetCursor(100, y);
-	  sprintf(OLED_buffer, "%-3s", (LEDStates[i] == GPIO_PIN_SET) ? "ON" : "OFF");
-	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == LEDIndex) && (menu_layer == LEVEL_1)) ? Black : White);
-	}
-
-	ssd1306_UpdateScreen();
-}
 
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
@@ -116,7 +93,7 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 		// Toggle menu layer
 		menu_layer = (menu_layer == ROOT) ? LEVEL_1 : ROOT;
 
-		updateMenu();
+		updateMenuC();
 	}
 }
 
@@ -154,7 +131,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 					break;
 			}
 
-			updateMenu();
+			updateMenuC();
 		}
 	}
 }
@@ -219,7 +196,7 @@ int main(void)
   WS2812_SetBackgroundColor(0, 0, 0);
   WS2812_SendAll();
 
-  updateMenu();
+  updateMenuC();
   /* USER CODE END 2 */
 
   /* Infinite loop */
