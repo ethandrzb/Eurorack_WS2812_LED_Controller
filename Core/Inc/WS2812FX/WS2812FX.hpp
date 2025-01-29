@@ -119,6 +119,7 @@ class WS2812Effect
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
 		virtual void updateEffect() = 0;
+		virtual char *getValueStringByIndex(uint8_t index) = 0;
 		std::unique_ptr<EffectParameterBase> params[WS2812FX_EFFECT_NUM_PARAMS];
 
 		template <typename T> T *getParameter(uint16_t index) const

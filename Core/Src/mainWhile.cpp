@@ -18,7 +18,6 @@ extern "C"
 extern uint8_t LEDIndex;
 extern char OLED_buffer[30];
 extern uint8_t menu_layer;
-extern GPIO_PinState LEDStates[4];
 
 colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 1.0};
@@ -77,8 +76,8 @@ void updateMenuCpp()
 
 	  // Display item value
 	  ssd1306_SetCursor(100, y);
-//	  sprintf(OLED_buffer, "%-3s", (LEDStates[i] == GPIO_PIN_SET) ? "ON" : "OFF");
-	  sprintf(OLED_buffer, "%-3s", sbe.getParameter<EffectParameterBase>(i)->getValueString());
+	  sprintf(OLED_buffer, "%-3s", sbe.getValueStringByIndex(i));
+
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == LEDIndex) && (menu_layer == LEVEL_1)) ? Black : White);
 	}
 

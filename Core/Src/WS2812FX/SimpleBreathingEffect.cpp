@@ -29,3 +29,32 @@ void SimpleBreathingEffect::updateEffect()
 		HAL_Delay(this->getParameter<NumericEffectParameter<uint8_t>>(0)->getValue());
 	}
 }
+
+char *SimpleBreathingEffect::getValueStringByIndex(uint8_t index)
+{
+	if(index < WS2812FX_EFFECT_NUM_PARAMS)
+	{
+		switch(index)
+		{
+			case 0:
+				return this->getParameter<NumericEffectParameter<uint8_t>>(index)->getValueString<uint8_t>();
+				break;
+			case 1:
+				return this->getParameter<NumericEffectParameter<float>>(index)->getValueString<float>();
+				break;
+			case 2:
+				return this->getParameter<ColorHSVEffectParameter>(index)->getValueString();
+				break;
+			case 3:
+				return this->getParameter<NumericEffectParameter<float>>(index)->getValueString<float>();
+				break;
+			default:
+				return NULL;
+				break;
+		};
+	}
+	else
+	{
+		return NULL;
+	}
+}
