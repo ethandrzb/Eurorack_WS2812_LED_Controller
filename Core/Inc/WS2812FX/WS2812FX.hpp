@@ -39,7 +39,7 @@ template <typename T> class EffectParameter : public EffectParameterBase
 	public:
 		T value;
 
-		EffectParameter(T value, std::string name) : value(value), EffectParameterBase(name) {}
+		EffectParameter(T value, std::string name) : EffectParameterBase(name), value(value) {}
 		virtual ~EffectParameter() {}
 
 
