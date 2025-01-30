@@ -69,14 +69,14 @@ void updateMenuCpp()
 	  uint8_t y = i * 12 + 18;
 	  ssd1306_SetCursor(1, y);
 //	  sprintf(OLED_buffer, "%d: LED %d state", i, i);
-	  sprintf(OLED_buffer, "%d: %s", i, sbe.getParameter<EffectParameterBase>(i)->name.c_str());
+	  sprintf(OLED_buffer, "%d: %s", i, sbe.getParameter(i)->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
 	  ssd1306_DrawRectangle(0, y - 1, 99, y + 9, ((i == LEDIndex) && (menu_layer == ROOT)) ? White : Black);
 
 	  // Display item value
 	  ssd1306_SetCursor(100, y);
-	  sprintf(OLED_buffer, "%-3s", sbe.getValueStringByIndex(i));
+	  sprintf(OLED_buffer, "%-3s", sbe.getParameter(i)->getValueString());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == LEDIndex) && (menu_layer == LEVEL_1)) ? Black : White);
 	}

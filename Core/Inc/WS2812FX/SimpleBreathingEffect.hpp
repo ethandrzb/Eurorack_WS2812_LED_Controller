@@ -34,7 +34,6 @@ class SimpleBreathingEffect : public WS2812Effect
 		}
 
 		void updateEffect() override;
-		char *getValueStringByIndex(uint8_t index) override;
 };
 
 #endif /* INC_WS2812FX_SIMPLEBREATHINGEFFECT_HPP_ */

@@ -11,50 +11,25 @@
 // The current behavior causes the next effect to be queued until this function finishes instead of immediately going to the new effect
 void SimpleBreathingEffect::updateEffect()
 {
-	colorHSV hsv = this->getParameter<ColorHSVEffectParameter>(2)->getValue();
+	uint8_t stepDelay = *(static_cast<uint8_t *>(this->getParameter(0)->getValue()));
+	float stepSize = *(static_cast<float *>(this->getParameter(1)->getValue()));
+	colorHSV hsv = *(static_cast<colorHSV *>(this->getParameter(2)->getValue()));
+	float maxValue = *(static_cast<float *>(this->getParameter(3)->getValue()));
+
 	colorRGB rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, hsv.value);
 
-	for(float i = 0.0; i < this->getParameter<NumericEffectParameter<float>>(3)->getValue(); i += this->getParameter<NumericEffectParameter<float>>(1)->getValue())
+	for(float i = 0.0; i < maxValue; i += stepSize)
 	{
 		rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, i);
 		WS2812_SetAllLEDs(rgb.red, rgb.green, rgb.blue);
 		WS2812_SendAll();
-		HAL_Delay(this->getParameter<NumericEffectParameter<uint8_t>>(0)->getValue());
+		HAL_Delay(stepDelay);
 	}
-	for(float i = this->getParameter<NumericEffectParameter<float>>(3)->getValue(); i >= 0; i -= this->getParameter<NumericEffectParameter<float>>(1)->getValue())
+	for(float i = maxValue; i >= 0; i -= stepSize)
 	{
 		rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, i);
 		WS2812_SetAllLEDs(rgb.red, rgb.green, rgb.blue);
 		WS2812_SendAll();
-		HAL_Delay(this->getParameter<NumericEffectParameter<uint8_t>>(0)->getValue());
-	}
-}
-
-char *SimpleBreathingEffect::getValueStringByIndex(uint8_t index)
-{
-	if(index < WS2812FX_EFFECT_NUM_PARAMS)
-	{
-		switch(index)
-		{
-			case 0:
-				return this->getParameter<NumericEffectParameter<uint8_t>>(index)->getValueString<uint8_t>();
-				break;
-			case 1:
-				return this->getParameter<NumericEffectParameter<float>>(index)->getValueString<float>();
-				break;
-			case 2:
-				return this->getParameter<ColorHSVEffectParameter>(index)->getValueString();
-				break;
-			case 3:
-				return this->getParameter<NumericEffectParameter<float>>(index)->getValueString<float>();
-				break;
-			default:
-				return NULL;
-				break;
-		};
-	}
-	else
-	{
-		return NULL;
+		HAL_Delay(stepDelay);
 	}
 }

@@ -31,6 +31,7 @@ class EffectParameterBase
 
 		EffectParameterBase(std::string name) : name(name) {}
 		virtual ~EffectParameterBase() {}
+		virtual void *getValue() = 0;
 		virtual char *getValueString() = 0;
 };
 
@@ -48,9 +49,9 @@ template <typename T> class EffectParameter : public EffectParameterBase
 			this->value = newValue;
 		}
 
-		T getValue()
+		void *getValue() override
 		{
-			return this->value;
+			return static_cast<void *>(&(this->value));
 		}
 
 		char *getValueString() override
@@ -86,17 +87,29 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 			return this->maxValue;
 		}
 
-		template <typename U> char *getValueString();
+		char *getValueString() override
+		{
+			if constexpr(std::is_same_v<T, uint8_t>)
+			{
+				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<uint8_t *>(this->getValue())));
+			}
+			else if constexpr(std::is_same_v<T, float>)
+			{
+				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%1.2f", *(static_cast<float *>(this->getValue())));
+			}
+			else
+			{
+				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "   ");
+			}
+
+			return this->valueString;
+		}
 
 	private:
 		T minValue;
 		T maxValue;
 		T tickAmount;
 };
-
-template <> template <> char *NumericEffectParameter<uint8_t>::getValueString<uint8_t>();
-
-template <> template <> char *NumericEffectParameter<float>::getValueString<float>();
 
 class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 {
@@ -119,17 +132,16 @@ class WS2812Effect
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
 		virtual void updateEffect() = 0;
-		virtual char *getValueStringByIndex(uint8_t index) = 0;
+//		virtual char *getValueStringByIndex(uint8_t index) = 0;
 		std::unique_ptr<EffectParameterBase> params[WS2812FX_EFFECT_NUM_PARAMS];
 
-		template <typename T> T *getParameter(uint16_t index) const
+		EffectParameterBase *getParameter(uint16_t index)
 		{
 			if(index < WS2812FX_EFFECT_NUM_PARAMS)
 			{
-				auto retVal = dynamic_cast<T *>(this->params[index].get());
-				return retVal;
+				return this->params[index].get();
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		template <typename T> void setParameter(const T &newParam, uint16_t index)
