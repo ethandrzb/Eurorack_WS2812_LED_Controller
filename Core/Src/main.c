@@ -126,6 +126,15 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 					}
 					break;
 				case LEVEL_1:
+					if(encoderLastDirectionForward)
+					{
+						incrementValueC(0, LEDIndex);
+					}
+					else
+					{
+						decrementValueC(0, LEDIndex);
+					}
+
 					LEDStates[LEDIndex] = (encoderLastDirectionForward) ? GPIO_PIN_SET : GPIO_PIN_RESET;
 					HAL_GPIO_WritePin(LEDPorts[LEDIndex], LEDPins[LEDIndex], LEDStates[LEDIndex]);
 					break;

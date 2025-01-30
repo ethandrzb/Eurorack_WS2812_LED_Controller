@@ -13,6 +13,16 @@ extern "C"
 	{
 		updateMenuCpp();
 	}
+
+	void incrementValueC(uint8_t effectIndex, uint8_t parameterIndex)
+	{
+		incrementValueCpp(effectIndex, parameterIndex);
+	}
+
+	void decrementValueC(uint8_t effectIndex, uint8_t parameterIndex)
+	{
+		decrementValueCpp(effectIndex, parameterIndex);
+	}
 }
 
 extern uint8_t LEDIndex;
@@ -28,35 +38,36 @@ void mainWhileCpp(void)
 
 	while(1)
 	{
-		switch(LEDIndex)
-		{
-			case 0:
-				sbe.updateEffect();
-//				WS2812FX_SimpleBreathingEffect(10, 0.005, hsv, 0.25);
-				break;
-			case 1:
-				rgb.red = 32;
-				rgb.green = 0;
-				rgb.blue = 32;
-				WS2812_ClearLEDs();
-				WS2812_SimpleMeterEffect(rgb, 45, true);
-				WS2812_SendAll();
-				break;
-			case 2:
-				rgb.red = 0;
-				rgb.green = 32;
-				rgb.blue = 16;
-				WS2812_ClearLEDs();
-				WS2812_MirroredMeterEffect(rgb, 17, false);
-				WS2812_SendAll();
-				break;
-			case 3:
-				static colorHSV hsvRainbow = {.hue = 0, .saturation = 1.0f, .value = 0.2f};
-				hsvRainbow.hue = (hsvRainbow.hue < 360) ? hsvRainbow.hue + 1 : 0;
-				WS2812_FillRainbow(hsvRainbow, 3);
-				WS2812_SendAll();
-				break;
-		}
+		sbe.updateEffect();
+//		switch(LEDIndex)
+//		{
+//			case 0:
+//				sbe.updateEffect();
+////				WS2812FX_SimpleBreathingEffect(10, 0.005, hsv, 0.25);
+//				break;
+//			case 1:
+//				rgb.red = 32;
+//				rgb.green = 0;
+//				rgb.blue = 32;
+//				WS2812_ClearLEDs();
+//				WS2812_SimpleMeterEffect(rgb, 45, true);
+//				WS2812_SendAll();
+//				break;
+//			case 2:
+//				rgb.red = 0;
+//				rgb.green = 32;
+//				rgb.blue = 16;
+//				WS2812_ClearLEDs();
+//				WS2812_MirroredMeterEffect(rgb, 17, false);
+//				WS2812_SendAll();
+//				break;
+//			case 3:
+//				static colorHSV hsvRainbow = {.hue = 0, .saturation = 1.0f, .value = 0.2f};
+//				hsvRainbow.hue = (hsvRainbow.hue < 360) ? hsvRainbow.hue + 1 : 0;
+//				WS2812_FillRainbow(hsvRainbow, 3);
+//				WS2812_SendAll();
+//				break;
+//		}
 	}
 }
 
@@ -69,17 +80,31 @@ void updateMenuCpp()
 	  uint8_t y = i * 12 + 18;
 	  ssd1306_SetCursor(1, y);
 //	  sprintf(OLED_buffer, "%d: LED %d state", i, i);
-	  sprintf(OLED_buffer, "%d: %s", i, sbe.getParameter(i)->name.c_str());
+	  sprintf(OLED_buffer, "%d:%s", i, sbe.getParameter(i)->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
-	  ssd1306_DrawRectangle(0, y - 1, 99, y + 9, ((i == LEDIndex) && (menu_layer == ROOT)) ? White : Black);
+	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == LEDIndex) && (menu_layer == ROOT)) ? White : Black);
 
 	  // Display item value
-	  ssd1306_SetCursor(100, y);
+//	  ssd1306_SetCursor(100, y);
+	  ssd1306_SetCursor(90, y);
 	  sprintf(OLED_buffer, "%-3s", sbe.getParameter(i)->getValueString());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == LEDIndex) && (menu_layer == LEVEL_1)) ? Black : White);
 	}
 
 	ssd1306_UpdateScreen();
+}
+
+void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex)
+{
+	UNUSED(effectIndex);
+
+	sbe.getParameter(parameterIndex)->incrementValue();
+}
+
+void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex)
+{
+	UNUSED(effectIndex);
+	sbe.getParameter(parameterIndex)->decrementValue();
 }

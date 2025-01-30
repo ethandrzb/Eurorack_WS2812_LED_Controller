@@ -18,7 +18,7 @@
 #define WS2812FX_EFFECT_PARAM_LEN 11
 #define WS2812FX_EFFECT_NUM_PARAMS 5
 // 3 chars + null char
-#define WS2812FX_PARAMETER_VALUE_STRING_LEN 4
+#define WS2812FX_PARAMETER_VALUE_STRING_LEN 5
 
 namespace WS2812FX
 {
@@ -33,6 +33,8 @@ class EffectParameterBase
 		virtual ~EffectParameterBase() {}
 		virtual void *getValue() = 0;
 		virtual char *getValueString() = 0;
+		virtual void incrementValue() = 0;
+		virtual void decrementValue() = 0;
 };
 
 template <typename T> class EffectParameter : public EffectParameterBase
@@ -42,7 +44,6 @@ template <typename T> class EffectParameter : public EffectParameterBase
 
 		EffectParameter(T value, std::string name) : EffectParameterBase(name), value(value) {}
 		virtual ~EffectParameter() {}
-
 
 		void setValue(T newValue)
 		{
@@ -67,12 +68,12 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 	public:
 		NumericEffectParameter(T value, std::string name, T minValue, T maxValue, T tickAmount) : EffectParameter<T>(value, name), minValue(minValue), maxValue(maxValue), tickAmount(tickAmount) {}
 
-		void incrementValue()
+		void incrementValue() override
 		{
 			this->value = (this->value < this->maxValue) ? this->value + this->tickAmount : this->maxValue;
 		}
 
-		void decrementValue()
+		void decrementValue() override
 		{
 			this->value = (this->value > this->minValue) ? this->value - this->tickAmount : this->minValue;
 		}
@@ -116,7 +117,17 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 	public:
 		ColorHSVEffectParameter(colorHSV hsv, std::string name) : EffectParameter<colorHSV>(hsv, name) {}
 
+		//TODO: Encapsulate hue, saturation, and value in discrete NumericEffectParameters
 		//TODO: Increment and decrement functions for hue, saturation, and value
+		void incrementValue() override
+		{
+			return;
+		}
+
+		void decrementValue() override
+		{
+			return;
+		}
 
 		// Shouldn't I need an override here?
 		char *getValueString()
@@ -132,7 +143,6 @@ class WS2812Effect
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
 		virtual void updateEffect() = 0;
-//		virtual char *getValueStringByIndex(uint8_t index) = 0;
 		std::unique_ptr<EffectParameterBase> params[WS2812FX_EFFECT_NUM_PARAMS];
 
 		EffectParameterBase *getParameter(uint16_t index)

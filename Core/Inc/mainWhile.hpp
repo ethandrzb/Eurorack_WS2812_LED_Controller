@@ -12,6 +12,8 @@
 
 void mainWhileCpp(void);
 void updateMenuCpp(void);
+void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex);
+void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex);
 
 #ifdef __cplusplus
 extern "C"
@@ -19,6 +21,8 @@ extern "C"
 #endif
 	void mainWhileC(void);
 	void updateMenuC(void);
+	void incrementValueC(uint8_t effectIndex, uint8_t parameterIndex);
+	void decrementValueC(uint8_t effectIndex, uint8_t parameterIndex);
 #ifdef __cplusplus
 }
 #endif
