@@ -126,16 +126,8 @@ class WS2812Effect
 		{
 			if(index < WS2812FX_EFFECT_NUM_PARAMS)
 			{
-				if constexpr(std::is_same_v<T, ColorHSVEffectParameter>)
-				{
-					auto retVal = dynamic_cast<ColorHSVEffectParameter *>(this->params[index].get());
-					return retVal;
-				}
-				else
-				{
-					auto retVal = dynamic_cast<T *>(this->params[index].get());
-					return retVal;
-				}
+				auto retVal = dynamic_cast<T *>(this->params[index].get());
+				return retVal;
 			}
 			return NULL;
 		}
@@ -144,14 +136,7 @@ class WS2812Effect
 		{
 			if(index < WS2812FX_EFFECT_NUM_PARAMS)
 			{
-				if constexpr(std::is_same_v<T, ColorHSVEffectParameter>)
-				{
-					this->params[index] = std::make_unique<ColorHSVEffectParameter>(newParam);
-				}
-				else
-				{
-					this->params[index] = std::make_unique<T>(newParam);
-				}
+				this->params[index] = std::make_unique<T>(newParam);
 			}
 		}
 };
