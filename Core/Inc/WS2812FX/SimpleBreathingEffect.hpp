@@ -24,7 +24,7 @@ class SimpleBreathingEffect : public WS2812Effect
 			this->setParameter(NumericEffectParameter<uint8_t>(stepDelay, "Step Delay", 0, 100, 1), 0);
 
 			// Parameter 1: Step size
-			this->setParameter(NumericEffectParameter<float>(stepSize, "Step Size", 0, 0.1, 0.005), 1);
+			this->setParameter(NumericEffectParameter<float>(stepSize, "Step Size", 0.005, 0.1, 0.005), 1);
 
 			// Parameter 2: HSV color
 			this->setParameter(ColorHSVEffectParameter(hsv, "Color"), 2);
