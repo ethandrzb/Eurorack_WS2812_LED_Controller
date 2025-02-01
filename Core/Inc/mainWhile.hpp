@@ -10,6 +10,8 @@
 
 #include "WS2812.h"
 
+#define WS2812FX_NUM_EFFECTS 1
+
 void mainWhileCpp(void);
 void updateMenuCpp(void);
 void drawHSVPicker(void);

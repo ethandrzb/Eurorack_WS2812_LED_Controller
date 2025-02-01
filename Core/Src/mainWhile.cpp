@@ -25,7 +25,8 @@ extern "C"
 	}
 }
 
-extern uint8_t LEDIndex;
+extern uint8_t effectIndex;
+extern uint8_t menuItemIndex;
 extern uint8_t HSVPickerIndex;
 extern char OLED_buffer[30];
 extern uint8_t menu_layer;
@@ -33,13 +34,18 @@ extern uint8_t menu_layer;
 colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 1.0};
 SimpleBreathingEffect sbe = SimpleBreathingEffect(10, 0.005, hsv, 0.25);
+WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 
 void mainWhileCpp(void)
 {
+	// Collect effects
+	fx[0] = &sbe;
+
+	updateMenuCpp();
 
 	while(1)
 	{
-		sbe.updateEffect();
+		fx[effectIndex]->updateEffect();
 //		switch(LEDIndex)
 //		{
 //			case 0:
@@ -86,16 +92,16 @@ void updateMenuCpp()
 	  // Display menu item
 	  uint8_t y = i * 12 + 18;
 	  ssd1306_SetCursor(1, y);
-	  sprintf(OLED_buffer, "%s", sbe.getParameter(i)->name.c_str());
+	  sprintf(OLED_buffer, "%s", fx[effectIndex]->getParameter(i)->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
-	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == LEDIndex) && (menu_layer == ROOT)) ? White : Black);
+	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == ROOT)) ? White : Black);
 
 	  // Display item value
 	  ssd1306_SetCursor(90, y);
-	  sprintf(OLED_buffer, "%-3s", sbe.getParameter(i)->getValueString());
+	  sprintf(OLED_buffer, "%-3s", fx[effectIndex]->getParameter(i)->getValueString());
 
-	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == LEDIndex) && (menu_layer == LEVEL_1)) ? Black : White);
+	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == LEVEL_1)) ? Black : White);
 	}
 
 	// Draw color picker
@@ -126,7 +132,9 @@ void drawHSVPicker(void)
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 2) && (menu_layer == HSV_PICKER_ROOT)) ? Black : White);
 
 	// Display HSV values
-	colorHSV *hsv = static_cast<colorHSV *>(sbe.getParameter(2)->getValue());
+	//TODO: Find better way to get position of ColorHSVEffectParameters in a given effect
+	// Maybe a separate list of colors?
+	colorHSV *hsv = static_cast<colorHSV *>(fx[effectIndex]->getParameter(2)->getValue());
 	sprintf(OLED_buffer, "%3d", hsv->hue);
 	ssd1306_SetCursor(30, 18);
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 0) && (menu_layer == HSV_PICKER_VALUE_SELECTED)) ? Black : White);
@@ -170,30 +178,26 @@ void drawHSVPicker(void)
 
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 {
-	UNUSED(effectIndex);
-
-	if(dynamic_cast<ColorHSVEffectParameter *>(sbe.getParameter(parameterIndex)))
+	if(dynamic_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(parameterIndex)))
 	{
-		ColorHSVEffectParameter *tmp = static_cast<ColorHSVEffectParameter *>(sbe.getParameter(parameterIndex));
+		ColorHSVEffectParameter *tmp = static_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(parameterIndex));
 		tmp->incrementValueByIndex(parameterSubIndex);
 	}
 	else
 	{
-		sbe.getParameter(parameterIndex)->incrementValue();
+		fx[effectIndex]->getParameter(parameterIndex)->incrementValue();
 	}
 }
 
 void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 {
-	UNUSED(effectIndex);
-
-	if(dynamic_cast<ColorHSVEffectParameter *>(sbe.getParameter(parameterIndex)))
+	if(dynamic_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(parameterIndex)))
 	{
-		ColorHSVEffectParameter *tmp = static_cast<ColorHSVEffectParameter *>(sbe.getParameter(parameterIndex));
+		ColorHSVEffectParameter *tmp = static_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(parameterIndex));
 		tmp->decrementValueByIndex(parameterSubIndex);
 	}
 	else
 	{
-		sbe.getParameter(parameterIndex)->decrementValue();
+		fx[effectIndex]->getParameter(parameterIndex)->decrementValue();
 	}
 }

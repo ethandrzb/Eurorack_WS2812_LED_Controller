@@ -63,7 +63,8 @@ uint16_t enc_count_prev = 0;
 GPIO_TypeDef *LEDPorts[4] = {LED1_GPIO_Port, LED2_GPIO_Port, LED3_GPIO_Port, LED4_GPIO_Port};
 uint16_t LEDPins[4] = {LED1_Pin, LED2_Pin, LED3_Pin, LED4_Pin};
 GPIO_PinState LEDStates[4] = {GPIO_PIN_RESET, GPIO_PIN_RESET, GPIO_PIN_RESET, GPIO_PIN_RESET};
-uint8_t LEDIndex = 0;
+uint8_t effectIndex = 0;
+uint8_t menuItemIndex = 0;
 uint8_t HSVPickerIndex = 0;
 
 uint8_t menu_layer = ROOT;
@@ -94,8 +95,8 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 	if(htim == &htim3 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
 	{
 		// Menu layer transitions
-		// Check is hardcoded for ColorHSVEffectParameter
-		if(LEDIndex == 2)
+		// Check is hardcoded for ColorHSVEffectParameter in effect 0 (SimpleBreathingEffect)
+		if(menuItemIndex == 2)
 		{
 			switch(menu_layer)
 			{
@@ -159,27 +160,27 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 					// Use last encoder movement direction to determine whether to increment or decrement the current value
 					if(encoderLastDirectionForward)
 					{
-						LEDIndex++;
-						LEDIndex %= 4;
+						menuItemIndex++;
+						menuItemIndex %= 4;
 					}
 					else
 					{
-						LEDIndex--;
-						LEDIndex %= 4;
+						menuItemIndex--;
+						menuItemIndex %= 4;
 					}
 					break;
 				case LEVEL_1:
 					if(encoderLastDirectionForward)
 					{
-						incrementValueC(0, LEDIndex, 0);
+						incrementValueC(effectIndex, menuItemIndex, 0);
 					}
 					else
 					{
-						decrementValueC(0, LEDIndex, 0);
+						decrementValueC(effectIndex, menuItemIndex, 0);
 					}
 
-					LEDStates[LEDIndex] = (encoderLastDirectionForward) ? GPIO_PIN_SET : GPIO_PIN_RESET;
-					HAL_GPIO_WritePin(LEDPorts[LEDIndex], LEDPins[LEDIndex], LEDStates[LEDIndex]);
+					LEDStates[menuItemIndex] = (encoderLastDirectionForward) ? GPIO_PIN_SET : GPIO_PIN_RESET;
+					HAL_GPIO_WritePin(LEDPorts[menuItemIndex], LEDPins[menuItemIndex], LEDStates[menuItemIndex]);
 					break;
 				case HSV_PICKER_ROOT:
 					if(encoderLastDirectionForward)
@@ -196,11 +197,11 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 				case HSV_PICKER_VALUE_SELECTED:
 					if(encoderLastDirectionForward)
 					{
-						incrementValueC(0, LEDIndex, HSVPickerIndex);
+						incrementValueC(effectIndex, menuItemIndex, HSVPickerIndex);
 					}
 					else
 					{
-						decrementValueC(0, LEDIndex, HSVPickerIndex);
+						decrementValueC(effectIndex, menuItemIndex, HSVPickerIndex);
 					}
 					break;
 			}
@@ -269,8 +270,6 @@ int main(void)
   WS2812_ClearLEDs();
   WS2812_SetBackgroundColor(0, 0, 0);
   WS2812_SendAll();
-
-  updateMenuC();
   /* USER CODE END 2 */
 
   /* Infinite loop */
