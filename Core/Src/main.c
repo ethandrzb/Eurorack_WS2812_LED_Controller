@@ -104,7 +104,7 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 					menu_layer = HSV_PICKER_VALUE_SELECTED;
 					break;
 				case HSV_PICKER_VALUE_SELECTED:
-					menu_layer = ROOT;
+					menu_layer = HSV_PICKER_ROOT;
 					break;
 			}
 		}
@@ -114,6 +114,26 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 		}
 
 		updateMenuC();
+	}
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	switch(GPIO_Pin)
+	{
+		case BACK_BTN_Pin:
+			switch(menu_layer)
+			{
+				case LEVEL_1:
+				case HSV_PICKER_ROOT:
+					menu_layer = ROOT;
+					break;
+				case HSV_PICKER_VALUE_SELECTED:
+					menu_layer = HSV_PICKER_ROOT;
+					break;
+			}
+			updateMenuC();
+			break;
 	}
 }
 
@@ -634,12 +654,22 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : BACK_BTN_Pin */
+  GPIO_InitStruct.Pin = BACK_BTN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(BACK_BTN_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : LED4_Pin */
   GPIO_InitStruct.Pin = LED4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED4_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
