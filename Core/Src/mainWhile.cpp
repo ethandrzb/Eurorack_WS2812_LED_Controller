@@ -77,7 +77,8 @@ void updateMenuCpp()
 	ssd1306_Fill(Black);
 
 	ssd1306_SetCursor(0, 0);
-	ssd1306_WriteString("LED control", Font_11x18, White);
+	sprintf(OLED_buffer, "LED control");
+	ssd1306_WriteString(OLED_buffer, Font_11x18, White);
 
 	// Show LED states on screen
 	for(uint8_t i = 0; i < 4; i++)
@@ -85,14 +86,12 @@ void updateMenuCpp()
 	  // Display menu item
 	  uint8_t y = i * 12 + 18;
 	  ssd1306_SetCursor(1, y);
-//	  sprintf(OLED_buffer, "%d: LED %d state", i, i);
 	  sprintf(OLED_buffer, "%s", sbe.getParameter(i)->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
 	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == LEDIndex) && (menu_layer == ROOT)) ? White : Black);
 
 	  // Display item value
-//	  ssd1306_SetCursor(100, y);
 	  ssd1306_SetCursor(90, y);
 	  sprintf(OLED_buffer, "%-3s", sbe.getParameter(i)->getValueString());
 

@@ -17,7 +17,7 @@
 #define WS2812FX_EFFECT_NAME_LEN 11
 #define WS2812FX_EFFECT_PARAM_LEN 11
 #define WS2812FX_EFFECT_NUM_PARAMS 5
-// 3 chars + null char
+// 4 chars + null char
 #define WS2812FX_PARAMETER_VALUE_STRING_LEN 5
 
 namespace WS2812FX
@@ -175,6 +175,7 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 			}
 		}
 
+		// Reconstruct colorHSV struct from values in NumericEffectParameters
 		void *getValue() override
 		{
 			this->hsv.hue = *(static_cast<uint16_t *>(hue.getValue()));

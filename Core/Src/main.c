@@ -87,12 +87,14 @@ static void MX_TIM3_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+// Detect encoder button presses
+// Had to use a timer for this because this button was really noisy
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim == &htim3 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
 	{
 		// Menu layer transitions
-		// Check is hardcoded to only ColorHSVEffectParameter
+		// Check is hardcoded for ColorHSVEffectParameter
 		if(LEDIndex == 2)
 		{
 			switch(menu_layer)
@@ -139,6 +141,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 {
+	// Handle encoder movement
 	if(htim == &htim2)
 	{
 		enc_count_prev = enc_count;
@@ -149,7 +152,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 		// Check if encoder moved
 		if(enc_count != enc_count_prev)
 		{
-			// Handle encoder movement
+			// Trigger change based on current menu_layer
 			switch(menu_layer)
 			{
 				case ROOT:
@@ -249,7 +252,6 @@ int main(void)
 
   // Initialize OLED
   ssd1306_Init();
-  ssd1306_Fill(Black);
   ssd1306_UpdateScreen();
 
   ssd1306_SetCursor(0, 0);
@@ -257,6 +259,7 @@ int main(void)
 
   ssd1306_UpdateScreen();
 
+  // Start encoder timer
   HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
 
   // Start debounce timer for encoder button
