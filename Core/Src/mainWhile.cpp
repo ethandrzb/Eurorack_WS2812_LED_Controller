@@ -127,15 +127,16 @@ void drawHSVPicker(void)
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 2) && (menu_layer == HSV_PICKER_ROOT)) ? Black : White);
 
 	// Display HSV values
-	sprintf(OLED_buffer, "hhhh");
+	colorHSV *hsv = static_cast<colorHSV *>(sbe.getParameter(2)->getValue());
+	sprintf(OLED_buffer, "%3d", hsv->hue);
 	ssd1306_SetCursor(30, 18);
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 0) && (menu_layer == HSV_PICKER_VALUE_SELECTED)) ? Black : White);
 
-	sprintf(OLED_buffer, "ssss");
+	sprintf(OLED_buffer, "%.2f", hsv->saturation);
 	ssd1306_SetCursor(30, 28);
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 1) && (menu_layer == HSV_PICKER_VALUE_SELECTED)) ? Black : White);
 
-	sprintf(OLED_buffer, "vvvv");
+	sprintf(OLED_buffer, "%.2f", hsv->value);
 	ssd1306_SetCursor(30, 38);
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 2) && (menu_layer == HSV_PICKER_VALUE_SELECTED)) ? Black : White);
 
@@ -170,35 +171,29 @@ void drawHSVPicker(void)
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 {
 	UNUSED(effectIndex);
-	UNUSED(parameterSubIndex);
 
-	//TODO: Modify this condition to compare the parameter at parameterIndex to ColorHSVEffectParameter instead of checking if the value inside the parameter is a colorHSV
-//	if constexpr(std::is_same_v<typeid(*(static_cast<colorHSV *>(sbe.getParameter(parameterIndex)->getValue()))), colorHSV>)
-//	{
-//		ColorHSVEffectParameter *tmp = static_cast<ColorHSVEffectParameter *>(sbe.getParameter(parameterIndex));
-//		tmp->incrementValueByIndex(parameterSubIndex);
-//	}
-//	else
-//	{
-//
-//	}
-	sbe.getParameter(parameterIndex)->incrementValue();
+	if(dynamic_cast<ColorHSVEffectParameter *>(sbe.getParameter(parameterIndex)))
+	{
+		ColorHSVEffectParameter *tmp = static_cast<ColorHSVEffectParameter *>(sbe.getParameter(parameterIndex));
+		tmp->incrementValueByIndex(parameterSubIndex);
+	}
+	else
+	{
+		sbe.getParameter(parameterIndex)->incrementValue();
+	}
 }
 
 void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 {
 	UNUSED(effectIndex);
-	UNUSED(parameterSubIndex);
 
-	//TODO: Modify this condition to compare the parameter at parameterIndex to ColorHSVEffectParameter instead of checking if the value inside the parameter is a colorHSV
-//	if constexpr(std::is_same_v<typeid(static_cast<colorHSV *>(sbe.getParameter(parameterIndex)->getValue())), colorHSV *>)
-//	{
-//		ColorHSVEffectParameter *tmp = static_cast<ColorHSVEffectParameter *>(sbe.getParameter(parameterIndex));
-//		tmp->decrementValueByIndex(parameterSubIndex);
-//	}
-//	else
-//	{
-//
-//	}
-	sbe.getParameter(parameterIndex)->decrementValue();
+	if(dynamic_cast<ColorHSVEffectParameter *>(sbe.getParameter(parameterIndex)))
+	{
+		ColorHSVEffectParameter *tmp = static_cast<ColorHSVEffectParameter *>(sbe.getParameter(parameterIndex));
+		tmp->decrementValueByIndex(parameterSubIndex);
+	}
+	else
+	{
+		sbe.getParameter(parameterIndex)->decrementValue();
+	}
 }
