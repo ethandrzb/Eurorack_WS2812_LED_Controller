@@ -12,6 +12,7 @@
 
 void mainWhileCpp(void);
 void updateMenuCpp(void);
+void drawHSVPicker(void);
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex);
 void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex);
 

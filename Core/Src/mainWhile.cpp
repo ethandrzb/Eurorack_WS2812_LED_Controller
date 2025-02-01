@@ -73,6 +73,11 @@ void mainWhileCpp(void)
 
 void updateMenuCpp()
 {
+	ssd1306_Fill(Black);
+
+	ssd1306_SetCursor(0, 0);
+	ssd1306_WriteString("LED control", Font_11x18, White);
+
 	// Show LED states on screen
 	for(uint8_t i = 0; i < 4; i++)
 	{
@@ -80,7 +85,7 @@ void updateMenuCpp()
 	  uint8_t y = i * 12 + 18;
 	  ssd1306_SetCursor(1, y);
 //	  sprintf(OLED_buffer, "%d: LED %d state", i, i);
-	  sprintf(OLED_buffer, "%d:%s", i, sbe.getParameter(i)->name.c_str());
+	  sprintf(OLED_buffer, "%s", sbe.getParameter(i)->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
 	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == LEDIndex) && (menu_layer == ROOT)) ? White : Black);
@@ -93,7 +98,58 @@ void updateMenuCpp()
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == LEDIndex) && (menu_layer == LEVEL_1)) ? Black : White);
 	}
 
+	// Draw color picker
+	if(menu_layer == HSV_PICKER_ROOT)
+	{
+		drawHSVPicker();
+	}
+
 	ssd1306_UpdateScreen();
+}
+
+void drawHSVPicker(void)
+{
+	ssd1306_FillRectangle(16, 16, 112, 48, Black);
+	ssd1306_DrawRectangle(16, 16, 112, 48, White);
+
+	sprintf(OLED_buffer, "H hhhh");
+	ssd1306_SetCursor(17, 18);
+	ssd1306_WriteString(OLED_buffer, Font_7x10, White);
+
+	sprintf(OLED_buffer, "S ssss");
+	ssd1306_SetCursor(17, 28);
+	ssd1306_WriteString(OLED_buffer, Font_7x10, White);
+
+	sprintf(OLED_buffer, "V vvvv");
+	ssd1306_SetCursor(17, 38);
+	ssd1306_WriteString(OLED_buffer, Font_7x10, White);
+
+	// Draw color wheel
+	// Radius line angle: Hue
+	// Radius: Saturation
+	ssd1306_DrawCircle(96, 32, 14, White);
+	ssd1306_RadiusLine(96, 32, 14, 235, White);
+
+	// Draw value meter
+	const uint8_t VALUE_METER_CENTER_X = 70;
+	const uint8_t VALUE_METER_CENTER_Y = 32;
+	const uint8_t VALUE_METER_BORDER_HALF_WIDTH_X = 6;
+	const uint8_t VALUE_METER_BORDER_HALF_WIDTH_Y = 14;
+	const uint8_t VALUE_METER_FILL_HALF_WIDTH_X = 4;
+	const uint8_t VALUE_METER_FILL_MAX_LENGTH = 24;
+	const uint8_t VALUE_METER_FILL_TOP_Y = VALUE_METER_CENTER_Y - (VALUE_METER_FILL_MAX_LENGTH / 2);
+	const uint8_t VALUE_METER_FILL_BOTTOM_Y = VALUE_METER_CENTER_Y + (VALUE_METER_FILL_MAX_LENGTH / 2);
+	uint8_t fillAmount = 0;
+	ssd1306_DrawRectangle(VALUE_METER_CENTER_X - VALUE_METER_BORDER_HALF_WIDTH_X,
+							VALUE_METER_CENTER_Y - VALUE_METER_BORDER_HALF_WIDTH_Y,
+							VALUE_METER_CENTER_X + VALUE_METER_BORDER_HALF_WIDTH_X,
+							VALUE_METER_CENTER_Y + VALUE_METER_BORDER_HALF_WIDTH_Y,
+							White);
+	ssd1306_FillRectangle(VALUE_METER_CENTER_X - VALUE_METER_FILL_HALF_WIDTH_X,
+							VALUE_METER_FILL_TOP_Y + (VALUE_METER_FILL_MAX_LENGTH - fillAmount),
+							VALUE_METER_CENTER_X + VALUE_METER_FILL_HALF_WIDTH_X,
+							VALUE_METER_FILL_BOTTOM_Y,
+							White);
 }
 
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex)

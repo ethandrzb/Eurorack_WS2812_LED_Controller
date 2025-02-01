@@ -417,6 +417,19 @@ void ssd1306_DrawArcWithRadiusLine(uint8_t x, uint8_t y, uint8_t radius, uint16_
     return;
 }
 
+// Draw line with end point determined by
+void ssd1306_RadiusLine(uint8_t x, uint8_t y, uint8_t radius, uint16_t angle, SSD1306_COLOR color) {
+    float rad;
+
+    rad = ssd1306_DegToRad(ssd1306_NormalizeTo0_360(angle));
+    uint8_t first_point_x = x + (int8_t)(sin(rad)*radius);
+    uint8_t first_point_y = y + (int8_t)(cos(rad)*radius);
+
+    // Radius line
+    ssd1306_Line(x,y,first_point_x,first_point_y,color);
+    return;
+}
+
 /* Draw circle by Bresenhem's algorithm */
 void ssd1306_DrawCircle(uint8_t par_x,uint8_t par_y,uint8_t par_r,SSD1306_COLOR par_color) {
     int32_t x = -par_r;

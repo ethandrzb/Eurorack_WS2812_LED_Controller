@@ -91,7 +91,14 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 	if(htim == &htim3 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
 	{
 		// Toggle menu layer
-		menu_layer = (menu_layer == ROOT) ? LEVEL_1 : ROOT;
+		if(LEDIndex == 2)
+		{
+			menu_layer = (menu_layer == ROOT) ? HSV_PICKER_ROOT : ROOT;
+		}
+		else
+		{
+			menu_layer = (menu_layer == ROOT) ? LEVEL_1 : ROOT;
+		}
 
 		updateMenuC();
 	}

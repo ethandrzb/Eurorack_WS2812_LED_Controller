@@ -39,7 +39,9 @@ extern "C" {
 typedef enum menuLayer
 {
 	ROOT = 0,
-	LEVEL_1 = 1
+	LEVEL_1 = 1,
+	HSV_PICKER_ROOT = 2,
+	HSV_PICKER_VALUE_SELECTED = 3
 } menuLayer;
 /* USER CODE END ET */
 

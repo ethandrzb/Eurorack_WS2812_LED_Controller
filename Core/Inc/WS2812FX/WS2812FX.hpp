@@ -90,17 +90,18 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 
 		char *getValueString() override
 		{
+			// Add support for additional number types
 			if constexpr(std::is_same_v<T, uint8_t>)
 			{
 				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<uint8_t *>(this->getValue())));
 			}
+			if constexpr(std::is_same_v<T, uint16_t>)
+			{
+				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<uint16_t *>(this->getValue())));
+			}
 			else if constexpr(std::is_same_v<T, float>)
 			{
 				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%1.2f", *(static_cast<float *>(this->getValue())));
-			}
-			else
-			{
-				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "   ");
 			}
 
 			return this->valueString;
@@ -115,10 +116,19 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 {
 	public:
-		ColorHSVEffectParameter(colorHSV hsv, std::string name) : EffectParameter<colorHSV>(hsv, name) {}
+		colorHSV hsv;
+		NumericEffectParameter<uint16_t> hue = NumericEffectParameter<uint16_t>(180, "Hue", 0, 360, 5);
+		NumericEffectParameter<float> saturation = NumericEffectParameter<float>(1.0, "Saturation", 0, 1, 0.05);
+		NumericEffectParameter<float> value = NumericEffectParameter<float>(0.2, "Value", 0, 1, 0.05);
 
-		//TODO: Encapsulate hue, saturation, and value in discrete NumericEffectParameters
-		//TODO: Increment and decrement functions for hue, saturation, and value
+		ColorHSVEffectParameter(colorHSV hsv, std::string name) : EffectParameter<colorHSV>(hsv, name)
+		{
+			this->hsv = hsv;
+			hue.setValue(hsv.hue);
+			saturation.setValue(hsv.saturation);
+			value.setValue(hsv.value);
+		}
+
 		void incrementValue() override
 		{
 			return;
@@ -129,10 +139,19 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 			return;
 		}
 
+		void *getValue() override
+		{
+			this->hsv.hue = *(static_cast<uint16_t *>(hue.getValue()));
+			this->hsv.saturation = *(static_cast<float *>(saturation.getValue()));
+			this->hsv.value = *(static_cast<float *>(value.getValue()));
+
+			return static_cast<void *>(&(hsv));
+		}
+
 		// Shouldn't I need an override here?
 		char *getValueString()
 		{
-			sprintf(this->valueString, "   ");
+			sprintf(this->valueString, "~");
 
 			return this->valueString;
 		}
