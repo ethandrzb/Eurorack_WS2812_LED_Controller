@@ -141,10 +141,11 @@ void drawHSVPicker(void)
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 2) && (menu_layer == HSV_PICKER_VALUE_SELECTED)) ? Black : White);
 
 	// Draw color wheel
+	const uint8_t HSV_PICKER_WHEEL_MAX_RADIUS = 14;
 	// Radius line angle: Hue
 	// Radius: Saturation
 	ssd1306_DrawCircle(96, 32, 14, White);
-	ssd1306_RadiusLine(96, 32, 14, 235, White);
+	ssd1306_RadiusLine(96, 32, (uint8_t)((float) HSV_PICKER_WHEEL_MAX_RADIUS * hsv->saturation), hsv->hue, White);
 
 	// Draw value meter
 	const uint8_t VALUE_METER_CENTER_X = 70;
@@ -155,7 +156,7 @@ void drawHSVPicker(void)
 	const uint8_t VALUE_METER_FILL_MAX_LENGTH = 24;
 	const uint8_t VALUE_METER_FILL_TOP_Y = VALUE_METER_CENTER_Y - (VALUE_METER_FILL_MAX_LENGTH / 2);
 	const uint8_t VALUE_METER_FILL_BOTTOM_Y = VALUE_METER_CENTER_Y + (VALUE_METER_FILL_MAX_LENGTH / 2);
-	uint8_t fillAmount = 0;
+	uint8_t fillAmount = (uint8_t)((float) VALUE_METER_FILL_MAX_LENGTH * hsv->value);
 	ssd1306_DrawRectangle(VALUE_METER_CENTER_X - VALUE_METER_BORDER_HALF_WIDTH_X,
 							VALUE_METER_CENTER_Y - VALUE_METER_BORDER_HALF_WIDTH_Y,
 							VALUE_METER_CENTER_X + VALUE_METER_BORDER_HALF_WIDTH_X,
