@@ -139,6 +139,42 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 			return;
 		}
 
+		void incrementValueByIndex(uint8_t index)
+		{
+			switch(index)
+			{
+				case 0:
+					hue.incrementValue();
+					break;
+				case 1:
+					saturation.incrementValue();
+					break;
+				case 2:
+					value.incrementValue();
+					break;
+				default:
+					return;
+			}
+		}
+
+		void decrementValueByIndex(uint8_t index)
+		{
+			switch(index)
+			{
+				case 0:
+					hue.decrementValue();
+					break;
+				case 1:
+					saturation.decrementValue();
+					break;
+				case 2:
+					value.decrementValue();
+					break;
+				default:
+					return;
+			}
+		}
+
 		void *getValue() override
 		{
 			this->hsv.hue = *(static_cast<uint16_t *>(hue.getValue()));

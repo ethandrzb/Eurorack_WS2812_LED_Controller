@@ -14,18 +14,19 @@ extern "C"
 		updateMenuCpp();
 	}
 
-	void incrementValueC(uint8_t effectIndex, uint8_t parameterIndex)
+	void incrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 	{
-		incrementValueCpp(effectIndex, parameterIndex);
+		incrementValueCpp(effectIndex, parameterIndex, parameterSubIndex);
 	}
 
-	void decrementValueC(uint8_t effectIndex, uint8_t parameterIndex)
+	void decrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 	{
-		decrementValueCpp(effectIndex, parameterIndex);
+		decrementValueCpp(effectIndex, parameterIndex, parameterSubIndex);
 	}
 }
 
 extern uint8_t LEDIndex;
+extern uint8_t HSVPickerIndex;
 extern char OLED_buffer[30];
 extern uint8_t menu_layer;
 
@@ -99,7 +100,7 @@ void updateMenuCpp()
 	}
 
 	// Draw color picker
-	if(menu_layer == HSV_PICKER_ROOT)
+	if(menu_layer == HSV_PICKER_ROOT || menu_layer == HSV_PICKER_VALUE_SELECTED)
 	{
 		drawHSVPicker();
 	}
@@ -112,17 +113,31 @@ void drawHSVPicker(void)
 	ssd1306_FillRectangle(16, 16, 112, 48, Black);
 	ssd1306_DrawRectangle(16, 16, 112, 48, White);
 
-	sprintf(OLED_buffer, "H hhhh");
+	// Display labels
+	sprintf(OLED_buffer, "H");
 	ssd1306_SetCursor(17, 18);
-	ssd1306_WriteString(OLED_buffer, Font_7x10, White);
+	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 0) && (menu_layer == HSV_PICKER_ROOT)) ? Black : White);
 
-	sprintf(OLED_buffer, "S ssss");
+	sprintf(OLED_buffer, "S");
 	ssd1306_SetCursor(17, 28);
-	ssd1306_WriteString(OLED_buffer, Font_7x10, White);
+	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 1) && (menu_layer == HSV_PICKER_ROOT)) ? Black : White);
 
-	sprintf(OLED_buffer, "V vvvv");
+	sprintf(OLED_buffer, "V");
 	ssd1306_SetCursor(17, 38);
-	ssd1306_WriteString(OLED_buffer, Font_7x10, White);
+	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 2) && (menu_layer == HSV_PICKER_ROOT)) ? Black : White);
+
+	// Display HSV values
+	sprintf(OLED_buffer, "hhhh");
+	ssd1306_SetCursor(30, 18);
+	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 0) && (menu_layer == HSV_PICKER_VALUE_SELECTED)) ? Black : White);
+
+	sprintf(OLED_buffer, "ssss");
+	ssd1306_SetCursor(30, 28);
+	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 1) && (menu_layer == HSV_PICKER_VALUE_SELECTED)) ? Black : White);
+
+	sprintf(OLED_buffer, "vvvv");
+	ssd1306_SetCursor(30, 38);
+	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 2) && (menu_layer == HSV_PICKER_VALUE_SELECTED)) ? Black : White);
 
 	// Draw color wheel
 	// Radius line angle: Hue
@@ -152,15 +167,38 @@ void drawHSVPicker(void)
 							White);
 }
 
-void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex)
+void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 {
 	UNUSED(effectIndex);
+	UNUSED(parameterSubIndex);
 
+	//TODO: Modify this condition to compare the parameter at parameterIndex to ColorHSVEffectParameter instead of checking if the value inside the parameter is a colorHSV
+//	if constexpr(std::is_same_v<typeid(*(static_cast<colorHSV *>(sbe.getParameter(parameterIndex)->getValue()))), colorHSV>)
+//	{
+//		ColorHSVEffectParameter *tmp = static_cast<ColorHSVEffectParameter *>(sbe.getParameter(parameterIndex));
+//		tmp->incrementValueByIndex(parameterSubIndex);
+//	}
+//	else
+//	{
+//
+//	}
 	sbe.getParameter(parameterIndex)->incrementValue();
 }
 
-void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex)
+void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 {
 	UNUSED(effectIndex);
+	UNUSED(parameterSubIndex);
+
+	//TODO: Modify this condition to compare the parameter at parameterIndex to ColorHSVEffectParameter instead of checking if the value inside the parameter is a colorHSV
+//	if constexpr(std::is_same_v<typeid(static_cast<colorHSV *>(sbe.getParameter(parameterIndex)->getValue())), colorHSV *>)
+//	{
+//		ColorHSVEffectParameter *tmp = static_cast<ColorHSVEffectParameter *>(sbe.getParameter(parameterIndex));
+//		tmp->decrementValueByIndex(parameterSubIndex);
+//	}
+//	else
+//	{
+//
+//	}
 	sbe.getParameter(parameterIndex)->decrementValue();
 }

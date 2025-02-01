@@ -13,8 +13,8 @@
 void mainWhileCpp(void);
 void updateMenuCpp(void);
 void drawHSVPicker(void);
-void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex);
-void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex);
+void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
+void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
 
 #ifdef __cplusplus
 extern "C"
@@ -22,8 +22,8 @@ extern "C"
 #endif
 	void mainWhileC(void);
 	void updateMenuC(void);
-	void incrementValueC(uint8_t effectIndex, uint8_t parameterIndex);
-	void decrementValueC(uint8_t effectIndex, uint8_t parameterIndex);
+	void incrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
+	void decrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
 #ifdef __cplusplus
 }
 #endif

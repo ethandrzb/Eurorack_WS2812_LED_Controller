@@ -64,6 +64,7 @@ GPIO_TypeDef *LEDPorts[4] = {LED1_GPIO_Port, LED2_GPIO_Port, LED3_GPIO_Port, LED
 uint16_t LEDPins[4] = {LED1_Pin, LED2_Pin, LED3_Pin, LED4_Pin};
 GPIO_PinState LEDStates[4] = {GPIO_PIN_RESET, GPIO_PIN_RESET, GPIO_PIN_RESET, GPIO_PIN_RESET};
 uint8_t LEDIndex = 0;
+uint8_t HSVPickerIndex = 0;
 
 uint8_t menu_layer = ROOT;
 uint8_t encoderLastDirectionForward = 0;
@@ -90,10 +91,22 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim == &htim3 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
 	{
-		// Toggle menu layer
+		// Menu layer transitions
+		// Check is hardcoded to only ColorHSVEffectParameter
 		if(LEDIndex == 2)
 		{
-			menu_layer = (menu_layer == ROOT) ? HSV_PICKER_ROOT : ROOT;
+			switch(menu_layer)
+			{
+				case ROOT:
+					menu_layer = HSV_PICKER_ROOT;
+					break;
+				case HSV_PICKER_ROOT:
+					menu_layer = HSV_PICKER_VALUE_SELECTED;
+					break;
+				case HSV_PICKER_VALUE_SELECTED:
+					menu_layer = ROOT;
+					break;
+			}
 		}
 		else
 		{
@@ -135,15 +148,37 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 				case LEVEL_1:
 					if(encoderLastDirectionForward)
 					{
-						incrementValueC(0, LEDIndex);
+						incrementValueC(0, LEDIndex, 0);
 					}
 					else
 					{
-						decrementValueC(0, LEDIndex);
+						decrementValueC(0, LEDIndex, 0);
 					}
 
 					LEDStates[LEDIndex] = (encoderLastDirectionForward) ? GPIO_PIN_SET : GPIO_PIN_RESET;
 					HAL_GPIO_WritePin(LEDPorts[LEDIndex], LEDPins[LEDIndex], LEDStates[LEDIndex]);
+					break;
+				case HSV_PICKER_ROOT:
+					if(encoderLastDirectionForward)
+					{
+						HSVPickerIndex++;
+						HSVPickerIndex %= 3;
+					}
+					else
+					{
+						HSVPickerIndex--;
+						HSVPickerIndex %= 3;
+					}
+					break;
+				case HSV_PICKER_VALUE_SELECTED:
+					if(encoderLastDirectionForward)
+					{
+						incrementValueC(0, LEDIndex, HSVPickerIndex);
+					}
+					else
+					{
+						decrementValueC(0, LEDIndex, HSVPickerIndex);
+					}
 					break;
 			}
 
