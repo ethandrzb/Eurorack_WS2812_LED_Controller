@@ -67,7 +67,7 @@ uint8_t effectIndex = 0;
 uint8_t menuItemIndex = 0;
 uint8_t HSVPickerIndex = 0;
 
-menuLayer menu_layer = ROOT;
+menuLayer menu_layer = NUMERIC_PARAMETER_ROOT;
 uint8_t encoderLastDirectionForward = 0;
 
 /* USER CODE END PV */
@@ -100,7 +100,7 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 		{
 			switch(menu_layer)
 			{
-				case ROOT:
+				case NUMERIC_PARAMETER_ROOT:
 					menu_layer = HSV_PICKER_ROOT;
 					break;
 				case HSV_PICKER_ROOT:
@@ -115,7 +115,7 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 		}
 		else
 		{
-			menu_layer = (menu_layer == ROOT) ? LEVEL_1 : ROOT;
+			menu_layer = (menu_layer == NUMERIC_PARAMETER_ROOT) ? NUMERIC_PARAMETER_VALUE_SELECTED : NUMERIC_PARAMETER_ROOT;
 		}
 
 		updateMenuC();
@@ -129,9 +129,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		case BACK_BTN_Pin:
 			switch(menu_layer)
 			{
-				case LEVEL_1:
+				case NUMERIC_PARAMETER_VALUE_SELECTED:
 				case HSV_PICKER_ROOT:
-					menu_layer = ROOT;
+					menu_layer = NUMERIC_PARAMETER_ROOT;
 					break;
 				case HSV_PICKER_VALUE_SELECTED:
 					menu_layer = HSV_PICKER_ROOT;
@@ -174,7 +174,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 				// Trigger change based on current menu_layer
 				switch(menu_layer)
 				{
-					case ROOT:
+					case NUMERIC_PARAMETER_ROOT:
 						// Use last encoder movement direction to determine whether to increment or decrement the current value
 						if(encoderLastDirectionForward)
 						{
@@ -187,7 +187,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 							menuItemIndex %= 4;
 						}
 						break;
-					case LEVEL_1:
+					case NUMERIC_PARAMETER_VALUE_SELECTED:
 						if(encoderLastDirectionForward)
 						{
 							incrementValueC(effectIndex, menuItemIndex, 0);

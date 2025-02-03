@@ -116,13 +116,13 @@ void drawMenuLevel1(void)
 	  sprintf(OLED_buffer, "%s", fx[effectIndex]->getParameter(i)->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
-	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == ROOT)) ? White : Black);
+	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == NUMERIC_PARAMETER_ROOT)) ? White : Black);
 
 	  // Display item value
 	  ssd1306_SetCursor(90, y);
 	  sprintf(OLED_buffer, "%-3s", fx[effectIndex]->getParameter(i)->getValueString());
 
-	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == LEVEL_1)) ? Black : White);
+	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)) ? Black : White);
 	}
 }
 
