@@ -10,10 +10,11 @@
 
 #include "WS2812.h"
 
-#define WS2812FX_NUM_EFFECTS 1
+#define WS2812FX_NUM_EFFECTS 14
 
 void mainWhileCpp(void);
 void updateMenuCpp(void);
+void drawMenuLevel1(void);
 void drawHSVPicker(void);
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
 void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);

@@ -78,6 +78,8 @@ void Error_Handler(void);
 #define BACK_BTN_Pin GPIO_PIN_7
 #define BACK_BTN_GPIO_Port GPIOC
 #define BACK_BTN_EXTI_IRQn EXTI9_5_IRQn
+#define FX_CHANGE_BTN_Pin GPIO_PIN_10
+#define FX_CHANGE_BTN_GPIO_Port GPIOA
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14

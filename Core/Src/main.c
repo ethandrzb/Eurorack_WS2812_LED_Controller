@@ -67,7 +67,7 @@ uint8_t effectIndex = 0;
 uint8_t menuItemIndex = 0;
 uint8_t HSVPickerIndex = 0;
 
-uint8_t menu_layer = ROOT;
+menuLayer menu_layer = ROOT;
 uint8_t encoderLastDirectionForward = 0;
 
 /* USER CODE END PV */
@@ -109,6 +109,8 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 				case HSV_PICKER_VALUE_SELECTED:
 					menu_layer = HSV_PICKER_ROOT;
 					break;
+				default:
+					break;
 			}
 		}
 		else
@@ -134,6 +136,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 				case HSV_PICKER_VALUE_SELECTED:
 					menu_layer = HSV_PICKER_ROOT;
 					break;
+				default:
+					break;
 			}
 			updateMenuC();
 			break;
@@ -153,57 +157,72 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 		// Check if encoder moved
 		if(enc_count != enc_count_prev)
 		{
-			// Trigger change based on current menu_layer
-			switch(menu_layer)
+			// FX change button held
+			if(HAL_GPIO_ReadPin(FX_CHANGE_BTN_GPIO_Port, FX_CHANGE_BTN_Pin) == GPIO_PIN_RESET)
 			{
-				case ROOT:
-					// Use last encoder movement direction to determine whether to increment or decrement the current value
-					if(encoderLastDirectionForward)
-					{
-						menuItemIndex++;
-						menuItemIndex %= 4;
-					}
-					else
-					{
-						menuItemIndex--;
-						menuItemIndex %= 4;
-					}
-					break;
-				case LEVEL_1:
-					if(encoderLastDirectionForward)
-					{
-						incrementValueC(effectIndex, menuItemIndex, 0);
-					}
-					else
-					{
-						decrementValueC(effectIndex, menuItemIndex, 0);
-					}
+				if(encoderLastDirectionForward)
+				{
+					effectIndex = (effectIndex < WS2812FX_NUM_EFFECTS - 1) ? effectIndex + 1 : WS2812FX_NUM_EFFECTS - 1;
+				}
+				else
+				{
+					effectIndex = (effectIndex > 0) ? effectIndex - 1 : 0;
+				}
+			}
+			else
+			{
+				// Trigger change based on current menu_layer
+				switch(menu_layer)
+				{
+					case ROOT:
+						// Use last encoder movement direction to determine whether to increment or decrement the current value
+						if(encoderLastDirectionForward)
+						{
+							menuItemIndex++;
+							menuItemIndex %= 4;
+						}
+						else
+						{
+							menuItemIndex--;
+							menuItemIndex %= 4;
+						}
+						break;
+					case LEVEL_1:
+						if(encoderLastDirectionForward)
+						{
+							incrementValueC(effectIndex, menuItemIndex, 0);
+						}
+						else
+						{
+							decrementValueC(effectIndex, menuItemIndex, 0);
+						}
 
-					LEDStates[menuItemIndex] = (encoderLastDirectionForward) ? GPIO_PIN_SET : GPIO_PIN_RESET;
-					HAL_GPIO_WritePin(LEDPorts[menuItemIndex], LEDPins[menuItemIndex], LEDStates[menuItemIndex]);
-					break;
-				case HSV_PICKER_ROOT:
-					if(encoderLastDirectionForward)
-					{
-						HSVPickerIndex++;
-						HSVPickerIndex %= 3;
-					}
-					else
-					{
-						HSVPickerIndex--;
-						HSVPickerIndex %= 3;
-					}
-					break;
-				case HSV_PICKER_VALUE_SELECTED:
-					if(encoderLastDirectionForward)
-					{
-						incrementValueC(effectIndex, menuItemIndex, HSVPickerIndex);
-					}
-					else
-					{
-						decrementValueC(effectIndex, menuItemIndex, HSVPickerIndex);
-					}
-					break;
+						LEDStates[menuItemIndex] = (encoderLastDirectionForward) ? GPIO_PIN_SET : GPIO_PIN_RESET;
+						HAL_GPIO_WritePin(LEDPorts[menuItemIndex], LEDPins[menuItemIndex], LEDStates[menuItemIndex]);
+						break;
+					case HSV_PICKER_ROOT:
+						if(encoderLastDirectionForward)
+						{
+							HSVPickerIndex++;
+							HSVPickerIndex %= 3;
+						}
+						else
+						{
+							HSVPickerIndex--;
+							HSVPickerIndex %= 3;
+						}
+						break;
+					case HSV_PICKER_VALUE_SELECTED:
+						if(encoderLastDirectionForward)
+						{
+							incrementValueC(effectIndex, menuItemIndex, HSVPickerIndex);
+						}
+						else
+						{
+							decrementValueC(effectIndex, menuItemIndex, HSVPickerIndex);
+						}
+						break;
+				}
 			}
 
 			updateMenuC();
@@ -661,6 +680,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(BACK_BTN_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : FX_CHANGE_BTN_Pin */
+  GPIO_InitStruct.Pin = FX_CHANGE_BTN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(FX_CHANGE_BTN_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LED4_Pin */
   GPIO_InitStruct.Pin = LED4_Pin;

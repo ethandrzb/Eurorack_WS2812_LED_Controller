@@ -39,7 +39,13 @@ WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 void mainWhileCpp(void)
 {
 	// Collect effects
-	fx[0] = &sbe;
+//	fx[0] = &sbe;
+
+	// Fill all FX slots with same FX instance until more FX are implemented
+	for(int i = 0; i < WS2812FX_NUM_EFFECTS; i++)
+	{
+		fx[i] = &sbe;
+	}
 
 	updateMenuCpp();
 
@@ -82,11 +88,26 @@ void updateMenuCpp()
 {
 	ssd1306_Fill(Black);
 
+	// Display title bar
 	ssd1306_SetCursor(0, 0);
-	sprintf(OLED_buffer, "LED control");
+//	sprintf(OLED_buffer, "%d %s", effectIndex, fx[effectIndex]->name);
+	sprintf(OLED_buffer, "%d", effectIndex);
 	ssd1306_WriteString(OLED_buffer, Font_11x18, White);
 
 	// Show LED states on screen
+	drawMenuLevel1();
+
+	// Draw color picker
+	if(menu_layer == HSV_PICKER_ROOT || menu_layer == HSV_PICKER_VALUE_SELECTED)
+	{
+		drawHSVPicker();
+	}
+
+	ssd1306_UpdateScreen();
+}
+
+void drawMenuLevel1(void)
+{
 	for(uint8_t i = 0; i < 4; i++)
 	{
 	  // Display menu item
@@ -103,14 +124,6 @@ void updateMenuCpp()
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == LEVEL_1)) ? Black : White);
 	}
-
-	// Draw color picker
-	if(menu_layer == HSV_PICKER_ROOT || menu_layer == HSV_PICKER_VALUE_SELECTED)
-	{
-		drawHSVPicker();
-	}
-
-	ssd1306_UpdateScreen();
 }
 
 void drawHSVPicker(void)
