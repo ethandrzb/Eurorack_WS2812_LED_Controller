@@ -15,6 +15,7 @@
 void mainWhileCpp(void);
 void updateMenuCpp(void);
 void drawMenuLevel1(void);
+void drawMenuColorPalette(void);
 void drawHSVPicker(void);
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
 void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);

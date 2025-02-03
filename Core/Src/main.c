@@ -129,7 +129,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		case BACK_BTN_Pin:
 			switch(menu_layer)
 			{
+				case NUMERIC_PARAMETER_ROOT:
+					menu_layer = COLOR_PALETTE_ROOT;
+					break;
 				case NUMERIC_PARAMETER_VALUE_SELECTED:
+				case COLOR_PALETTE_ROOT:
 				case HSV_PICKER_ROOT:
 					menu_layer = NUMERIC_PARAMETER_ROOT;
 					break;
@@ -139,6 +143,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 				default:
 					break;
 			}
+			updateMenuC();
+			break;
+		case FX_CHANGE_BTN_Pin:
 			updateMenuC();
 			break;
 	}
@@ -174,6 +181,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 				// Trigger change based on current menu_layer
 				switch(menu_layer)
 				{
+					case COLOR_PALETTE_ROOT:
 					case NUMERIC_PARAMETER_ROOT:
 						// Use last encoder movement direction to determine whether to increment or decrement the current value
 						if(encoderLastDirectionForward)
@@ -683,7 +691,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : FX_CHANGE_BTN_Pin */
   GPIO_InitStruct.Pin = FX_CHANGE_BTN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(FX_CHANGE_BTN_GPIO_Port, &GPIO_InitStruct);
 
@@ -697,6 +705,9 @@ static void MX_GPIO_Init(void)
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

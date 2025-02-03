@@ -92,10 +92,17 @@ void updateMenuCpp()
 	ssd1306_SetCursor(0, 0);
 //	sprintf(OLED_buffer, "%d %s", effectIndex, fx[effectIndex]->name);
 	sprintf(OLED_buffer, "%d", effectIndex);
-	ssd1306_WriteString(OLED_buffer, Font_11x18, White);
+	ssd1306_WriteString(OLED_buffer, Font_11x18, (HAL_GPIO_ReadPin(FX_CHANGE_BTN_GPIO_Port, FX_CHANGE_BTN_Pin) != GPIO_PIN_RESET) ? White : Black);
 
 	// Show LED states on screen
-	drawMenuLevel1();
+	if(menu_layer != COLOR_PALETTE_ROOT)
+	{
+		drawMenuLevel1();
+	}
+	else
+	{
+		drawMenuColorPalette();
+	}
 
 	// Draw color picker
 	if(menu_layer == HSV_PICKER_ROOT || menu_layer == HSV_PICKER_VALUE_SELECTED)
@@ -123,6 +130,20 @@ void drawMenuLevel1(void)
 	  sprintf(OLED_buffer, "%-3s", fx[effectIndex]->getParameter(i)->getValueString());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)) ? Black : White);
+	}
+}
+
+void drawMenuColorPalette(void)
+{
+	for(uint8_t i = 0; i < 4; i++)
+	{
+	  // Display menu item
+	  uint8_t y = i * 12 + 18;
+	  ssd1306_SetCursor(1, y);
+	  sprintf(OLED_buffer, "Color %i", i);
+
+	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
+	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == menuItemIndex)) ? White : Black);
 	}
 }
 
