@@ -16,7 +16,7 @@
 
 #define WS2812FX_EFFECT_NAME_LEN 11
 #define WS2812FX_EFFECT_PARAM_LEN 11
-#define WS2812FX_EFFECT_NUM_PARAMS 5
+#define WS2812FX_EFFECT_MAX_PARAMS 5
 // 4 chars + null char
 #define WS2812FX_PARAMETER_VALUE_STRING_LEN 5
 
@@ -199,11 +199,11 @@ class WS2812Effect
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
 		virtual void updateEffect() = 0;
-		std::unique_ptr<EffectParameterBase> params[WS2812FX_EFFECT_NUM_PARAMS];
+		std::unique_ptr<EffectParameterBase> params[WS2812FX_EFFECT_MAX_PARAMS];
 
 		EffectParameterBase *getParameter(uint16_t index)
 		{
-			if(index < WS2812FX_EFFECT_NUM_PARAMS)
+			if(index < WS2812FX_EFFECT_MAX_PARAMS)
 			{
 				return this->params[index].get();
 			}
@@ -212,7 +212,7 @@ class WS2812Effect
 
 		template <typename T> void setParameter(const T &newParam, uint16_t index)
 		{
-			if(index < WS2812FX_EFFECT_NUM_PARAMS)
+			if(index < WS2812FX_EFFECT_MAX_PARAMS)
 			{
 				this->params[index] = std::make_unique<T>(newParam);
 			}

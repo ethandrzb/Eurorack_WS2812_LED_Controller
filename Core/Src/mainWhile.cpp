@@ -2,6 +2,8 @@
 #include "WS2812FX/SimpleBreathingEffect.hpp"
 #include "../../Drivers/ssd1306/ssd1306.h"
 
+#include <vector>
+
 extern "C"
 {
 	void mainWhileC(void)
@@ -31,6 +33,9 @@ extern uint8_t HSVPickerIndex;
 extern char OLED_buffer[30];
 extern uint8_t menu_layer;
 
+std::vector<EffectParameterBase *> numericParams;
+std::vector<ColorHSVEffectParameter *> colors;
+
 colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 1.0};
 SimpleBreathingEffect sbe = SimpleBreathingEffect(10, 0.005, hsv, 0.25);
@@ -46,6 +51,8 @@ void mainWhileCpp(void)
 	{
 		fx[i] = &sbe;
 	}
+
+	populateMenuItems();
 
 	updateMenuCpp();
 
@@ -92,12 +99,13 @@ void updateMenuCpp()
 	ssd1306_SetCursor(0, 0);
 //	sprintf(OLED_buffer, "%d %s", effectIndex, fx[effectIndex]->name);
 	sprintf(OLED_buffer, "%d", effectIndex);
+	// Invert text color when FX_CHANGE_BTN held
 	ssd1306_WriteString(OLED_buffer, Font_11x18, (HAL_GPIO_ReadPin(FX_CHANGE_BTN_GPIO_Port, FX_CHANGE_BTN_Pin) != GPIO_PIN_RESET) ? White : Black);
 
 	// Show LED states on screen
 	if(menu_layer != COLOR_PALETTE_ROOT)
 	{
-		drawMenuLevel1();
+		drawMenuNumericParameter();
 	}
 	else
 	{
@@ -113,7 +121,9 @@ void updateMenuCpp()
 	ssd1306_UpdateScreen();
 }
 
-void drawMenuLevel1(void)
+//TODO: Modify this function to us the new numericParams vector instead of fetching parameters by index
+// You will likely need to add and manage new index variables for their respective menus
+void drawMenuNumericParameter(void)
 {
 	for(uint8_t i = 0; i < 4; i++)
 	{
@@ -133,6 +143,7 @@ void drawMenuLevel1(void)
 	}
 }
 
+//TODO: Modify this function to us the new colors vector instead of fetching parameters by index
 void drawMenuColorPalette(void)
 {
 	for(uint8_t i = 0; i < 4; i++)
@@ -189,6 +200,7 @@ void drawHSVPicker(void)
 	ssd1306_RadiusLine(96, 32, (uint8_t)((float) HSV_PICKER_WHEEL_MAX_RADIUS * hsv->saturation), hsv->hue, White);
 
 	// Draw value meter
+	// Meter position specified using center point and extending up, down, left, and right from it
 	const uint8_t VALUE_METER_CENTER_X = 70;
 	const uint8_t VALUE_METER_CENTER_Y = 32;
 	const uint8_t VALUE_METER_BORDER_HALF_WIDTH_X = 6;
@@ -233,5 +245,22 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 	else
 	{
 		fx[effectIndex]->getParameter(parameterIndex)->decrementValue();
+	}
+}
+
+// Groups the arbitrary parameters in each effect into numeric and color parameters based on type
+// These are used to populate the items for their respective menus
+void populateMenuItems()
+{
+	for(int i = 0; i < WS2812FX_EFFECT_MAX_PARAMS; i++)
+	{
+		if(dynamic_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(i)))
+		{
+			colors.push_back(static_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(i)));
+		}
+		else
+		{
+			numericParams.push_back(fx[effectIndex]->getParameter(i));
+		}
 	}
 }
