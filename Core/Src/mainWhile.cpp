@@ -188,8 +188,7 @@ void drawHSVPicker(void)
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 2) && (menu_layer == HSV_PICKER_ROOT)) ? Black : White);
 
 	// Display HSV values
-	//TODO: Remove hardcoded index for color
-	colorHSV *hsv = static_cast<colorHSV *>(colors[0]->getValue());
+	colorHSV *hsv = static_cast<colorHSV *>(colors[menuItemIndex]->getValue());
 	sprintf(OLED_buffer, "%3d", hsv->hue);
 	ssd1306_SetCursor(30, 18);
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 0) && (menu_layer == HSV_PICKER_VALUE_SELECTED)) ? Black : White);
