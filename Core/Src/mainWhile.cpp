@@ -109,8 +109,7 @@ void updateMenuCpp(void)
 
 	// Display title bar
 	ssd1306_SetCursor(0, 0);
-//	sprintf(OLED_buffer, "%d %s", effectIndex, fx[effectIndex]->name);
-	sprintf(OLED_buffer, "%d", effectIndex);
+	sprintf(OLED_buffer, "%d %s", effectIndex, fx[effectIndex]->name);
 	// Invert text color when FX_CHANGE_BTN held
 	ssd1306_WriteString(OLED_buffer, Font_11x18, (HAL_GPIO_ReadPin(FX_CHANGE_BTN_GPIO_Port, FX_CHANGE_BTN_Pin) != GPIO_PIN_RESET) ? White : Black);
 
