@@ -125,6 +125,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	switch(GPIO_Pin)
 	{
 		case BACK_BTN_Pin:
+			// Reset cursor position
+			menuItemIndex = 0;
 			switch(menu_layer)
 			{
 				case NUMERIC_PARAMETER_ROOT:
@@ -184,13 +186,11 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 						// Use last encoder movement direction to determine whether to increment or decrement the current value
 						if(encoderLastDirectionForward)
 						{
-							menuItemIndex++;
-//							menuItemIndex %= 4;
+							incrementMenuItemIndexC();
 						}
 						else
 						{
-							menuItemIndex--;
-//							menuItemIndex %= 4;
+							decrementMenuItemIndexC();
 						}
 						break;
 					case NUMERIC_PARAMETER_VALUE_SELECTED:

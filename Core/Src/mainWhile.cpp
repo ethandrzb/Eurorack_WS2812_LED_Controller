@@ -25,6 +25,16 @@ extern "C"
 	{
 		decrementValueCpp(effectIndex, parameterIndex, parameterSubIndex);
 	}
+
+	void incrementMenuItemIndexC(void)
+	{
+		incrementMenuItemIndexCpp();
+	}
+
+	void decrementMenuItemIndexC(void)
+	{
+		decrementMenuItemIndexCpp();
+	}
 }
 
 extern uint8_t effectIndex;
@@ -91,7 +101,7 @@ void mainWhileCpp(void)
 	}
 }
 
-void updateMenuCpp()
+void updateMenuCpp(void)
 {
 	ssd1306_Fill(Black);
 
@@ -101,9 +111,6 @@ void updateMenuCpp()
 	sprintf(OLED_buffer, "%d", effectIndex);
 	// Invert text color when FX_CHANGE_BTN held
 	ssd1306_WriteString(OLED_buffer, Font_11x18, (HAL_GPIO_ReadPin(FX_CHANGE_BTN_GPIO_Port, FX_CHANGE_BTN_Pin) != GPIO_PIN_RESET) ? White : Black);
-
-	// Reset cursor position
-	menuItemIndex = 0;
 
 	// Show LED states on screen
 	if(menu_layer == NUMERIC_PARAMETER_ROOT || menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)
@@ -249,9 +256,50 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 	}
 }
 
+void incrementMenuItemIndexCpp(void)
+{
+	menuItemIndex++;
+
+	switch(menu_layer)
+	{
+		case NUMERIC_PARAMETER_ROOT:
+			if(menuItemIndex >= numericParams.size())
+			{
+				menuItemIndex = 0;
+			}
+			break;
+		case COLOR_PALETTE_ROOT:
+			if(menuItemIndex >= colors.size())
+			{
+				menuItemIndex = 0;
+			}
+			break;
+	}
+}
+
+void decrementMenuItemIndexCpp(void)
+{
+	if(menuItemIndex > 0)
+	{
+		menuItemIndex--;
+	}
+	else
+	{
+		switch(menu_layer)
+			{
+				case NUMERIC_PARAMETER_ROOT:
+					menuItemIndex = numericParams.size() - 1;
+					break;
+				case COLOR_PALETTE_ROOT:
+					menuItemIndex = colors.size() - 1;
+					break;
+			}
+	}
+}
+
 // Groups the arbitrary parameters in each effect into numeric and color parameters based on type
 // These are used to populate the items for their respective menus
-void populateMenuItems()
+void populateMenuItems(void)
 {
 	// Sort effect parameters into separate lists by type
 	for(int i = 0; i < WS2812FX_EFFECT_MAX_PARAMS; i++)

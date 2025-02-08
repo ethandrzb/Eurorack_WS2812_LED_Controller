@@ -19,6 +19,8 @@ void drawMenuColorPalette(void);
 void drawHSVPicker(void);
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
 void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
+void incrementMenuItemIndexCpp(void);
+void decrementMenuItemIndexCpp(void);
 void populateMenuItems(void);
 
 #ifdef __cplusplus
@@ -29,6 +31,8 @@ extern "C"
 	void updateMenuC(void);
 	void incrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
 	void decrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
+	void incrementMenuItemIndexC(void);
+	void decrementMenuItemIndexC(void);
 #ifdef __cplusplus
 }
 #endif
