@@ -150,6 +150,7 @@ void WS2812_SendAll(void)
 
 #else
 
+//TODO: Make lookup table for entire bytes to reduce runtime of this function
 // Same as WS2812_SendSingleLED, returns the data that would be sent instead of sending it
 uint8_t *WS2812_GetSingleLEDData(uint32_t red, uint32_t green, uint32_t blue)
 {

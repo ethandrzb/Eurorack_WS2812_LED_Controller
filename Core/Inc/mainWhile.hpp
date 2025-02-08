@@ -10,7 +10,7 @@
 
 #include "WS2812.h"
 
-#define WS2812FX_NUM_EFFECTS 14
+#define WS2812FX_NUM_EFFECTS 2
 
 void mainWhileCpp(void);
 void updateMenuCpp(void);
@@ -21,7 +21,7 @@ void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
 void incrementMenuItemIndexCpp(void);
 void decrementMenuItemIndexCpp(void);
-void populateMenuItems(void);
+void populateMenuItemsCpp(void);
 
 #ifdef __cplusplus
 extern "C"
@@ -33,6 +33,7 @@ extern "C"
 	void decrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
 	void incrementMenuItemIndexC(void);
 	void decrementMenuItemIndexC(void);
+	void populateMenuItemsC(void);
 #ifdef __cplusplus
 }
 #endif

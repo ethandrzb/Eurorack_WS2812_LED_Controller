@@ -9,13 +9,13 @@
 - Name: Simple meter
   - Index: 1
   - Parameters
-    - RGB color
+    - HSV color
     - Meter value (uint8_t)
     - Flip (bool)
 - Name: Mirrored meter
   - Index: 2
   - Parameters
-    - RGB color
+    - HSV color
     - Meter value (uint8_t)
     - Centered (bool)
 - Name: Scroll rainbow

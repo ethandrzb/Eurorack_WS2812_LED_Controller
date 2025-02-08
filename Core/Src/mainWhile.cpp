@@ -1,5 +1,6 @@
 #include "mainWhile.hpp"
 #include "WS2812FX/SimpleBreathingEffect.hpp"
+#include "WS2812FX/SimpleMeterEffect.hpp"
 #include "../../Drivers/ssd1306/ssd1306.h"
 
 #include <vector>
@@ -35,6 +36,11 @@ extern "C"
 	{
 		decrementMenuItemIndexCpp();
 	}
+
+	void populateMenuItemsC(void)
+	{
+		populateMenuItemsCpp();
+	}
 }
 
 extern uint8_t effectIndex;
@@ -49,20 +55,16 @@ std::vector<ColorHSVEffectParameter *> colors;
 colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 1.0};
 SimpleBreathingEffect sbe = SimpleBreathingEffect(10, 0.005, hsv, 0.25);
+SimpleMeterEffect sme = SimpleMeterEffect(10, hsv, 0);
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 
 void mainWhileCpp(void)
 {
 	// Collect effects
-//	fx[0] = &sbe;
+	fx[0] = &sbe;
+	fx[1] = &sme;
 
-	// Fill all FX slots with same FX instance until more FX are implemented
-	for(int i = 0; i < WS2812FX_NUM_EFFECTS; i++)
-	{
-		fx[i] = &sbe;
-	}
-
-	populateMenuItems();
+	populateMenuItemsCpp();
 
 	updateMenuCpp();
 
@@ -162,7 +164,7 @@ void drawMenuColorPalette(void)
 	  // Display menu item
 	  uint8_t y = i * 12 + 18;
 	  ssd1306_SetCursor(1, y);
-	  sprintf(OLED_buffer, "Color %i", i);
+	  sprintf(OLED_buffer, "%s", colors[i]->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
 	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == menuItemIndex)) ? White : Black);
@@ -285,21 +287,25 @@ void decrementMenuItemIndexCpp(void)
 	else
 	{
 		switch(menu_layer)
-			{
-				case NUMERIC_PARAMETER_ROOT:
-					menuItemIndex = numericParams.size() - 1;
-					break;
-				case COLOR_PALETTE_ROOT:
-					menuItemIndex = colors.size() - 1;
-					break;
-			}
+		{
+			case NUMERIC_PARAMETER_ROOT:
+				menuItemIndex = numericParams.size() - 1;
+				break;
+			case COLOR_PALETTE_ROOT:
+				menuItemIndex = colors.size() - 1;
+				break;
+		}
 	}
 }
 
 // Groups the arbitrary parameters in each effect into numeric and color parameters based on type
 // These are used to populate the items for their respective menus
-void populateMenuItems(void)
+//TODO: Make numericParams and colors vectors of vectors so we only have to do this once
+void populateMenuItemsCpp(void)
 {
+	numericParams.clear();
+	colors.clear();
+
 	// Sort effect parameters into separate lists by type
 	for(int i = 0; i < WS2812FX_EFFECT_MAX_PARAMS; i++)
 	{
