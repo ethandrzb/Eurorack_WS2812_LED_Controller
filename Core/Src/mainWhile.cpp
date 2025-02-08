@@ -102,8 +102,11 @@ void updateMenuCpp()
 	// Invert text color when FX_CHANGE_BTN held
 	ssd1306_WriteString(OLED_buffer, Font_11x18, (HAL_GPIO_ReadPin(FX_CHANGE_BTN_GPIO_Port, FX_CHANGE_BTN_Pin) != GPIO_PIN_RESET) ? White : Black);
 
+	// Reset cursor position
+	menuItemIndex = 0;
+
 	// Show LED states on screen
-	if(menu_layer != COLOR_PALETTE_ROOT)
+	if(menu_layer == NUMERIC_PARAMETER_ROOT || menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)
 	{
 		drawMenuNumericParameter();
 	}
@@ -121,32 +124,33 @@ void updateMenuCpp()
 	ssd1306_UpdateScreen();
 }
 
-//TODO: Modify this function to us the new numericParams vector instead of fetching parameters by index
-// You will likely need to add and manage new index variables for their respective menus
 void drawMenuNumericParameter(void)
 {
-	for(uint8_t i = 0; i < 4; i++)
+	uint8_t numMenuItems = (numericParams.size() < 4) ? numericParams.size() : 4;
+
+	for(uint8_t i = 0; i < numMenuItems; i++)
 	{
 	  // Display menu item
 	  uint8_t y = i * 12 + 18;
 	  ssd1306_SetCursor(1, y);
-	  sprintf(OLED_buffer, "%s", fx[effectIndex]->getParameter(i)->name.c_str());
+	  sprintf(OLED_buffer, "%s", numericParams[i]->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
 	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == NUMERIC_PARAMETER_ROOT)) ? White : Black);
 
 	  // Display item value
 	  ssd1306_SetCursor(90, y);
-	  sprintf(OLED_buffer, "%-3s", fx[effectIndex]->getParameter(i)->getValueString());
+	  sprintf(OLED_buffer, "%-3s", numericParams[i]->getValueString());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)) ? Black : White);
 	}
 }
 
-//TODO: Modify this function to us the new colors vector instead of fetching parameters by index
 void drawMenuColorPalette(void)
 {
-	for(uint8_t i = 0; i < 4; i++)
+	uint8_t numMenuItems = (colors.size() < 4) ? colors.size() : 4;
+
+	for(uint8_t i = 0; i < numMenuItems; i++)
 	{
 	  // Display menu item
 	  uint8_t y = i * 12 + 18;
@@ -177,9 +181,8 @@ void drawHSVPicker(void)
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 2) && (menu_layer == HSV_PICKER_ROOT)) ? Black : White);
 
 	// Display HSV values
-	//TODO: Find better way to get position of ColorHSVEffectParameters in a given effect
-	// Maybe a separate list of colors?
-	colorHSV *hsv = static_cast<colorHSV *>(fx[effectIndex]->getParameter(2)->getValue());
+	//TODO: Remove hardcoded index for color
+	colorHSV *hsv = static_cast<colorHSV *>(colors[0]->getValue());
 	sprintf(OLED_buffer, "%3d", hsv->hue);
 	ssd1306_SetCursor(30, 18);
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 0) && (menu_layer == HSV_PICKER_VALUE_SELECTED)) ? Black : White);
@@ -224,27 +227,25 @@ void drawHSVPicker(void)
 
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 {
-	if(dynamic_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(parameterIndex)))
+	if(menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)
 	{
-		ColorHSVEffectParameter *tmp = static_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(parameterIndex));
-		tmp->incrementValueByIndex(parameterSubIndex);
+		numericParams[parameterIndex]->incrementValue();
 	}
-	else
+	else if(menu_layer == HSV_PICKER_VALUE_SELECTED)
 	{
-		fx[effectIndex]->getParameter(parameterIndex)->incrementValue();
+		colors[parameterIndex]->incrementValueByIndex(parameterSubIndex);
 	}
 }
 
 void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 {
-	if(dynamic_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(parameterIndex)))
+	if(menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)
 	{
-		ColorHSVEffectParameter *tmp = static_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(parameterIndex));
-		tmp->decrementValueByIndex(parameterSubIndex);
+		numericParams[parameterIndex]->decrementValue();
 	}
-	else
+	else if(menu_layer == HSV_PICKER_VALUE_SELECTED)
 	{
-		fx[effectIndex]->getParameter(parameterIndex)->decrementValue();
+		colors[parameterIndex]->decrementValueByIndex(parameterSubIndex);
 	}
 }
 
@@ -252,13 +253,15 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 // These are used to populate the items for their respective menus
 void populateMenuItems()
 {
+	// Sort effect parameters into separate lists by type
 	for(int i = 0; i < WS2812FX_EFFECT_MAX_PARAMS; i++)
 	{
+		// Ensure parameters are valid objects before adding them to either vector
 		if(dynamic_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(i)))
 		{
 			colors.push_back(static_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(i)));
 		}
-		else
+		else if(dynamic_cast<EffectParameterBase *>(fx[effectIndex]->getParameter(i)))
 		{
 			numericParams.push_back(fx[effectIndex]->getParameter(i));
 		}

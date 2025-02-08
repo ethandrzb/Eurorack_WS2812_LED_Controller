@@ -94,28 +94,26 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim == &htim3 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
 	{
-		// Menu layer transitions
-		// Check is hardcoded for ColorHSVEffectParameter in effect 0 (SimpleBreathingEffect)
-		if(menuItemIndex == 2)
+		// Menu layer transitions for numeric and color menus
+		switch(menu_layer)
 		{
-			switch(menu_layer)
-			{
-				case NUMERIC_PARAMETER_ROOT:
-					menu_layer = HSV_PICKER_ROOT;
-					break;
-				case HSV_PICKER_ROOT:
-					menu_layer = HSV_PICKER_VALUE_SELECTED;
-					break;
-				case HSV_PICKER_VALUE_SELECTED:
-					menu_layer = HSV_PICKER_ROOT;
-					break;
-				default:
-					break;
-			}
-		}
-		else
-		{
-			menu_layer = (menu_layer == NUMERIC_PARAMETER_ROOT) ? NUMERIC_PARAMETER_VALUE_SELECTED : NUMERIC_PARAMETER_ROOT;
+			case NUMERIC_PARAMETER_ROOT:
+				menu_layer = NUMERIC_PARAMETER_VALUE_SELECTED;
+				break;
+			case NUMERIC_PARAMETER_VALUE_SELECTED:
+				menu_layer = NUMERIC_PARAMETER_ROOT;
+				break;
+			case COLOR_PALETTE_ROOT:
+				menu_layer = HSV_PICKER_ROOT;
+				break;
+			case HSV_PICKER_ROOT:
+				menu_layer = HSV_PICKER_VALUE_SELECTED;
+				break;
+			case HSV_PICKER_VALUE_SELECTED:
+				menu_layer = HSV_PICKER_ROOT;
+				break;
+			default:
+				break;
 		}
 
 		updateMenuC();
@@ -187,12 +185,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 						if(encoderLastDirectionForward)
 						{
 							menuItemIndex++;
-							menuItemIndex %= 4;
+//							menuItemIndex %= 4;
 						}
 						else
 						{
 							menuItemIndex--;
-							menuItemIndex %= 4;
+//							menuItemIndex %= 4;
 						}
 						break;
 					case NUMERIC_PARAMETER_VALUE_SELECTED:
