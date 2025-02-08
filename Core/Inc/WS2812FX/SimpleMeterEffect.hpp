@@ -34,11 +34,12 @@ public:
 		this->setParameter(NumericEffectParameter<uint8_t>(fill, "Fill 1", 0, NUM_PHYSICAL_LEDS, 1), 3);
 
 		// Parameter 1: Meter color
+		hsv.hue = (hsv.hue + 180) % 360;
 		this->setParameter(ColorHSVEffectParameter(hsv, "Color 1"), 4);
 
 		// Parameter 2: Flip meter
 		//TODO: Add support for boolean NumericEffectParameters
-		this->setParameter(NumericEffectParameter<uint8_t>(flip, "Flip 1", 0, 1, 1), 5);
+		this->setParameter(NumericEffectParameter<uint8_t>(!flip, "Flip 1", 0, 1, 1), 5);
 	}
 
 	void updateEffect() override;

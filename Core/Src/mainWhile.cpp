@@ -53,7 +53,7 @@ std::vector<EffectParameterBase *> numericParams;
 std::vector<ColorHSVEffectParameter *> colors;
 
 colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
-colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 1.0};
+colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 0.25};
 SimpleBreathingEffect sbe = SimpleBreathingEffect(10, 0.005, hsv, 0.25);
 SimpleMeterEffect sme = SimpleMeterEffect(10, hsv, 0);
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
