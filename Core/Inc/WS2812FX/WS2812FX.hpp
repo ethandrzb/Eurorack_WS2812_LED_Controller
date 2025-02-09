@@ -63,6 +63,7 @@ template <typename T> class EffectParameter : public EffectParameterBase
 		}
 };
 
+//TODO: Add support for custom format strings
 template <typename T> class NumericEffectParameter : public EffectParameter<T>
 {
 	public:
@@ -113,6 +114,28 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 		T tickAmount;
 };
 
+class BooleanEffectParameter : public EffectParameter<bool>
+{
+	BooleanEffectParameter(bool value, std::string name) : EffectParameter<bool>(value, name) {}
+
+	void incrementValue() override
+	{
+		this->value = true;
+	}
+
+	void decrementValue() override
+	{
+		this->value = false;
+	}
+
+	char *getValueString() override
+	{
+		snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "[%s]", (value) ? "x" : " ");
+
+		return this->valueString;
+	}
+};
+
 class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 {
 	public:
@@ -129,6 +152,9 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 			value.setValue(hsv.value);
 		}
 
+		// This class does not support basic increment/decrement
+		// The *ByIndex versions of increment and decrement must be used instead
+		// Stubbing them out prevents crashes if they somehow get called at runtime
 		void incrementValue() override
 		{
 			return;
