@@ -17,7 +17,7 @@ class MeterEffect : public WS2812Effect
 {
 public:
 	//TODO: Remove second meter from effect when effects can be designed/stacked instead of hardcoded
-	MeterEffect(uint8_t fill, colorHSV hsv, uint8_t flip, uint8_t mirrored)
+	MeterEffect(uint8_t fill, colorHSV hsv, uint8_t flip, uint8_t mirror)
 	{
 		snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Meter");
 
@@ -31,13 +31,12 @@ public:
 		this->setParameter(ColorHSVEffectParameter(hsv, "Color 1"), 4);
 
 		// Parameters 2 and 5: Flip meter
-		//TODO: Add support for boolean NumericEffectParameters
-		this->setParameter(NumericEffectParameter<uint8_t>(flip, "Flip 0", 0, 1, 1), 2);
-		this->setParameter(NumericEffectParameter<uint8_t>(!flip, "Flip 1", 0, 1, 1), 5);
+		this->setParameter(BooleanEffectParameter(flip, "Flip 0"), 2);
+		this->setParameter(BooleanEffectParameter(!flip, "Flip 1"), 5);
 
 		// Parameters 6 and 7: Mirror meter
-		this->setParameter(NumericEffectParameter<uint8_t>(mirrored, "Mirror 0", 0, 1, 1), 6);
-		this->setParameter(NumericEffectParameter<uint8_t>(mirrored, "Mirror 1", 0, 1, 1), 7);
+		this->setParameter(BooleanEffectParameter(mirror, "Mirror 0"), 6);
+		this->setParameter(BooleanEffectParameter(mirror, "Mirror 1"), 7);
 	}
 
 	void updateEffect() override;

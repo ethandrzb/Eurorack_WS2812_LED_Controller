@@ -116,24 +116,25 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 
 class BooleanEffectParameter : public EffectParameter<bool>
 {
-	BooleanEffectParameter(bool value, std::string name) : EffectParameter<bool>(value, name) {}
+	public:
+		BooleanEffectParameter(bool value, std::string name) : EffectParameter<bool>(value, name) {}
 
-	void incrementValue() override
-	{
-		this->value = true;
-	}
+		void incrementValue() override
+		{
+			this->value = true;
+		}
 
-	void decrementValue() override
-	{
-		this->value = false;
-	}
+		void decrementValue() override
+		{
+			this->value = false;
+		}
 
-	char *getValueString() override
-	{
-		snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "[%s]", (value) ? "x" : " ");
+		char *getValueString() override
+		{
+			snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "[%s]", (value) ? "x" : " ");
 
-		return this->valueString;
-	}
+			return this->valueString;
+		}
 };
 
 class ColorHSVEffectParameter : public EffectParameter<colorHSV>
