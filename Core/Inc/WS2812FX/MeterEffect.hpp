@@ -5,19 +5,19 @@
  *      Author: ethan
  */
 
-#ifndef INC_WS2812FX_SIMPLEMETEREFFECT_HPP_
-#define INC_WS2812FX_SIMPLEMETEREFFECT_HPP_
+#ifndef INC_WS2812FX_METEREFFECT_HPP_
+#define INC_WS2812FX_METEREFFECT_HPP_
 
 #include <WS2812FX/WS2812FX.hpp>
 #include <main.h>
 
 using namespace WS2812FX;
 
-class SimpleMeterEffect : public WS2812Effect
+class MeterEffect : public WS2812Effect
 {
 public:
 	//TODO: Remove second meter from effect when effects can be designed/stacked instead of hardcoded
-	SimpleMeterEffect(uint8_t fill, colorHSV hsv, uint8_t flip, uint8_t mirrored)
+	MeterEffect(uint8_t fill, colorHSV hsv, uint8_t flip, uint8_t mirrored)
 	{
 		snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Meter");
 
@@ -43,4 +43,4 @@ public:
 	void updateEffect() override;
 };
 
-#endif /* INC_WS2812FX_SIMPLEMETEREFFECT_HPP_ */
+#endif /* INC_WS2812FX_METEREFFECT_HPP_ */

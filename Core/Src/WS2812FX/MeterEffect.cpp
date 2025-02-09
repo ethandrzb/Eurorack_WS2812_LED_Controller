@@ -5,9 +5,9 @@
  *      Author: ethan
  */
 
-#include "WS2812FX/SimpleMeterEffect.hpp"
+#include <WS2812FX/MeterEffect.hpp>
 
-void SimpleMeterEffect::updateEffect()
+void MeterEffect::updateEffect()
 {
 	uint8_t meterFill0 = *(static_cast<uint8_t *>(this->getParameter(0)->getValue()));
 	colorHSV hsv0 = *(static_cast<colorHSV *>(this->getParameter(1)->getValue()));
