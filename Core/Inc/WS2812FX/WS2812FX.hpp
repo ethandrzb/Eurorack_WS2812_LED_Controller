@@ -140,17 +140,15 @@ class BooleanEffectParameter : public EffectParameter<bool>
 class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 {
 	public:
-		colorHSV hsv;
-		NumericEffectParameter<uint16_t> hue = NumericEffectParameter<uint16_t>(180, "Hue", 0, 360, 5);
-		NumericEffectParameter<float> saturation = NumericEffectParameter<float>(1.0, "Saturation", 0, 1, 0.05);
-		NumericEffectParameter<float> value = NumericEffectParameter<float>(0.2, "Value", 0, 1, 0.05);
+		NumericEffectParameter<uint16_t> _hue = NumericEffectParameter<uint16_t>(180, "Hue", 0, 360, 5);
+		NumericEffectParameter<float> _saturation = NumericEffectParameter<float>(1.0, "Saturation", 0, 1, 0.05);
+		NumericEffectParameter<float> _value = NumericEffectParameter<float>(0.2, "Value", 0, 1, 0.05);
 
 		ColorHSVEffectParameter(colorHSV hsv, std::string name) : EffectParameter<colorHSV>(hsv, name)
 		{
-			this->hsv = hsv;
-			hue.setValue(hsv.hue);
-			saturation.setValue(hsv.saturation);
-			value.setValue(hsv.value);
+			_hue.setValue(hsv.hue);
+			_saturation.setValue(hsv.saturation);
+			_value.setValue(hsv.value);
 		}
 
 		// This class does not support basic increment/decrement
@@ -171,13 +169,13 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 			switch(index)
 			{
 				case 0:
-					hue.incrementValue();
+					_hue.incrementValue();
 					break;
 				case 1:
-					saturation.incrementValue();
+					_saturation.incrementValue();
 					break;
 				case 2:
-					value.incrementValue();
+					_value.incrementValue();
 					break;
 				default:
 					return;
@@ -189,13 +187,13 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 			switch(index)
 			{
 				case 0:
-					hue.decrementValue();
+					_hue.decrementValue();
 					break;
 				case 1:
-					saturation.decrementValue();
+					_saturation.decrementValue();
 					break;
 				case 2:
-					value.decrementValue();
+					_value.decrementValue();
 					break;
 				default:
 					return;
@@ -205,11 +203,11 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 		// Reconstruct colorHSV struct from values in NumericEffectParameters
 		void *getValue() override
 		{
-			this->hsv.hue = *(static_cast<uint16_t *>(hue.getValue()));
-			this->hsv.saturation = *(static_cast<float *>(saturation.getValue()));
-			this->hsv.value = *(static_cast<float *>(value.getValue()));
+			this->value.hue = *(static_cast<uint16_t *>(_hue.getValue()));
+			this->value.saturation = *(static_cast<float *>(_saturation.getValue()));
+			this->value.value = *(static_cast<float *>(_value.getValue()));
 
-			return static_cast<void *>(&(hsv));
+			return static_cast<void *>(&(value));
 		}
 
 		// Shouldn't I need an override here?
