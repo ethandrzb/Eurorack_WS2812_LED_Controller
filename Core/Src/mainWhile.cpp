@@ -131,15 +131,16 @@ void updateMenuCpp(void)
 
 	ssd1306_UpdateScreen();
 }
-
+//TODO: Merge this function with drawMenuColorPallette
 void drawMenuNumericParameter(void)
 {
-	uint8_t numMenuItems = (numericParams.size() < 4) ? numericParams.size() : 4;
+	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;
+	uint8_t end = ((uint8_t)(start + 4) > numericParams.size()) ? numericParams.size() : start + 4;
 
-	for(uint8_t i = 0; i < numMenuItems; i++)
+	for(uint8_t i = start; i < end; i++)
 	{
 	  // Display menu item
-	  uint8_t y = i * 12 + 18;
+	  uint8_t y = (i - start) * 12 + 18;
 	  ssd1306_SetCursor(1, y);
 	  sprintf(OLED_buffer, "%s", numericParams[i]->name.c_str());
 
@@ -154,6 +155,7 @@ void drawMenuNumericParameter(void)
 	}
 }
 
+//TODO: Add scrolling functionality from drawMenuNumericParameter here
 void drawMenuColorPalette(void)
 {
 	uint8_t numMenuItems = (colors.size() < 4) ? colors.size() : 4;
