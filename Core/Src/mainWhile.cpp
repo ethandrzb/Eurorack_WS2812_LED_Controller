@@ -260,20 +260,18 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 
 void incrementMenuItemIndexCpp(void)
 {
-	menuItemIndex++;
-
 	switch(menu_layer)
 	{
 		case NUMERIC_PARAMETER_ROOT:
-			if(menuItemIndex >= numericParams.size())
+			if(menuItemIndex < numericParams.size() - 1)
 			{
-				menuItemIndex = 0;
+				menuItemIndex++;
 			}
 			break;
 		case COLOR_PALETTE_ROOT:
-			if(menuItemIndex >= colors.size())
+			if(menuItemIndex < colors.size() - 1)
 			{
-				menuItemIndex = 0;
+				menuItemIndex++;
 			}
 			break;
 	}
@@ -281,22 +279,7 @@ void incrementMenuItemIndexCpp(void)
 
 void decrementMenuItemIndexCpp(void)
 {
-	if(menuItemIndex > 0)
-	{
-		menuItemIndex--;
-	}
-	else
-	{
-		switch(menu_layer)
-		{
-			case NUMERIC_PARAMETER_ROOT:
-				menuItemIndex = numericParams.size() - 1;
-				break;
-			case COLOR_PALETTE_ROOT:
-				menuItemIndex = colors.size() - 1;
-				break;
-		}
-	}
+	menuItemIndex = (menuItemIndex > 0) ? menuItemIndex - 1 : 0;
 }
 
 // Groups the arbitrary parameters in each effect into numeric and color parameters based on type
