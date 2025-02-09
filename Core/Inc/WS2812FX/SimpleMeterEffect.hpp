@@ -16,30 +16,28 @@ using namespace WS2812FX;
 class SimpleMeterEffect : public WS2812Effect
 {
 public:
-	SimpleMeterEffect(uint8_t fill, colorHSV hsv, uint8_t flip)
+	//TODO: Remove second meter from effect when effects can be designed/stacked instead of hardcoded
+	SimpleMeterEffect(uint8_t fill, colorHSV hsv, uint8_t flip, uint8_t mirrored)
 	{
-		snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "S. Meter");
+		snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Meter");
 
-		// Parameter 0: Meter fill amount
+		// Parameters 0 and 3: Meter fill amount
 		this->setParameter(NumericEffectParameter<uint8_t>(fill, "Fill 0", 0, NUM_PHYSICAL_LEDS, 1), 0);
-
-		// Parameter 1: Meter color
-		this->setParameter(ColorHSVEffectParameter(hsv, "Color 0"), 1);
-
-		// Parameter 2: Flip meter
-		//TODO: Add support for boolean NumericEffectParameters
-		this->setParameter(NumericEffectParameter<uint8_t>(flip, "Flip 0", 0, 1, 1), 2);
-
-		// Parameter 0: Meter fill amount
 		this->setParameter(NumericEffectParameter<uint8_t>(fill, "Fill 1", 0, NUM_PHYSICAL_LEDS, 1), 3);
 
-		// Parameter 1: Meter color
+		// Parameters 1 and 4: Meter color
+		this->setParameter(ColorHSVEffectParameter(hsv, "Color 0"), 1);
 		hsv.hue = (hsv.hue + 180) % 360;
 		this->setParameter(ColorHSVEffectParameter(hsv, "Color 1"), 4);
 
-		// Parameter 2: Flip meter
+		// Parameters 2 and 5: Flip meter
 		//TODO: Add support for boolean NumericEffectParameters
+		this->setParameter(NumericEffectParameter<uint8_t>(flip, "Flip 0", 0, 1, 1), 2);
 		this->setParameter(NumericEffectParameter<uint8_t>(!flip, "Flip 1", 0, 1, 1), 5);
+
+		// Parameters 6 and 7: Mirror meter
+		this->setParameter(NumericEffectParameter<uint8_t>(mirrored, "Mirror 0", 0, 1, 1), 6);
+		this->setParameter(NumericEffectParameter<uint8_t>(mirrored, "Mirror 1", 0, 1, 1), 7);
 	}
 
 	void updateEffect() override;
