@@ -131,8 +131,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 					break;
 				case NUMERIC_PARAMETER_VALUE_SELECTED:
 				case COLOR_PALETTE_ROOT:
-				case HSV_PICKER_ROOT:
 					menu_layer = NUMERIC_PARAMETER_ROOT;
+					break;
+				case HSV_PICKER_ROOT:
+					menu_layer = COLOR_PALETTE_ROOT;
 					break;
 				case HSV_PICKER_VALUE_SELECTED:
 					menu_layer = HSV_PICKER_ROOT;
