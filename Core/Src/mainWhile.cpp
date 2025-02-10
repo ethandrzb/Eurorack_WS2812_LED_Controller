@@ -1,6 +1,7 @@
-#include <WS2812FX/MeterEffect.hpp>
 #include "mainWhile.hpp"
 #include "WS2812FX/SimpleBreathingEffect.hpp"
+#include "WS2812FX/MeterEffect.hpp"
+#include "WS2812FX/RainbowEffect.hpp"
 #include "../../Drivers/ssd1306/ssd1306.h"
 
 #include <vector>
@@ -56,6 +57,7 @@ colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 0.25};
 SimpleBreathingEffect simpleBreathingEffect = SimpleBreathingEffect(10, 0.005, hsv, 0.25);
 MeterEffect meterEffect = MeterEffect(10, hsv, false, true);
+RainbowEffect rainbowEffect = RainbowEffect(3, 1, 1, hsv);
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 
 void mainWhileCpp(void)
@@ -63,6 +65,7 @@ void mainWhileCpp(void)
 	// Collect effects
 	fx[0] = &simpleBreathingEffect;
 	fx[1] = &meterEffect;
+	fx[2] = &rainbowEffect;
 
 	populateMenuItemsCpp();
 

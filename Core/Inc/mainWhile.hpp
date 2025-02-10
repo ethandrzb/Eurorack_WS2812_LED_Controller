@@ -10,7 +10,7 @@
 
 #include "WS2812.h"
 
-#define WS2812FX_NUM_EFFECTS 2
+#define WS2812FX_NUM_EFFECTS 3
 
 void mainWhileCpp(void);
 void updateMenuCpp(void);

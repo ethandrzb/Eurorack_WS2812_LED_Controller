@@ -96,9 +96,13 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 			{
 				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<uint8_t *>(this->getValue())));
 			}
-			if constexpr(std::is_same_v<T, uint16_t>)
+			else if constexpr(std::is_same_v<T, uint16_t>)
 			{
 				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<uint16_t *>(this->getValue())));
+			}
+			else if constexpr(std::is_same_v<T, int8_t>)
+			{
+				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<int8_t *>(this->getValue())));
 			}
 			else if constexpr(std::is_same_v<T, float>)
 			{
@@ -162,6 +166,16 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 		void decrementValue() override
 		{
 			return;
+		}
+
+		// Members of the colorHSV struct are broken into their own parameters, so we need to update those instead of the struct itself
+		// Changing the wrapped value directly (e.g., this->value = newValue) DOES NOT WORK
+		// This due to the fact getValue reconstructs the colorHSV struct using the values contained in the subparameters instead of returning the raw value
+		void setValue(colorHSV hsv)
+		{
+			_hue.setValue(hsv.hue);
+			_saturation.setValue(hsv.saturation);
+			_value.setValue(hsv.value);
 		}
 
 		void incrementValueByIndex(uint8_t index)
