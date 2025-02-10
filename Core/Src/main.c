@@ -67,6 +67,13 @@ uint8_t HSVPickerIndex = 0;
 menuLayer menu_layer = NUMERIC_PARAMETER_ROOT;
 uint8_t encoderLastDirectionForward = 0;
 
+#define UART_TRANSMIT_BUFFER_LENGTH 25
+uint8_t UARTTransmitBuffer[UART_TRANSMIT_BUFFER_LENGTH];
+
+#ifdef ENABLE_FPS_COUNTER
+volatile uint16_t WS2812FramesSent;
+#endif
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -232,6 +239,23 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 	}
 }
 
+#ifdef ENABLE_FPS_COUNTER
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	// FPS timer
+	if(htim == &htim6)
+	{
+		// String operations are too slow to have in an ISR, even if preempted by a higher priority interrupt
+		sprintf((char *)UARTTransmitBuffer, "%d fps\n", WS2812FramesSent);
+
+		HAL_UART_Transmit_IT(&huart2, UARTTransmitBuffer, UART_TRANSMIT_BUFFER_LENGTH);
+
+		// Reset frame counter
+		WS2812FramesSent = 0;
+	}
+}
+#endif
+
 /* USER CODE END 0 */
 
 /**
@@ -291,6 +315,10 @@ int main(void)
   WS2812_ClearLEDs();
   WS2812_SetBackgroundColor(0, 0, 0);
   WS2812_SendAll();
+
+#ifdef ENABLE_FPS_COUNTER
+  HAL_TIM_Base_Start_IT(&htim6);
+#endif
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -543,9 +571,9 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 80-1;
+  htim6.Init.Prescaler = 8000-1;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 50000-1;
+  htim6.Init.Period = 10000-1;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {
