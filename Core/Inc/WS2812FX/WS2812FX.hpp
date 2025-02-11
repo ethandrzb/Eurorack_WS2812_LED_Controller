@@ -130,19 +130,19 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 			// Add support for additional number types
 			if constexpr(std::is_same_v<T, uint8_t>)
 			{
-				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<uint8_t *>(this->getValue())));
+				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<uint8_t *>(this->getValueRaw())));
 			}
 			else if constexpr(std::is_same_v<T, uint16_t>)
 			{
-				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<uint16_t *>(this->getValue())));
+				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<uint16_t *>(this->getValueRaw())));
 			}
 			else if constexpr(std::is_same_v<T, int8_t>)
 			{
-				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<int8_t *>(this->getValue())));
+				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<int8_t *>(this->getValueRaw())));
 			}
 			else if constexpr(std::is_same_v<T, float>)
 			{
-				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%1.2f", *(static_cast<float *>(this->getValue())));
+				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%1.2f", *(static_cast<float *>(this->getValueRaw())));
 			}
 
 			return this->valueString;
