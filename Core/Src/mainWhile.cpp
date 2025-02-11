@@ -79,8 +79,24 @@ void mainWhileCpp(void)
 	{
 		fx[effectIndex]->updateEffect();
 		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, 3);
-		(static_cast<NumericEffectParameter<uint8_t> *>(fx[1]->getParameter(0)))->setModulation(rawADCData[0]);
-		(static_cast<NumericEffectParameter<uint8_t> *>(fx[1]->getParameter(3)))->setModulation(rawADCData[1]);
+
+		switch(effectIndex)
+		{
+			case 0:
+				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(0)))->setModulation(rawADCData[0] >> 2);
+				(static_cast<NumericEffectParameter<float> *>(fx[effectIndex]->getParameter(1)))->setModulation(rawADCData[1] * 0.002);
+				(static_cast<NumericEffectParameter<float> *>(fx[effectIndex]->getParameter(3)))->setModulation(rawADCData[2] / 256.0f);
+				break;
+			case 1:
+				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(0)))->setModulation(rawADCData[0] >> 1);
+				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(3)))->setModulation(rawADCData[1] >> 1);
+				break;
+			case 2:
+				(static_cast<NumericEffectParameter<int8_t> *>(fx[effectIndex]->getParameter(0)))->setModulation(rawADCData[0] >> 1);
+				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(1)))->setModulation(rawADCData[1] >> 1);
+				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(2)))->setModulation(rawADCData[2] >> 1);
+				break;
+		}
 //		switch(LEDIndex)
 //		{
 //			case 0:
