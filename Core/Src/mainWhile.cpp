@@ -3,6 +3,7 @@
 #include "WS2812FX/MeterEffect.hpp"
 #include "WS2812FX/RainbowEffect.hpp"
 #include "../../Drivers/ssd1306/ssd1306.h"
+#include "main.h"
 
 #include <vector>
 
@@ -50,6 +51,9 @@ extern uint8_t HSVPickerIndex;
 extern char OLED_buffer[30];
 extern uint8_t menu_layer;
 
+extern ADC_HandleTypeDef hadc1;
+extern uint16_t rawADCData[3];
+
 std::vector<EffectParameterBase *> numericParams;
 std::vector<ColorHSVEffectParameter *> colors;
 
@@ -74,6 +78,9 @@ void mainWhileCpp(void)
 	while(1)
 	{
 		fx[effectIndex]->updateEffect();
+		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, 3);
+		(static_cast<NumericEffectParameter<uint8_t> *>(fx[1]->getParameter(0)))->setModulation(rawADCData[0]);
+		(static_cast<NumericEffectParameter<uint8_t> *>(fx[1]->getParameter(3)))->setModulation(rawADCData[1]);
 //		switch(LEDIndex)
 //		{
 //			case 0:

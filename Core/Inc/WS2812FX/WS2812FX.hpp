@@ -32,6 +32,7 @@ class EffectParameterBase
 		EffectParameterBase(std::string name) : name(name) {}
 		virtual ~EffectParameterBase() {}
 		virtual void *getValue() = 0;
+		virtual void *getValueRaw() = 0;
 		virtual char *getValueString() = 0;
 		virtual void incrementValue() = 0;
 		virtual void decrementValue() = 0;
@@ -41,6 +42,7 @@ template <typename T> class EffectParameter : public EffectParameterBase
 {
 	public:
 		T value;
+		T modulation;
 
 		EffectParameter(T value, std::string name) : EffectParameterBase(name), value(value) {}
 		virtual ~EffectParameter() {}
@@ -50,7 +52,18 @@ template <typename T> class EffectParameter : public EffectParameterBase
 			this->value = newValue;
 		}
 
+		void setModulation(T newModulation)
+		{
+			this->modulation = newModulation;
+		}
+
 		void *getValue() override
+		{
+			return static_cast<void *>(&(this->value));
+		}
+
+		// Not adding modulation to value here because not every type supports the '+'
+		void *getValueRaw() override
 		{
 			return static_cast<void *>(&(this->value));
 		}
@@ -67,7 +80,11 @@ template <typename T> class EffectParameter : public EffectParameterBase
 template <typename T> class NumericEffectParameter : public EffectParameter<T>
 {
 	public:
-		NumericEffectParameter(T value, std::string name, T minValue, T maxValue, T tickAmount) : EffectParameter<T>(value, name), minValue(minValue), maxValue(maxValue), tickAmount(tickAmount) {}
+		NumericEffectParameter(T value, std::string name, T minValue, T maxValue, T tickAmount) : EffectParameter<T>(value, name), minValue(minValue), maxValue(maxValue), tickAmount(tickAmount)
+		{
+			this->modulation = (T)0;
+			this->modulatedValue = this->value;
+		}
 
 		void incrementValue() override
 		{
@@ -77,6 +94,25 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 		void decrementValue() override
 		{
 			this->value = (this->value > this->minValue) ? this->value - this->tickAmount : this->minValue;
+		}
+
+		void *getValue() override
+		{
+			// This might cause an overflow!
+			// Make sure to use a sufficiently large data type
+			this->modulatedValue = this->value + this->modulation;
+
+			// Clip range of modulated value
+			if(this->modulatedValue > this->maxValue)
+			{
+				this->modulatedValue = this->maxValue;
+			}
+			else if(this->modulatedValue < this->minValue)
+			{
+				this->modulatedValue = this->minValue;
+			}
+
+			return static_cast<void *>(&this->modulatedValue);
 		}
 
 		T getMinValue()
@@ -113,6 +149,7 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 		}
 
 	private:
+		T modulatedValue;
 		T minValue;
 		T maxValue;
 		T tickAmount;
@@ -121,7 +158,10 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 class BooleanEffectParameter : public EffectParameter<bool>
 {
 	public:
-		BooleanEffectParameter(bool value, std::string name) : EffectParameter<bool>(value, name) {}
+		BooleanEffectParameter(bool value, std::string name) : EffectParameter<bool>(value, name)
+		{
+			this->modulation = false;
+		}
 
 		void incrementValue() override
 		{
@@ -178,6 +218,13 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 			_value.setValue(hsv.value);
 		}
 
+		void setModulation(colorHSV hsv)
+		{
+			_hue.setModulation(hsv.hue);
+			_saturation.setModulation(hsv.saturation);
+			_value.setModulation(hsv.value);
+		}
+
 		void incrementValueByIndex(uint8_t index)
 		{
 			switch(index)
@@ -220,6 +267,16 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 			this->value.hue = *(static_cast<uint16_t *>(_hue.getValue()));
 			this->value.saturation = *(static_cast<float *>(_saturation.getValue()));
 			this->value.value = *(static_cast<float *>(_value.getValue()));
+
+			return static_cast<void *>(&(value));
+		}
+
+		// Reconstruct colorHSV struct from values in NumericEffectParameters
+		void *getValueRaw() override
+		{
+			this->value.hue = *(static_cast<uint16_t *>(_hue.getValueRaw()));
+			this->value.saturation = *(static_cast<float *>(_saturation.getValueRaw()));
+			this->value.value = *(static_cast<float *>(_value.getValueRaw()));
 
 			return static_cast<void *>(&(value));
 		}
