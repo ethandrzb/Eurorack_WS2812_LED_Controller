@@ -15,6 +15,7 @@
 using namespace WS2812FX;
 
 //TODO: Add parameter to manually reset rainbow to (new) starting color
+//TODO: Add "emphasis" color to change the background of the strip
 class RainbowEffect : public WS2812Effect
 {
 	public:

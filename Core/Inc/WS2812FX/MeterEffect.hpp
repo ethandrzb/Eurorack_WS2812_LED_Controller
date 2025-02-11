@@ -16,6 +16,7 @@ using namespace WS2812FX;
 class MeterEffect : public WS2812Effect
 {
 public:
+	//TODO: Increase size of fill parameters to avoid overflow with larger LED strips
 	//TODO: Remove second meter from effect when effects can be designed/stacked instead of hardcoded
 	MeterEffect(uint8_t fill, colorHSV hsv, uint8_t flip, uint8_t mirror)
 	{

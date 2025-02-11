@@ -16,6 +16,7 @@ void RainbowEffect::updateEffect()
 
 	hsv.hue = (hsv.hue < 360) ? hsv.hue + scrollHue : 0;
 
+	//TODO: Create a separate internal colorHSV struct to prevent the starting point stored in Parameter 3 from being changed
 	static_cast<ColorHSVEffectParameter *>(this->getParameter(3))->setValue(hsv);
 
 	WS2812_FillRainbow(hsv, density);
