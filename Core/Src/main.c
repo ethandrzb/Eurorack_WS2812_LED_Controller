@@ -140,6 +140,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	switch(GPIO_Pin)
 	{
+		case FX_CHANGE_BTN_Pin:
+			populateMenuItemsC();
+			// FX_CHANGE_BTN_Pin case allowed to fall through to BACK_BTN_Pin case due to repeated code
 		case BACK_BTN_Pin:
 			// Reset cursor position
 			menuItemIndex = 0;
@@ -161,10 +164,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 				default:
 					break;
 			}
-			updateMenuC();
-			break;
-		case FX_CHANGE_BTN_Pin:
-			populateMenuItemsC();
 			updateMenuC();
 			break;
 	}
