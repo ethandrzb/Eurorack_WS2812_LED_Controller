@@ -10,6 +10,6 @@
 
 #include <stdint.h>
 
-extern const uint8_t byteToWS2812DataLUT[][8];
+extern const uint8_t byteToWS2812DataLUT[256][8];
 
 #endif /* INC_BYTETOWS2812DATALOOKUPTABLE_H_ */

@@ -7,7 +7,7 @@
 
 #include "ByteToWS2812DataLookupTable.h"
 
-const uint8_t byteToWS2812DataLUT[][8] = {
+const uint8_t byteToWS2812DataLUT[256][8] = {
 {0b100, 0b100, 0b100, 0b100, 0b100, 0b100, 0b100, 0b100},
 {0b100, 0b100, 0b100, 0b100, 0b100, 0b100, 0b100, 0b110},
 {0b100, 0b100, 0b100, 0b100, 0b100, 0b100, 0b110, 0b100},
