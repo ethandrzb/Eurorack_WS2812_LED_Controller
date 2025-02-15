@@ -460,7 +460,7 @@ uint8_t *WS2812_GetSingleLEDData(uint32_t red, uint32_t green, uint32_t blue)
 	for(int i = 16; i >= 0; i -= 8)
 	{
 		// Copy LUT entry to data
-		memcpy(data + i, byteToWS2812DataLUT[(color >> i) & 0xFF], 8 * sizeof(uint8_t));
+		memcpy(data + (16 - i), byteToWS2812DataLUT[(color >> i) & 0xFF], 8 * sizeof(uint8_t));
 	}
 
 	return data;
