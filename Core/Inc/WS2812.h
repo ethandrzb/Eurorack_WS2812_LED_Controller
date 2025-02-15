@@ -36,6 +36,10 @@ extern "C"
 
 #define USE_LUT_OPTIMIZATION
 
+#ifdef USE_LUT_OPTIMIZATION
+#include "ByteToWS2812DataLookupTable.h"
+#endif
+
 // NOTE: WS2811 have a lower maximum frame rate than WS2812.
 // Effects that work on the WS2812 might have to be rate limited or slowed down to work on WS2811.
 //#define WS2811_MODE
