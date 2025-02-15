@@ -15,6 +15,7 @@ extern "C"
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 
 
 // NUM_PHYSICAL_LEDS should be evenly divisible by DOWNSAMPLING_FACTOR
@@ -32,6 +33,8 @@ extern "C"
 #define NUM_MAX_COMETS 10
 
 #define USE_NEW_SEND_FUNCTIONS
+
+#define USE_LUT_OPTIMIZATION
 
 // NOTE: WS2811 have a lower maximum frame rate than WS2812.
 // Effects that work on the WS2812 might have to be rate limited or slowed down to work on WS2811.
