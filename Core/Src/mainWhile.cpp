@@ -111,13 +111,15 @@ void updateMenuCpp(void)
 	ssd1306_WriteString(OLED_buffer, Font_11x18, (HAL_GPIO_ReadPin(FX_CHANGE_BTN_GPIO_Port, FX_CHANGE_BTN_Pin) != GPIO_PIN_RESET) ? White : Black);
 
 	// Show LED states on screen
-	if(menu_layer == NUMERIC_PARAMETER_ROOT || menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)
+	switch(menu_layer)
 	{
-		drawMenuNumericParameter();
-	}
-	else
-	{
-		drawMenuColorPalette();
+		case NUMERIC_PARAMETER_ROOT:
+		case NUMERIC_PARAMETER_VALUE_SELECTED:
+			drawMenuNumericParameter();
+			break;
+		case COLOR_PALETTE_ROOT:
+			drawMenuColorPalette();
+			break;
 	}
 
 	// Draw color picker
