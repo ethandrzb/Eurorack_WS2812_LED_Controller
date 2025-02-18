@@ -232,6 +232,11 @@ void WS2812_SendAll(void)
 			// Append to data to be sent
 			for(int j = 0; j < 24; j++)
 			{
+				// Data and instruction synchronization barriers
+				// Ensures correct memory access when code is optimized
+				__DSB();
+				__ISB();
+
 				sendData[(i * 24 * DOWNSAMPLING_FACTOR) + (groupIndex * 24) + j] = data[i][j];
 			}
 		}
