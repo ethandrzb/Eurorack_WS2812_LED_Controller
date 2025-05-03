@@ -19,7 +19,7 @@ using namespace WS2812FX;
 class RainbowEffect : public WS2812Effect
 {
 	public:
-		RainbowEffect(uint8_t density, int8_t scrollHue, uint8_t stepDelay, colorHSV startHSV)
+		RainbowEffect(uint8_t density, int8_t scrollHue, uint8_t stepDelay, colorHSV startHSV, bool manualMode)
 		{
 			snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Rainbow");
 
@@ -34,6 +34,9 @@ class RainbowEffect : public WS2812Effect
 
 			// Parameter 3: Starting color
 			this->setParameter(ColorHSVEffectParameter(startHSV, "Start color"), 3);
+
+			// Parameter 4: Manual mode
+			this->setParameter(BooleanEffectParameter(manualMode, "Manual mode"), 4);
 		}
 
 		void updateEffect() override;

@@ -61,7 +61,7 @@ colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 0.25};
 SimpleBreathingEffect simpleBreathingEffect = SimpleBreathingEffect(10, 0.005, hsv, 0.25);
 MeterEffect meterEffect = MeterEffect(10, hsv, false, true);
-RainbowEffect rainbowEffect = RainbowEffect(3, 1, 1, hsv);
+RainbowEffect rainbowEffect = RainbowEffect(3, 1, 1, hsv, false);
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 
 void mainWhileCpp(void)

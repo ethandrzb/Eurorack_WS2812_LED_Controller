@@ -13,15 +13,19 @@ void RainbowEffect::updateEffect()
 	uint8_t scrollHue = *(static_cast<uint8_t *>(this->getParameter(1)->getValue()));
 	uint8_t stepDelay = *(static_cast<uint8_t *>(this->getParameter(2)->getValue()));
 	colorHSV hsv = *(static_cast<colorHSV *>(this->getParameter(3)->getValue()));
+	bool manualMode = *(static_cast<bool *>(this->getParameter(4)->getValue()));
 
-	hsv.hue = (hsv.hue < 360) ? hsv.hue + scrollHue : 0;
+	static uint16_t currentHue = 0;
 
-	//TODO: Create a separate internal colorHSV struct to prevent the starting point stored in Parameter 3 from being changed
-	static_cast<ColorHSVEffectParameter *>(this->getParameter(3))->setValue(hsv);
+	currentHue = (currentHue < 360) ? currentHue + scrollHue : 0;
+
+	if(!manualMode)
+	{
+		hsv.hue += currentHue;
+		hsv.hue %= 360;
+	}
 
 	WS2812_FillRainbow(hsv, density);
 	WS2812_SendAll();
 	HAL_Delay(stepDelay);
 }
-
-
