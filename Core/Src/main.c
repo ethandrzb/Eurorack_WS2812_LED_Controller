@@ -77,7 +77,7 @@ uint8_t UARTTransmitBuffer[UART_TRANSMIT_BUFFER_LENGTH];
 volatile uint16_t WS2812FramesSent;
 #endif
 
-uint16_t rawADCData[3];
+uint16_t rawADCData[NUM_CV_INPUTS];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -128,6 +128,15 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 			case HSV_PICKER_VALUE_SELECTED:
 				menu_layer = HSV_PICKER_ROOT;
 				break;
+			case MOD_MATRIX_ROOT:
+				menu_layer = MOD_MATRIX_DESTINATION_SELECTED;
+				break;
+			case MOD_MATRIX_DESTINATION_SELECTED:
+				menu_layer = MOD_MATRIX_AMOUNT_SELECTED;
+				break;
+			case MOD_MATRIX_AMOUNT_SELECTED:
+				menu_layer = MOD_MATRIX_DESTINATION_SELECTED;
+				break;
 			default:
 				break;
 		}
@@ -161,10 +170,26 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 				case HSV_PICKER_VALUE_SELECTED:
 					menu_layer = HSV_PICKER_ROOT;
 					break;
+				case MOD_MATRIX_ROOT:
+					menu_layer = NUMERIC_PARAMETER_ROOT;
+					break;
+				case MOD_MATRIX_DESTINATION_SELECTED:
+					menu_layer = MOD_MATRIX_ROOT;
+					break;
+				case MOD_MATRIX_AMOUNT_SELECTED:
+					menu_layer = MOD_MATRIX_DESTINATION_SELECTED;
+					break;
 				default:
 					break;
 			}
 			updateMenuC();
+			break;
+		case MOD_BTN_Pin:
+			if((menu_layer != MOD_MATRIX_ROOT) && (menu_layer != MOD_MATRIX_DESTINATION_SELECTED) && (menu_layer != MOD_MATRIX_AMOUNT_SELECTED))
+			{
+				menu_layer = MOD_MATRIX_ROOT;
+				updateMenuC();
+			}
 			break;
 	}
 }
@@ -199,8 +224,11 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 				// Trigger change based on current menu_layer
 				switch(menu_layer)
 				{
-					case COLOR_PALETTE_ROOT:
 					case NUMERIC_PARAMETER_ROOT:
+					case COLOR_PALETTE_ROOT:
+					case MOD_MATRIX_ROOT:
+					case MOD_MATRIX_DESTINATION_SELECTED:
+					case MOD_MATRIX_AMOUNT_SELECTED:
 						// Use last encoder movement direction to determine whether to increment or decrement the current value
 						if(encoderLastDirectionForward)
 						{
@@ -736,8 +764,8 @@ static void MX_DMA_Init(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
+  /* USER CODE BEGIN MX_GPIO_Init_1 */
+  /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
@@ -776,6 +804,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(FX_CHANGE_BTN_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : MOD_BTN_Pin */
+  GPIO_InitStruct.Pin = MOD_BTN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(MOD_BTN_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : LED4_Pin */
   GPIO_InitStruct.Pin = LED4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -790,8 +824,8 @@ static void MX_GPIO_Init(void)
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
+  /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */

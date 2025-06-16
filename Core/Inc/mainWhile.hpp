@@ -17,6 +17,7 @@ void updateMenuCpp(void);
 void drawMenuNumericParameter(void);
 void drawMenuColorPalette(void);
 void drawHSVPicker(void);
+void drawMenuModMatrix(void);
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
 void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
 void incrementMenuItemIndexCpp(void);

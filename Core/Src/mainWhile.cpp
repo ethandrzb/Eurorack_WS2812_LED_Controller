@@ -52,10 +52,13 @@ extern char OLED_buffer[30];
 extern uint8_t menu_layer;
 
 extern ADC_HandleTypeDef hadc1;
-extern uint16_t rawADCData[3];
+extern uint16_t rawADCData[NUM_CV_INPUTS];
 
 std::vector<EffectParameterBase *> numericParams;
 std::vector<ColorHSVEffectParameter *> colors;
+std::vector<std::string> modMatrixSources = {"A", "B", "C", "D", "E"};
+std::vector<std::string> modMatrixDestinations = {"aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee"};
+std::vector<std::string> modMatrixAmounts = {"000", "111", "222", "333", "444"};
 
 colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 0.25};
@@ -78,7 +81,7 @@ void mainWhileCpp(void)
 	while(1)
 	{
 		fx[effectIndex]->updateEffect();
-		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, 3);
+		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, NUM_CV_INPUTS);
 
 		switch(effectIndex)
 		{
@@ -119,6 +122,11 @@ void updateMenuCpp(void)
 			break;
 		case COLOR_PALETTE_ROOT:
 			drawMenuColorPalette();
+			break;
+		case MOD_MATRIX_ROOT:
+		case MOD_MATRIX_DESTINATION_SELECTED:
+		case MOD_MATRIX_AMOUNT_SELECTED:
+			drawMenuModMatrix();
 			break;
 	}
 
@@ -233,6 +241,40 @@ void drawHSVPicker(void)
 							White);
 }
 
+void drawMenuModMatrix()
+{
+	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;
+	uint8_t end = ((uint8_t)(start + 4) > modMatrixSources.size()) ? modMatrixSources.size() : start + 4;
+
+	// Display separator line between mod sources and destinations
+	ssd1306_Line(11, 18, 11, 63, White);
+
+	//TODO: Make separate loop for displaying mod sources so they scroll independently of the destinations and amounts
+
+	//TODO: Invert text of currently selected mod source when destination and amount are being edited.
+
+	for(uint8_t i = start; i < end; i++)
+	{
+	  // Display mod source
+	  uint8_t y = (i - start) * 12 + 18;
+	  ssd1306_SetCursor(1, y);
+	  sprintf(OLED_buffer, "%s", modMatrixSources[i].c_str());
+	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
+	  ssd1306_DrawRectangle(0, y - 1, 8, y + 9, ((i == menuItemIndex) && (menu_layer == MOD_MATRIX_ROOT)) ? White : Black);
+
+	  // Display mod destination
+	  ssd1306_SetCursor(15, y);
+	  sprintf(OLED_buffer, "%s", modMatrixDestinations[i].c_str());
+	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
+	  ssd1306_DrawRectangle(14, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == MOD_MATRIX_DESTINATION_SELECTED)) ? White : Black);
+
+	  // Display mod amount
+	  ssd1306_SetCursor(90, y);
+	  sprintf(OLED_buffer, "%-3s", modMatrixAmounts[i].c_str());
+	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == MOD_MATRIX_AMOUNT_SELECTED)) ? Black : White);
+	}
+}
+
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 {
 	if(menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)
@@ -273,6 +315,24 @@ void incrementMenuItemIndexCpp(void)
 				menuItemIndex++;
 			}
 			break;
+		case MOD_MATRIX_ROOT:
+			if(menuItemIndex < NUM_CV_INPUTS - 1)
+			{
+				menuItemIndex++;
+			}
+			break;
+		case MOD_MATRIX_DESTINATION_SELECTED:
+			if(menuItemIndex < modMatrixDestinations.size() - 1)
+			{
+				menuItemIndex++;
+			}
+			break;
+		case MOD_MATRIX_AMOUNT_SELECTED:
+			if(menuItemIndex < modMatrixAmounts.size() - 1)
+			{
+				menuItemIndex++;
+			}
+			break;
 	}
 }
 
@@ -301,5 +361,7 @@ void populateMenuItemsCpp(void)
 		{
 			numericParams.push_back(fx[effectIndex]->getParameter(i));
 		}
+
+		//TODO: Insert modulation references here?
 	}
 }

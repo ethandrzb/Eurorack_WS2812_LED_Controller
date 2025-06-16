@@ -42,7 +42,10 @@ typedef enum menuLayer
 	NUMERIC_PARAMETER_VALUE_SELECTED,
 	COLOR_PALETTE_ROOT,
 	HSV_PICKER_ROOT,
-	HSV_PICKER_VALUE_SELECTED
+	HSV_PICKER_VALUE_SELECTED,
+	MOD_MATRIX_ROOT,
+	MOD_MATRIX_DESTINATION_SELECTED,
+	MOD_MATRIX_AMOUNT_SELECTED
 } menuLayer;
 /* USER CODE END ET */
 
@@ -91,11 +94,14 @@ void Error_Handler(void);
 #define SWO_GPIO_Port GPIOB
 #define ENC_BTN_Pin GPIO_PIN_4
 #define ENC_BTN_GPIO_Port GPIOB
+#define MOD_BTN_Pin GPIO_PIN_5
+#define MOD_BTN_GPIO_Port GPIOB
+#define MOD_BTN_EXTI_IRQn EXTI9_5_IRQn
 #define LED4_Pin GPIO_PIN_6
 #define LED4_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-
+#define NUM_CV_INPUTS 3
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

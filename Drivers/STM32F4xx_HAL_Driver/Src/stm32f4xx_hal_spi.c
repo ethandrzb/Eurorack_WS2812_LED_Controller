@@ -1648,7 +1648,7 @@ HAL_StatusTypeDef HAL_SPI_TransmitReceive_IT(SPI_HandleTypeDef *hspi, const uint
   * @param  Size amount of data elements (u8 or u16) to be sent
   * @retval HAL status
   */
-__attribute__ ((section(".RamFunc"))) HAL_StatusTypeDef HAL_SPI_Transmit_DMA(SPI_HandleTypeDef *hspi, const uint8_t *pData, uint16_t Size)
+HAL_StatusTypeDef HAL_SPI_Transmit_DMA(SPI_HandleTypeDef *hspi, const uint8_t *pData, uint16_t Size)
 {
 
   /* Check tx dma handle */
