@@ -48,6 +48,7 @@ extern "C"
 extern uint8_t effectIndex;
 extern uint8_t menuItemIndex;
 extern uint8_t HSVPickerIndex;
+extern uint8_t selectedModSourceIndex;
 extern char OLED_buffer[30];
 extern uint8_t menu_layer;
 
@@ -56,7 +57,7 @@ extern uint16_t rawADCData[NUM_CV_INPUTS];
 
 std::vector<EffectParameterBase *> numericParams;
 std::vector<ColorHSVEffectParameter *> colors;
-std::vector<std::string> modMatrixSources = {"A", "B", "C", "D", "E"};
+std::vector<std::string> modMatrixSources = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
 std::vector<std::string> modMatrixDestinations = {"aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee"};
 std::vector<std::string> modMatrixAmounts = {"000", "111", "222", "333", "444"};
 
@@ -243,25 +244,28 @@ void drawHSVPicker(void)
 
 void drawMenuModMatrix()
 {
+	uint8_t startSource = (selectedModSourceIndex > 3) ? selectedModSourceIndex - 3 : 0;
+	uint8_t endSource = ((uint8_t)(startSource + 4) > modMatrixSources.size()) ? modMatrixSources.size() : startSource + 4;
+
 	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;
-	uint8_t end = ((uint8_t)(start + 4) > modMatrixSources.size()) ? modMatrixSources.size() : start + 4;
+	uint8_t end = ((uint8_t)(start + 4) > modMatrixDestinations.size()) ? modMatrixDestinations.size() : start + 4;
 
 	// Display separator line between mod sources and destinations
 	ssd1306_Line(11, 18, 11, 63, White);
 
-	//TODO: Make separate loop for displaying mod sources so they scroll independently of the destinations and amounts
-
-	//TODO: Invert text of currently selected mod source when destination and amount are being edited.
+	for(uint8_t i = startSource; i < endSource; i++)
+	{
+	  uint8_t y = (i - startSource) * 12 + 18;
+	  // Display mod source
+	  ssd1306_SetCursor(1, y);
+	  sprintf(OLED_buffer, "%s", modMatrixSources[i].c_str());
+	  ssd1306_FillRectangle(0, y - 1, 8, y + 9, (i == selectedModSourceIndex) ? White : Black);
+	  ssd1306_WriteString(OLED_buffer, Font_7x10, (i == selectedModSourceIndex) ? Black : White);
+	}
 
 	for(uint8_t i = start; i < end; i++)
 	{
-	  // Display mod source
 	  uint8_t y = (i - start) * 12 + 18;
-	  ssd1306_SetCursor(1, y);
-	  sprintf(OLED_buffer, "%s", modMatrixSources[i].c_str());
-	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
-	  ssd1306_DrawRectangle(0, y - 1, 8, y + 9, ((i == menuItemIndex) && (menu_layer == MOD_MATRIX_ROOT)) ? White : Black);
-
 	  // Display mod destination
 	  ssd1306_SetCursor(15, y);
 	  sprintf(OLED_buffer, "%s", modMatrixDestinations[i].c_str());
@@ -299,6 +303,7 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 	}
 }
 
+// While menuItemIndex is the main variable used to track cursor position, some menus may use additional variables to store cursor positions for deeper levels
 void incrementMenuItemIndexCpp(void)
 {
 	switch(menu_layer)
@@ -316,9 +321,9 @@ void incrementMenuItemIndexCpp(void)
 			}
 			break;
 		case MOD_MATRIX_ROOT:
-			if(menuItemIndex < NUM_CV_INPUTS - 1)
+			if(selectedModSourceIndex < modMatrixSources.size() - 1)
 			{
-				menuItemIndex++;
+				selectedModSourceIndex++;
 			}
 			break;
 		case MOD_MATRIX_DESTINATION_SELECTED:
@@ -338,7 +343,15 @@ void incrementMenuItemIndexCpp(void)
 
 void decrementMenuItemIndexCpp(void)
 {
-	menuItemIndex = (menuItemIndex > 0) ? menuItemIndex - 1 : 0;
+	switch(menu_layer)
+	{
+		case MOD_MATRIX_ROOT:
+			selectedModSourceIndex = (selectedModSourceIndex > 0) ? selectedModSourceIndex - 1 : 0;
+			break;
+		default:
+			menuItemIndex = (menuItemIndex > 0) ? menuItemIndex - 1 : 0;
+			break;
+	}
 }
 
 // Groups the arbitrary parameters in each effect into numeric and color parameters based on type

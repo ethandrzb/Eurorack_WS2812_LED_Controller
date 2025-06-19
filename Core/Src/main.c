@@ -65,6 +65,7 @@ uint16_t enc_count_prev = 0;
 
 uint8_t effectIndex = 0;
 uint8_t menuItemIndex = 0;
+uint8_t selectedModSourceIndex = 0;
 uint8_t HSVPickerIndex = 0;
 
 menuLayer menu_layer = NUMERIC_PARAMETER_ROOT;
