@@ -227,6 +227,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 				{
 					case NUMERIC_PARAMETER_ROOT:
 					case COLOR_PALETTE_ROOT:
+					case HSV_PICKER_ROOT:
 					case MOD_MATRIX_ROOT:
 					case MOD_MATRIX_DESTINATION_SELECTED:
 					case MOD_MATRIX_AMOUNT_SELECTED:
@@ -250,16 +251,6 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 							decrementValueC(effectIndex, menuItemIndex, 0);
 						}
 
-						break;
-					case HSV_PICKER_ROOT:
-						if(encoderLastDirectionForward)
-						{
-							HSVPickerIndex = (HSVPickerIndex < 2) ? HSVPickerIndex + 1 : 2;
-						}
-						else
-						{
-							HSVPickerIndex = (HSVPickerIndex > 0) ? HSVPickerIndex - 1 : 0;
-						}
 						break;
 					case HSV_PICKER_VALUE_SELECTED:
 						if(encoderLastDirectionForward)

@@ -320,6 +320,9 @@ void incrementMenuItemIndexCpp(void)
 				menuItemIndex++;
 			}
 			break;
+		case HSV_PICKER_ROOT:
+			HSVPickerIndex = (HSVPickerIndex < 2) ? HSVPickerIndex + 1 : 2;
+			break;
 		case MOD_MATRIX_ROOT:
 			if(selectedModSourceIndex < modMatrixSources.size() - 1)
 			{
@@ -345,6 +348,9 @@ void decrementMenuItemIndexCpp(void)
 {
 	switch(menu_layer)
 	{
+		case HSV_PICKER_ROOT:
+			HSVPickerIndex = (HSVPickerIndex > 0) ? HSVPickerIndex - 1 : 0;
+			break;
 		case MOD_MATRIX_ROOT:
 			selectedModSourceIndex = (selectedModSourceIndex > 0) ? selectedModSourceIndex - 1 : 0;
 			break;
