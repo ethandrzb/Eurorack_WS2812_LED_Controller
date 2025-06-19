@@ -84,6 +84,7 @@ void mainWhileCpp(void)
 		fx[effectIndex]->updateEffect();
 		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, NUM_CV_INPUTS);
 
+		// Apply modulation from CV inputs
 		switch(effectIndex)
 		{
 			case 0:
@@ -114,7 +115,7 @@ void updateMenuCpp(void)
 	// Invert text color when FX_CHANGE_BTN held
 	ssd1306_WriteString(OLED_buffer, Font_11x18, (HAL_GPIO_ReadPin(FX_CHANGE_BTN_GPIO_Port, FX_CHANGE_BTN_Pin) != GPIO_PIN_RESET) ? White : Black);
 
-	// Show LED states on screen
+	// Draw appropriate menu for current state
 	switch(menu_layer)
 	{
 		case NUMERIC_PARAMETER_ROOT:
@@ -131,7 +132,7 @@ void updateMenuCpp(void)
 			break;
 	}
 
-	// Draw color picker
+	// Draw color picker pop-up
 	if(menu_layer == HSV_PICKER_ROOT || menu_layer == HSV_PICKER_VALUE_SELECTED)
 	{
 		drawHSVPicker();
@@ -139,7 +140,7 @@ void updateMenuCpp(void)
 
 	ssd1306_UpdateScreen();
 }
-//TODO: Merge this function with drawMenuColorPalette
+//TODO: Merge this function with drawMenuColorPalette. A more generic function with parameters to describe the menu should work.
 void drawMenuNumericParameter(void)
 {
 	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;

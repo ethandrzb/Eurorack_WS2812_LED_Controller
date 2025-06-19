@@ -97,7 +97,7 @@ static void MX_ADC1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+//TODO: Add a ping-pong buffer for ADC values so we don't have to keep starting conversion and DMA
 //void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 //{
 //	// >> 3 to scale to comfortable range
@@ -338,7 +338,6 @@ int main(void)
   ssd1306_UpdateScreen();
 
   // Start encoder timer
-//  HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
   HAL_TIM_Encoder_Start_IT(&htim1, TIM_CHANNEL_ALL);
 
   // Start debounce timer for encoder button
