@@ -17,6 +17,7 @@
 #define WS2812FX_EFFECT_NAME_LEN 11
 #define WS2812FX_EFFECT_PARAM_LEN 11
 #define WS2812FX_EFFECT_MAX_PARAMS 8
+#define WS2812FX_EFFECT_MAX_MOD_SLOTS 8
 // 4 chars + null char
 #define WS2812FX_PARAMETER_VALUE_STRING_LEN 5
 
@@ -28,6 +29,7 @@ class EffectParameterBase
 	public:
 		std::string name;
 		char valueString[WS2812FX_PARAMETER_VALUE_STRING_LEN];
+		//TODO: Add boolean to specify whether parameter can be modulated in the mod matrix
 
 		EffectParameterBase(std::string name) : name(name) {}
 		virtual ~EffectParameterBase() {}
@@ -290,12 +292,28 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 		}
 };
 
+class ModMatrixEntry
+{
+	public:
+		uint8_t modSourceIndex;
+		std::unique_ptr<EffectParameterBase> modDestination;
+		// Using an effect parameter to store the amount means we should be able to modulate modulation amounts with minimal effort
+		std::unique_ptr<NumericEffectParameter<int8_t>> modAmount;
+
+		//TODO: Constructor for ModMatrixEntry (get and set functions from WS2812Effect class below might help)
+		//TODO: Initialize modAmount parameter to constrain the range to [-100, 100]
+		//TODO: Write a function to convert modAmount to a percentage of the range of modDestination and apply this value to modDestination
+};
+
 class WS2812Effect
 {
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
 		virtual void updateEffect() = 0;
 		std::unique_ptr<EffectParameterBase> params[WS2812FX_EFFECT_MAX_PARAMS];
+		ModMatrixEntry modMatrix[WS2812FX_EFFECT_MAX_MOD_SLOTS];
+
+		//TODO: Constructor to initialize modMatrix entries
 
 		EffectParameterBase *getParameter(uint16_t index)
 		{
