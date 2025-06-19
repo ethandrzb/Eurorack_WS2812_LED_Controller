@@ -11,6 +11,7 @@
 #include "WS2812.h"
 
 #define WS2812FX_NUM_EFFECTS 3
+#define HSV_PICKER_NUM_MENU_ITEMS 3
 
 void mainWhileCpp(void);
 void updateMenuCpp(void);

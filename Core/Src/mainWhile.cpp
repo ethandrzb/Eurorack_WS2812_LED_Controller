@@ -303,7 +303,7 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 	}
 }
 
-// While menuItemIndex is the main variable used to track cursor position, some menus may use additional variables to store cursor positions for deeper levels
+// While menuItemIndex is the main variable used to track cursor position, some menus may use additional variables to store cursor positions for certain levels
 void incrementMenuItemIndexCpp(void)
 {
 	switch(menu_layer)
@@ -321,7 +321,10 @@ void incrementMenuItemIndexCpp(void)
 			}
 			break;
 		case HSV_PICKER_ROOT:
-			HSVPickerIndex = (HSVPickerIndex < 2) ? HSVPickerIndex + 1 : 2;
+			if(HSVPickerIndex < HSV_PICKER_NUM_MENU_ITEMS - 1)
+			{
+				HSVPickerIndex++;
+			}
 			break;
 		case MOD_MATRIX_ROOT:
 			if(selectedModSourceIndex < modMatrixSources.size() - 1)
