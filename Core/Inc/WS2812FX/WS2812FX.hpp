@@ -102,6 +102,7 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 		{
 			// This might cause an overflow!
 			// Make sure to use a sufficiently large data type
+			//TODO: Add mapping function to modulation
 			this->modulatedValue = this->value + this->modulation;
 
 			// Clip range of modulated value
@@ -295,7 +296,7 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 class ModMatrixEntry
 {
 	public:
-		uint8_t modSourceIndex;
+		uint8_t *modSource;
 		std::unique_ptr<EffectParameterBase> modDestination;
 		// Using an effect parameter to store the amount means we should be able to modulate modulation amounts with minimal effort
 		std::unique_ptr<NumericEffectParameter<int8_t>> modAmount;
