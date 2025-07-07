@@ -19,12 +19,12 @@ using namespace WS2812FX;
 class RainbowEffect : public WS2812Effect
 {
 	public:
-		RainbowEffect(uint8_t density, int8_t scrollHue, uint8_t stepDelay, colorHSV startHSV, bool manualMode)
+		RainbowEffect(uint8_t density, int16_t scrollHue, uint8_t stepDelay, colorHSV startHSV, bool manualMode)
 		{
 			snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Rainbow");
 
 			// Parameter 0: Rainbow density (delta hue)
-			this->setParameter(NumericEffectParameter<int8_t>(density, "Density", -50, 50, 1), 0);
+			this->setParameter(NumericEffectParameter<int16_t>(density, "Density", -50, 50, 1), 0);
 
 			// Parameter 1: Scroll hue amount
 			this->setParameter(NumericEffectParameter<uint8_t>(scrollHue, "Scroll hue", 0, 100, 1), 1);

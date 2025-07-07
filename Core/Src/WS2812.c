@@ -90,7 +90,7 @@ void WS2812_FadeAll(uint8_t denominator)
 }
 
 // Moves the position the values of the LEDs by shiftAmount in LEDData
-void WS2812_ShiftLEDs(int8_t shiftAmount)
+void WS2812_ShiftLEDs(int16_t shiftAmount)
 {
 	uint8_t tmp[NUM_LOGICAL_LEDS][NUM_LED_PARAMS];
 	for(int i = 0; i < NUM_LOGICAL_LEDS; i++)
@@ -457,7 +457,7 @@ void WS2812_MirroredMeterEffect(colorRGB color, uint8_t level, bool centered)
 	}
 }
 
-void WS2812_FillRainbow(colorHSV startingColor, int8_t deltaHue)
+void WS2812_FillRainbow(colorHSV startingColor, int16_t deltaHue)
 {
 	bool fillForward = true;
 

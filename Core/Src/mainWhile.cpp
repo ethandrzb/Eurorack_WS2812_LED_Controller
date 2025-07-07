@@ -82,24 +82,25 @@ void mainWhileCpp(void)
 	while(1)
 	{
 		fx[effectIndex]->updateEffect();
+		//TODO: Store ADC values inside each effect and use current effect index to determine the DMA destination
 		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, NUM_CV_INPUTS);
 
 		// Apply modulation from CV inputs
 		switch(effectIndex)
 		{
 			case 0:
-				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(0)))->setModulation(rawADCData[0] >> 2);
-				(static_cast<NumericEffectParameter<float> *>(fx[effectIndex]->getParameter(1)))->setModulation(rawADCData[1] * 0.002);
-				(static_cast<NumericEffectParameter<float> *>(fx[effectIndex]->getParameter(3)))->setModulation(rawADCData[2] / 256.0f);
+				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(0)))->setModulation(rawADCData[0]);
+				(static_cast<NumericEffectParameter<float> *>(fx[effectIndex]->getParameter(1)))->setModulation(rawADCData[1]);
+				(static_cast<NumericEffectParameter<float> *>(fx[effectIndex]->getParameter(3)))->setModulation(rawADCData[2]);
 				break;
 			case 1:
-				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(0)))->setModulation(rawADCData[0] >> 2);
-				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(3)))->setModulation(rawADCData[1] >> 2);
+				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(0)))->setModulation(rawADCData[0]);
+				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(3)))->setModulation(rawADCData[1]);
 				break;
 			case 2:
-				(static_cast<NumericEffectParameter<int8_t> *>(fx[effectIndex]->getParameter(0)))->setModulation(rawADCData[0] >> 2);
-				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(1)))->setModulation(rawADCData[1] >> 2);
-				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(2)))->setModulation(rawADCData[2] >> 2);
+				(static_cast<NumericEffectParameter<int16_t> *>(fx[effectIndex]->getParameter(0)))->setModulation(rawADCData[0]);
+				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(1)))->setModulation(rawADCData[1]);
+				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(2)))->setModulation(rawADCData[2]);
 				break;
 		}
 	}

@@ -16,7 +16,7 @@
 - Name: Rainbow
   - Index: 2
   - Parameters
-    - Delta hue (int8_t)
+    - Delta hue (int16_t)
     - Scroll hue (uint8_t)
     - Millisecond delay between steps (uint8_t)
     - Starting HSV color

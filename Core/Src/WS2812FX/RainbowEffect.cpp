@@ -9,7 +9,7 @@
 
 void RainbowEffect::updateEffect()
 {
-	int8_t density = *(static_cast<int8_t *>(this->getParameter(0)->getValue()));
+	int16_t density = *(static_cast<int16_t *>(this->getParameter(0)->getValue()));
 	uint8_t scrollHue = *(static_cast<uint8_t *>(this->getParameter(1)->getValue()));
 	uint8_t stepDelay = *(static_cast<uint8_t *>(this->getParameter(2)->getValue()));
 	colorHSV hsv = *(static_cast<colorHSV *>(this->getParameter(3)->getValue()));

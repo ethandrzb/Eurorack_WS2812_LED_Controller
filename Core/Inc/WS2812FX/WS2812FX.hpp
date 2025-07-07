@@ -8,11 +8,13 @@
 #ifndef INC_WS2812FX_HPP_
 #define INC_WS2812FX_HPP_
 
+#include <functional>
+#include <limits.h>
 #include <main.h>
 #include <memory>
-#include <WS2812.h>
 #include <stdio.h>
 #include <string>
+#include <WS2812.h>
 
 #define WS2812FX_EFFECT_NAME_LEN 11
 #define WS2812FX_EFFECT_PARAM_LEN 11
@@ -20,6 +22,10 @@
 #define WS2812FX_EFFECT_MAX_MOD_SLOTS 8
 // 4 chars + null char
 #define WS2812FX_PARAMETER_VALUE_STRING_LEN 5
+
+// MUST be consistent with ADC data type used for CV inputs
+#define RAW_MODULATION_MIN 0
+#define RAW_MODULATION_MAX UINT8_MAX
 
 namespace WS2812FX
 {
@@ -45,6 +51,7 @@ template <typename T> class EffectParameter : public EffectParameterBase
 	public:
 		T value;
 		T modulation;
+		std::function<T(T)> modulationMapper;
 
 		EffectParameter(T value, std::string name) : EffectParameterBase(name), value(value) {}
 		virtual ~EffectParameter() {}
@@ -82,10 +89,28 @@ template <typename T> class EffectParameter : public EffectParameterBase
 template <typename T> class NumericEffectParameter : public EffectParameter<T>
 {
 	public:
+		//TODO: Add support for custom mapping functions
 		NumericEffectParameter(T value, std::string name, T minValue, T maxValue, T tickAmount) : EffectParameter<T>(value, name), minValue(minValue), maxValue(maxValue), tickAmount(tickAmount)
 		{
 			this->modulation = (T)0;
 			this->modulatedValue = this->value;
+
+			// Create linear mapping function from raw ADC values to min and max values for this parameter
+			this->modulationMapper = [=](T raw) {
+
+				//TODO: Convert raw ADC data to signed when the appropriate circuitry has been designed and connected
+				// Trying to implement the offsets and other logic necessary to handle bipolar CV signals without actually being able to process them has been rather difficult
+				if constexpr(std::is_same_v<T, int16_t>)
+				{
+					// Move zero position of ADC data for signed parameters
+					raw += 128;
+				}
+
+				// Positive minimum values will cause the mapped modulation value to be shifted up if a traditional linear mapping is used
+				// The unmodulated value of this parameter is also bound by this Positive minimum, meaning that the minimum modulated value is 2x the minimum value
+				// In other words, if the range of values for a parameter is [a,b], the modulation applied to the value must be bound to the range [0, b-a].
+				return ((raw - RAW_MODULATION_MIN) * (maxValue - minValue) / (RAW_MODULATION_MAX - RAW_MODULATION_MIN)) + ((minValue < 0) ? minValue : 0);
+			};
 		}
 
 		void incrementValue() override
@@ -102,8 +127,7 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 		{
 			// This might cause an overflow!
 			// Make sure to use a sufficiently large data type
-			//TODO: Add mapping function to modulation
-			this->modulatedValue = this->value + this->modulation;
+			this->modulatedValue = this->value + this->modulationMapper(this->modulation);
 
 			// Clip range of modulated value
 			if(this->modulatedValue > this->maxValue)
@@ -139,9 +163,9 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 			{
 				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<uint16_t *>(this->getValueRaw())));
 			}
-			else if constexpr(std::is_same_v<T, int8_t>)
+			else if constexpr(std::is_same_v<T, int16_t>)
 			{
-				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<int8_t *>(this->getValueRaw())));
+				snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "%3d", *(static_cast<int16_t *>(this->getValueRaw())));
 			}
 			else if constexpr(std::is_same_v<T, float>)
 			{
