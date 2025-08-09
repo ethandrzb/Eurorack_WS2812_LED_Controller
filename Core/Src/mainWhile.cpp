@@ -57,9 +57,7 @@ extern uint16_t rawADCData[NUM_CV_INPUTS];
 
 std::vector<EffectParameterBase *> numericParams;
 std::vector<ColorHSVEffectParameter *> colors;
-std::vector<std::string> modMatrixSources = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
-std::vector<std::string> modMatrixDestinations = {"aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee"};
-std::vector<std::string> modMatrixAmounts = {"000", "111", "222", "333", "444"};
+std::vector<std::string> modMatrixSources = {"A", "B", "C"};
 
 colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 0.25};
@@ -249,8 +247,11 @@ void drawMenuModMatrix()
 	uint8_t startSource = (selectedModSourceIndex > 3) ? selectedModSourceIndex - 3 : 0;
 	uint8_t endSource = ((uint8_t)(startSource + 4) > modMatrixSources.size()) ? modMatrixSources.size() : startSource + 4;
 
-	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;
-	uint8_t end = ((uint8_t)(start + 4) > modMatrixDestinations.size()) ? modMatrixDestinations.size() : start + 4;
+//	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;
+//	uint8_t end = ((uint8_t)(start + 4) > modMatrixDestinations.size()) ? modMatrixDestinations.size() : start + 4;
+
+	uint8_t start = 0;
+	uint8_t end = 1;
 
 	// Display separator line between mod sources and destinations
 	ssd1306_Line(11, 18, 11, 63, White);
@@ -270,13 +271,13 @@ void drawMenuModMatrix()
 	  uint8_t y = (i - start) * 12 + 18;
 	  // Display mod destination
 	  ssd1306_SetCursor(15, y);
-	  sprintf(OLED_buffer, "%s", modMatrixDestinations[i].c_str());
+	  sprintf(OLED_buffer, "%s", fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination->name.c_str());
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
 	  ssd1306_DrawRectangle(14, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == MOD_MATRIX_DESTINATION_SELECTED)) ? White : Black);
 
 	  // Display mod amount
 	  ssd1306_SetCursor(90, y);
-	  sprintf(OLED_buffer, "%-3s", modMatrixAmounts[i].c_str());
+	  sprintf(OLED_buffer, "%-3s", fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->getValueString());
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == MOD_MATRIX_AMOUNT_SELECTED)) ? Black : White);
 	}
 }
@@ -335,13 +336,13 @@ void incrementMenuItemIndexCpp(void)
 			}
 			break;
 		case MOD_MATRIX_DESTINATION_SELECTED:
-			if(menuItemIndex < modMatrixDestinations.size() - 1)
+			if(menuItemIndex < WS2812FX_EFFECT_MAX_MOD_SLOTS - 1)
 			{
 				menuItemIndex++;
 			}
 			break;
 		case MOD_MATRIX_AMOUNT_SELECTED:
-			if(menuItemIndex < modMatrixAmounts.size() - 1)
+			if(menuItemIndex < WS2812FX_EFFECT_MAX_MOD_SLOTS)
 			{
 				menuItemIndex++;
 			}
