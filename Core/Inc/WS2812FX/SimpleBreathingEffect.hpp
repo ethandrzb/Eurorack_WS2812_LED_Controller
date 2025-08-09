@@ -30,7 +30,7 @@ class SimpleBreathingEffect : public WS2812Effect
 			this->setParameter(ColorHSVEffectParameter(hsv, "Color"), 2);
 
 			// Parameter 3: Max color value
-			this->setParameter(NumericEffectParameter<float>(maxValue, "Max value", 0.05, 1, 0.05), 3);
+			this->setParameter(NumericEffectParameter<float>(maxValue, "Max Value", 0.05, 1, 0.05), 3);
 
 			this->initModMatrixDefaults();
 		}
