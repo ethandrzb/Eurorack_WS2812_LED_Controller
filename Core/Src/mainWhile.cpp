@@ -242,6 +242,7 @@ void drawHSVPicker(void)
 							White);
 }
 
+//TODO: Display list of available destinations and highlight chosen one for selected mod source
 void drawMenuModMatrix()
 {
 	uint8_t startSource = (selectedModSourceIndex > 3) ? selectedModSourceIndex - 3 : 0;
@@ -284,25 +285,33 @@ void drawMenuModMatrix()
 
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 {
-	if(menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)
+	switch(menu_layer)
 	{
-		numericParams[parameterIndex]->incrementValue();
-	}
-	else if(menu_layer == HSV_PICKER_VALUE_SELECTED)
-	{
-		colors[parameterIndex]->incrementValueByIndex(parameterSubIndex);
+		case NUMERIC_PARAMETER_VALUE_SELECTED:
+			numericParams[parameterIndex]->incrementValue();
+			break;
+		case HSV_PICKER_VALUE_SELECTED:
+			colors[parameterIndex]->incrementValueByIndex(parameterSubIndex);
+			break;
+		case MOD_MATRIX_AMOUNT_SELECTED:
+			fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->incrementValue();
+			break;
 	}
 }
 
 void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 {
-	if(menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)
+	switch(menu_layer)
 	{
-		numericParams[parameterIndex]->decrementValue();
-	}
-	else if(menu_layer == HSV_PICKER_VALUE_SELECTED)
-	{
-		colors[parameterIndex]->decrementValueByIndex(parameterSubIndex);
+		case NUMERIC_PARAMETER_VALUE_SELECTED:
+			numericParams[parameterIndex]->decrementValue();
+			break;
+		case HSV_PICKER_VALUE_SELECTED:
+			colors[parameterIndex]->decrementValueByIndex(parameterSubIndex);
+			break;
+		case MOD_MATRIX_AMOUNT_SELECTED:
+			fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->decrementValue();
+			break;
 	}
 }
 

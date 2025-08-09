@@ -230,7 +230,6 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 					case HSV_PICKER_ROOT:
 					case MOD_MATRIX_ROOT:
 					case MOD_MATRIX_DESTINATION_SELECTED:
-					case MOD_MATRIX_AMOUNT_SELECTED:
 						// Use last encoder movement direction to determine whether to increment or decrement the current value
 						if(encoderLastDirectionForward)
 						{
@@ -242,6 +241,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 						}
 						break;
 					case NUMERIC_PARAMETER_VALUE_SELECTED:
+					case MOD_MATRIX_AMOUNT_SELECTED:
 						if(encoderLastDirectionForward)
 						{
 							incrementValueC(effectIndex, menuItemIndex, 0);
