@@ -32,7 +32,12 @@ class SimpleBreathingEffect : public WS2812Effect
 			// Parameter 3: Max color value
 			this->setParameter(NumericEffectParameter<float>(maxValue, "Max value", 0.05, 1, 0.05), 3);
 
-			// Init default mod matrix for this effect
+			this->initModMatrixDefaults();
+		}
+
+		// Init default mod matrix for this effect
+		void initModMatrixDefaults() override
+		{
 			this->modMatrix[0].modSource = NULL;
 			this->modMatrix[0].modDestination = this->getParameter(0);
 			this->modMatrix[0].modAmount->setValue(8);

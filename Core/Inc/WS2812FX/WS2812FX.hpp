@@ -339,10 +339,9 @@ class WS2812Effect
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
 		virtual void updateEffect() = 0;
+		virtual void initModMatrixDefaults() = 0;
 		std::unique_ptr<EffectParameterBase> params[WS2812FX_EFFECT_MAX_PARAMS];
 		ModMatrixEntry modMatrix[WS2812FX_EFFECT_MAX_MOD_SLOTS];
-
-		//TODO: Constructor to initialize modMatrix entries
 
 		EffectParameterBase *getParameter(uint16_t index)
 		{

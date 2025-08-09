@@ -37,6 +37,24 @@ class RainbowEffect : public WS2812Effect
 
 			// Parameter 4: Manual mode
 			this->setParameter(BooleanEffectParameter(manualMode, "Manual mode"), 4);
+
+			this->initModMatrixDefaults();
+		}
+
+		// Init default mod matrix for this effect
+		void initModMatrixDefaults() override
+		{
+			this->modMatrix[0].modSource = NULL;
+			this->modMatrix[0].modDestination = this->getParameter(0);
+			this->modMatrix[0].modAmount->setValue(8);
+
+			this->modMatrix[1].modSource = NULL;
+			this->modMatrix[1].modDestination = this->getParameter(1);
+			this->modMatrix[1].modAmount->setValue(13);
+
+			this->modMatrix[2].modSource = NULL;
+			this->modMatrix[2].modDestination = this->getParameter(2);
+			this->modMatrix[2].modAmount->setValue(21);
 		}
 
 		void updateEffect() override;
