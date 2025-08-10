@@ -250,7 +250,7 @@ void drawHSVPicker(void)
 							White);
 }
 
-//TODO: Display list of available destinations and highlight chosen one for selected mod source
+// Display list of available destinations and highlight chosen one for selected mod source
 void drawMenuModMatrix()
 {
 	uint8_t startSource = (selectedModSourceIndex > 3) ? selectedModSourceIndex - 3 : 0;
@@ -281,13 +281,16 @@ void drawMenuModMatrix()
 	  sprintf(OLED_buffer, "%s%s", (fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination == fx[effectIndex]->getExpandedParameters()[i].get()) ? "*": "",
 			  fx[effectIndex]->getExpandedParameters()[i]->name.c_str());
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
-	  ssd1306_DrawRectangle(14, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == MOD_MATRIX_DESTINATION_SELECTED)) ? White : Black);
+	  ssd1306_DrawRectangle(14, y - 1, 98, y + 9, ((i == menuItemIndex) && (menu_layer == MOD_MATRIX_DESTINATION_SELECTED)) ? White : Black);
 
-	  // Display mod amount
-	  ssd1306_SetCursor(90, y);
-	  sprintf(OLED_buffer, "%-3s", fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->getValueString());
-	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == MOD_MATRIX_AMOUNT_SELECTED)) ? Black : White);
+	  //TODO: Move mod amount back into this loop to visualize amounts for currently selected source to all possible destinations
+	  //TODO: Visualize amount to each destination mentioned in last TODO using box that gradually fills up? It might be possible to reuse the code for the "value" bar from the HSV picker popup.
 	}
+
+	// Display mod amount
+	ssd1306_SetCursor(99, 36);
+	sprintf(OLED_buffer, "%-3s", fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->getValueString());
+	ssd1306_WriteString(OLED_buffer, Font_7x10, (menu_layer == MOD_MATRIX_AMOUNT_SELECTED) ? Black : White);
 }
 
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
