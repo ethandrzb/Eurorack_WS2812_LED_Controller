@@ -272,7 +272,8 @@ void drawMenuModMatrix()
 	  uint8_t y = (i - start) * 12 + 18;
 	  // Display mod destination
 	  ssd1306_SetCursor(15, y);
-	  sprintf(OLED_buffer, "%s", fx[effectIndex]->getExpandedParameters()[i]->name.c_str());
+	  sprintf(OLED_buffer, "%s%s", (fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination == fx[effectIndex]->getExpandedParameters()[i].get()) ? "*": "",
+			  fx[effectIndex]->getExpandedParameters()[i]->name.c_str());
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
 	  ssd1306_DrawRectangle(14, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == MOD_MATRIX_DESTINATION_SELECTED)) ? White : Black);
 
