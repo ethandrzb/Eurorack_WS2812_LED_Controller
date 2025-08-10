@@ -35,6 +35,7 @@ class EffectParameterBase
 	public:
 		std::string name;
 		char valueString[WS2812FX_PARAMETER_VALUE_STRING_LEN];
+		//TODO: Add pointer to ADC data for modulation source assigned to this parameter
 		//TODO: Add boolean to specify whether parameter can be modulated in the mod matrix
 
 		EffectParameterBase(std::string name) : name(name) {}
@@ -189,6 +190,7 @@ class BooleanEffectParameter : public EffectParameter<bool>
 		BooleanEffectParameter(bool value, std::string name) : EffectParameter<bool>(value, name)
 		{
 			this->modulation = false;
+			this->modulatedValue = false;
 		}
 
 		void incrementValue() override
@@ -201,17 +203,28 @@ class BooleanEffectParameter : public EffectParameter<bool>
 			this->value = false;
 		}
 
+		void *getValue() override
+		{
+			this->modulatedValue = this->value || this->modulation;
+
+			return static_cast<void *>(&this->modulatedValue);
+		}
+
 		char *getValueString() override
 		{
 			snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "[%s]", (value) ? "x" : " ");
 
 			return this->valueString;
 		}
+
+	private:
+		bool modulatedValue;
 };
 
 class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 {
 	public:
+		//TODO: Prefix names of sub-parameters (e.g., hue) with identifier to differentiate them when a color is split into its constituent parts
 		NumericEffectParameter<uint16_t> _hue = NumericEffectParameter<uint16_t>(180, "Hue", 0, 360, 5);
 		NumericEffectParameter<float> _saturation = NumericEffectParameter<float>(1.0, "Saturation", 0, 1, 0.05);
 		NumericEffectParameter<float> _value = NumericEffectParameter<float>(0.2, "Value", 0, 1, 0.05);
@@ -328,6 +341,7 @@ class ModMatrixEntry
 
 		ModMatrixEntry()
 		{
+			//TODO: Prefix names of amount parameter with identifier to differentiate them from other mod amounts
 			this->modAmount = std::make_unique<NumericEffectParameter<int16_t>>(5, "Mod Amount", -100, 100, 1);
 		}
 
@@ -338,8 +352,6 @@ class WS2812Effect
 {
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
-		virtual void updateEffect() = 0;
-		virtual void initModMatrixDefaults() = 0;
 		std::unique_ptr<EffectParameterBase> params[WS2812FX_EFFECT_MAX_PARAMS];
 		ModMatrixEntry modMatrix[WS2812FX_EFFECT_MAX_MOD_SLOTS];
 
@@ -352,6 +364,9 @@ class WS2812Effect
 			return nullptr;
 		}
 
+		//TODO: Dedicated function to get the value from an effect parameter?
+		// This should cut down on the code needed to fetch the value stored in a parameter.
+
 		template <typename T> void setParameter(const T &newParam, uint16_t index)
 		{
 			if(index < WS2812FX_EFFECT_MAX_PARAMS)
@@ -359,6 +374,9 @@ class WS2812Effect
 				this->params[index] = std::make_unique<T>(newParam);
 			}
 		}
+
+		virtual void updateEffect() = 0;
+		virtual void initModMatrixDefaults() = 0;
 };
 }
 #endif
