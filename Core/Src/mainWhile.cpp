@@ -251,11 +251,8 @@ void drawMenuModMatrix()
 	uint8_t startSource = (selectedModSourceIndex > 3) ? selectedModSourceIndex - 3 : 0;
 	uint8_t endSource = ((uint8_t)(startSource + 4) > modMatrixSources.size()) ? modMatrixSources.size() : startSource + 4;
 
-//	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;
-//	uint8_t end = ((uint8_t)(start + 4) > modMatrixDestinations.size()) ? modMatrixDestinations.size() : start + 4;
-
-	uint8_t start = 0;
-	uint8_t end = 1;
+	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;
+	uint8_t end = ((uint8_t)(start + 4) > fx[effectIndex]->getExpandedParameters().size()) ? fx[effectIndex]->getExpandedParameters().size() : start + 4;
 
 	// Display separator line between mod sources and destinations
 	ssd1306_Line(11, 18, 11, 63, White);
@@ -275,7 +272,7 @@ void drawMenuModMatrix()
 	  uint8_t y = (i - start) * 12 + 18;
 	  // Display mod destination
 	  ssd1306_SetCursor(15, y);
-	  sprintf(OLED_buffer, "%s", fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination->name.c_str());
+	  sprintf(OLED_buffer, "%s", fx[effectIndex]->getExpandedParameters()[i]->name.c_str());
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
 	  ssd1306_DrawRectangle(14, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == MOD_MATRIX_DESTINATION_SELECTED)) ? White : Black);
 
@@ -348,13 +345,7 @@ void incrementMenuItemIndexCpp(void)
 			}
 			break;
 		case MOD_MATRIX_DESTINATION_SELECTED:
-			if(menuItemIndex < WS2812FX_EFFECT_MAX_MOD_SLOTS - 1)
-			{
-				menuItemIndex++;
-			}
-			break;
-		case MOD_MATRIX_AMOUNT_SELECTED:
-			if(menuItemIndex < WS2812FX_EFFECT_MAX_MOD_SLOTS)
+			if(menuItemIndex < fx[effectIndex]->getExpandedParameters().size() - 1)
 			{
 				menuItemIndex++;
 			}

@@ -224,7 +224,6 @@ class BooleanEffectParameter : public EffectParameter<bool>
 class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 {
 	public:
-		//TODO: Prefix names of sub-parameters (e.g., hue) with identifier to differentiate them when a color is split into its constituent parts
 		std::shared_ptr<NumericEffectParameter<uint16_t>> _hue = std::make_shared<NumericEffectParameter<uint16_t>>(180, "Hue", 0, 360, 5);
 		std::shared_ptr<NumericEffectParameter<float>> _saturation = std::make_shared<NumericEffectParameter<float>>(1.0, "Saturation", 0, 1, 0.05);
 		std::shared_ptr<NumericEffectParameter<float>> _value = std::make_shared<NumericEffectParameter<float>>(0.2, "Value", 0, 1, 0.05);
@@ -353,6 +352,7 @@ class WS2812Effect
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
 		std::shared_ptr<EffectParameterBase> params[WS2812FX_EFFECT_MAX_PARAMS];
+		std::vector<std::shared_ptr<EffectParameterBase>> params_expanded;
 		ModMatrixEntry modMatrix[WS2812FX_EFFECT_MAX_MOD_SLOTS];
 
 		EffectParameterBase *getParameter(uint16_t index)
@@ -373,6 +373,40 @@ class WS2812Effect
 			{
 				this->params[index] = std::make_shared<T>(newParam);
 			}
+		}
+
+		std::vector<std::shared_ptr<EffectParameterBase>> getExpandedParameters()
+		{
+			// Only do this once per effect
+			if(params_expanded.size() > 0)
+			{
+				return params_expanded;
+			}
+
+			for(int i = 0; i < WS2812FX_EFFECT_MAX_PARAMS; i++)
+			{
+				// Ensure parameters are valid objects before adding them to either vector
+				if(dynamic_cast<ColorHSVEffectParameter *>(this->getParameter(i)))
+				{
+					ColorHSVEffectParameter *tmp = dynamic_cast<ColorHSVEffectParameter *>(this->getParameter(i));
+
+					// Prepend color name to sub parameters to differentiate them in the combined list
+					tmp->_hue->name = tmp->name.substr(0, 8) + " Hue";
+					tmp->_saturation->name = tmp->name.substr(0, 8) + " Sat";
+					tmp->_value->name = tmp->name.substr(0, 8) + " Val";
+
+					// Break current color into sub parameters before adding to list
+					params_expanded.push_back(tmp->_hue);
+					params_expanded.push_back(tmp->_saturation);
+					params_expanded.push_back(tmp->_value);
+				}
+				else if(dynamic_cast<EffectParameterBase *>(this->getParameter(i)))
+				{
+					params_expanded.push_back(params[i]);
+				}
+			}
+
+			return params_expanded;
 		}
 
 		virtual void updateEffect() = 0;
