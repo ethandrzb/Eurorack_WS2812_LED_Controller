@@ -225,15 +225,15 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 {
 	public:
 		//TODO: Prefix names of sub-parameters (e.g., hue) with identifier to differentiate them when a color is split into its constituent parts
-		NumericEffectParameter<uint16_t> _hue = NumericEffectParameter<uint16_t>(180, "Hue", 0, 360, 5);
-		NumericEffectParameter<float> _saturation = NumericEffectParameter<float>(1.0, "Saturation", 0, 1, 0.05);
-		NumericEffectParameter<float> _value = NumericEffectParameter<float>(0.2, "Value", 0, 1, 0.05);
+		NumericEffectParameter<uint16_t> *_hue = new NumericEffectParameter<uint16_t>(180, "Hue", 0, 360, 5);
+		NumericEffectParameter<float> *_saturation = new NumericEffectParameter<float>(1.0, "Saturation", 0, 1, 0.05);
+		NumericEffectParameter<float> *_value = new NumericEffectParameter<float>(0.2, "Value", 0, 1, 0.05);
 
 		ColorHSVEffectParameter(colorHSV hsv, std::string name) : EffectParameter<colorHSV>(hsv, name)
 		{
-			_hue.setValue(hsv.hue);
-			_saturation.setValue(hsv.saturation);
-			_value.setValue(hsv.value);
+			_hue->setValue(hsv.hue);
+			_saturation->setValue(hsv.saturation);
+			_value->setValue(hsv.value);
 		}
 
 		// This class does not support basic increment/decrement
@@ -254,16 +254,16 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 		// This due to the fact getValue reconstructs the colorHSV struct using the values contained in the subparameters instead of returning the raw value
 		void setValue(colorHSV hsv)
 		{
-			_hue.setValue(hsv.hue);
-			_saturation.setValue(hsv.saturation);
-			_value.setValue(hsv.value);
+			_hue->setValue(hsv.hue);
+			_saturation->setValue(hsv.saturation);
+			_value->setValue(hsv.value);
 		}
 
 		void setModulation(colorHSV hsv)
 		{
-			_hue.setModulation(hsv.hue);
-			_saturation.setModulation(hsv.saturation);
-			_value.setModulation(hsv.value);
+			_hue->setModulation(hsv.hue);
+			_saturation->setModulation(hsv.saturation);
+			_value->setModulation(hsv.value);
 		}
 
 		void incrementValueByIndex(uint8_t index)
@@ -271,13 +271,13 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 			switch(index)
 			{
 				case 0:
-					_hue.incrementValue();
+					_hue->incrementValue();
 					break;
 				case 1:
-					_saturation.incrementValue();
+					_saturation->incrementValue();
 					break;
 				case 2:
-					_value.incrementValue();
+					_value->incrementValue();
 					break;
 				default:
 					return;
@@ -289,13 +289,13 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 			switch(index)
 			{
 				case 0:
-					_hue.decrementValue();
+					_hue->decrementValue();
 					break;
 				case 1:
-					_saturation.decrementValue();
+					_saturation->decrementValue();
 					break;
 				case 2:
-					_value.decrementValue();
+					_value->decrementValue();
 					break;
 				default:
 					return;
@@ -305,9 +305,9 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 		// Reconstruct colorHSV struct from values in NumericEffectParameters
 		void *getValue() override
 		{
-			this->value.hue = *(static_cast<uint16_t *>(_hue.getValue()));
-			this->value.saturation = *(static_cast<float *>(_saturation.getValue()));
-			this->value.value = *(static_cast<float *>(_value.getValue()));
+			this->value.hue = *(static_cast<uint16_t *>(_hue->getValue()));
+			this->value.saturation = *(static_cast<float *>(_saturation->getValue()));
+			this->value.value = *(static_cast<float *>(_value->getValue()));
 
 			return static_cast<void *>(&(value));
 		}
@@ -315,9 +315,9 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 		// Reconstruct colorHSV struct from values in NumericEffectParameters
 		void *getValueRaw() override
 		{
-			this->value.hue = *(static_cast<uint16_t *>(_hue.getValueRaw()));
-			this->value.saturation = *(static_cast<float *>(_saturation.getValueRaw()));
-			this->value.value = *(static_cast<float *>(_value.getValueRaw()));
+			this->value.hue = *(static_cast<uint16_t *>(_hue->getValueRaw()));
+			this->value.saturation = *(static_cast<float *>(_saturation->getValueRaw()));
+			this->value.value = *(static_cast<float *>(_value->getValueRaw()));
 
 			return static_cast<void *>(&(value));
 		}

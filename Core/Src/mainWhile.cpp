@@ -80,9 +80,12 @@ void mainWhileCpp(void)
 	while(1)
 	{
 		fx[effectIndex]->updateEffect();
+
 		//TODO: Store ADC values inside each effect and use current effect index to determine the DMA destination
 		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, NUM_CV_INPUTS);
 
+		//NOTE: Noise on ADC inputs can cause the effect to appear to stutter
+		// Comment out the switch statement below if you're not sure why an effect is stuttering
 		// Apply modulation from CV inputs
 		switch(effectIndex)
 		{
@@ -378,6 +381,7 @@ void decrementMenuItemIndexCpp(void)
 // Groups the arbitrary parameters in each effect into numeric and color parameters based on type
 // These are used to populate the items for their respective menus
 //TODO: Make numericParams and colors vectors of vectors so we only have to do this once
+//TODO: Handle this inside WS2812Effect?
 void populateMenuItemsCpp(void)
 {
 	numericParams.clear();
