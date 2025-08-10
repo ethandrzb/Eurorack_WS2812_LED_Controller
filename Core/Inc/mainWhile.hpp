@@ -24,6 +24,7 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 void incrementMenuItemIndexCpp(void);
 void decrementMenuItemIndexCpp(void);
 void populateMenuItemsCpp(void);
+void updateSelectedModDestinationCpp();
 
 #ifdef __cplusplus
 extern "C"
@@ -36,6 +37,7 @@ extern "C"
 	void incrementMenuItemIndexC(void);
 	void decrementMenuItemIndexC(void);
 	void populateMenuItemsC(void);
+	void updateSelectedModDestinationC();
 #ifdef __cplusplus
 }
 #endif

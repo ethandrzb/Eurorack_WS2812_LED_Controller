@@ -154,8 +154,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			populateMenuItemsC();
 			// FX_CHANGE_BTN_Pin case allowed to fall through to BACK_BTN_Pin case due to repeated code
 		case BACK_BTN_Pin:
-			// Reset cursor position
-			menuItemIndex = 0;
+			//TODO: Find better solution for this when more state transitions require the cursor to remain in its current position
+			if(menu_layer != MOD_MATRIX_DESTINATION_SELECTED)
+			{
+				// Reset cursor position
+				menuItemIndex = 0;
+			}
+
 			switch(menu_layer)
 			{
 				case NUMERIC_PARAMETER_ROOT:
@@ -175,7 +180,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 					menu_layer = NUMERIC_PARAMETER_ROOT;
 					break;
 				case MOD_MATRIX_DESTINATION_SELECTED:
-					menu_layer = MOD_MATRIX_ROOT;
+					// Assign currently selected destination to this mod slot
+					updateSelectedModDestinationC();
+
+					menu_layer = MOD_MATRIX_AMOUNT_SELECTED;
 					break;
 				case MOD_MATRIX_AMOUNT_SELECTED:
 					menu_layer = MOD_MATRIX_DESTINATION_SELECTED;
@@ -186,7 +194,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			updateMenuC();
 			break;
 		case MOD_BTN_Pin:
-			if((menu_layer != MOD_MATRIX_ROOT) && (menu_layer != MOD_MATRIX_DESTINATION_SELECTED) && (menu_layer != MOD_MATRIX_AMOUNT_SELECTED))
+			if(menu_layer != MOD_MATRIX_ROOT)
 			{
 				menu_layer = MOD_MATRIX_ROOT;
 				updateMenuC();

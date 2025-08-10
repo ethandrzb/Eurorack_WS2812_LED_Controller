@@ -43,6 +43,11 @@ extern "C"
 	{
 		populateMenuItemsCpp();
 	}
+
+	void updateSelectedModDestinationC(void)
+	{
+		updateSelectedModDestinationCpp();
+	}
 }
 
 extern uint8_t effectIndex;
@@ -271,6 +276,7 @@ void drawMenuModMatrix()
 	{
 	  uint8_t y = (i - start) * 12 + 18;
 	  // Display mod destination
+	  // Current destination for this source is prefixed with '*'
 	  ssd1306_SetCursor(15, y);
 	  sprintf(OLED_buffer, "%s%s", (fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination == fx[effectIndex]->getExpandedParameters()[i].get()) ? "*": "",
 			  fx[effectIndex]->getExpandedParameters()[i]->name.c_str());
@@ -391,7 +397,13 @@ void populateMenuItemsCpp(void)
 		{
 			numericParams.push_back(fx[effectIndex]->getParameter(i));
 		}
-
-		//TODO: Insert modulation references here?
 	}
+}
+
+// Assign destination selected by cursor to currently selected mod source
+void updateSelectedModDestinationCpp(void)
+{
+	fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination = fx[effectIndex]->getExpandedParameters()[menuItemIndex].get();
+
+	//TODO: Update ADC reference inside effect parameter
 }
