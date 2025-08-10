@@ -225,9 +225,9 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 {
 	public:
 		//TODO: Prefix names of sub-parameters (e.g., hue) with identifier to differentiate them when a color is split into its constituent parts
-		NumericEffectParameter<uint16_t> *_hue = new NumericEffectParameter<uint16_t>(180, "Hue", 0, 360, 5);
-		NumericEffectParameter<float> *_saturation = new NumericEffectParameter<float>(1.0, "Saturation", 0, 1, 0.05);
-		NumericEffectParameter<float> *_value = new NumericEffectParameter<float>(0.2, "Value", 0, 1, 0.05);
+		std::shared_ptr<NumericEffectParameter<uint16_t>> _hue = std::make_shared<NumericEffectParameter<uint16_t>>(180, "Hue", 0, 360, 5);
+		std::shared_ptr<NumericEffectParameter<float>> _saturation = std::make_shared<NumericEffectParameter<float>>(1.0, "Saturation", 0, 1, 0.05);
+		std::shared_ptr<NumericEffectParameter<float>> _value = std::make_shared<NumericEffectParameter<float>>(0.2, "Value", 0, 1, 0.05);
 
 		ColorHSVEffectParameter(colorHSV hsv, std::string name) : EffectParameter<colorHSV>(hsv, name)
 		{
