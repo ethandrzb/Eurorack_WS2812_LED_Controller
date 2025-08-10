@@ -352,7 +352,7 @@ class WS2812Effect
 {
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
-		std::unique_ptr<EffectParameterBase> params[WS2812FX_EFFECT_MAX_PARAMS];
+		std::shared_ptr<EffectParameterBase> params[WS2812FX_EFFECT_MAX_PARAMS];
 		ModMatrixEntry modMatrix[WS2812FX_EFFECT_MAX_MOD_SLOTS];
 
 		EffectParameterBase *getParameter(uint16_t index)
@@ -371,7 +371,7 @@ class WS2812Effect
 		{
 			if(index < WS2812FX_EFFECT_MAX_PARAMS)
 			{
-				this->params[index] = std::make_unique<T>(newParam);
+				this->params[index] = std::make_shared<T>(newParam);
 			}
 		}
 
