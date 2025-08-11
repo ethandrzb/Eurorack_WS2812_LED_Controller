@@ -89,7 +89,6 @@ void mainWhileCpp(void)
 	{
 		fx[effectIndex]->updateEffect();
 
-		//TODO: Store ADC values inside each effect and use current effect index to determine the DMA destination
 		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, NUM_CV_INPUTS);
 
 		//NOTE: Noise on ADC inputs can cause the effect to appear to stutter
@@ -290,6 +289,7 @@ void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 			break;
 		case MOD_MATRIX_AMOUNT_SELECTED:
 			fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->incrementValue();
+			updateModulationScale();
 			break;
 	}
 }
@@ -306,6 +306,7 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 			break;
 		case MOD_MATRIX_AMOUNT_SELECTED:
 			fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->decrementValue();
+			updateModulationScale();
 			break;
 	}
 }
@@ -388,7 +389,7 @@ void populateMenuItemsCpp(void)
 	}
 }
 //TODO: Move the two functions below to the WS2812Effect class
-// Assign destination selected by cursor to currently selected mod source
+// Assign destination selected by cursor to currently selected mod source and updates modulation scalar
 void updateSelectedModDestinationCpp(void)
 {
 	// Remove modulation from previous destination
@@ -400,8 +401,13 @@ void updateSelectedModDestinationCpp(void)
 
 	// Update ADC reference and scale factor inside destination effect parameter
 	fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination->modulationSource = &(rawADCData[selectedModSourceIndex]);
-//	fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination->modulationScale = (((float)(*(static_cast<int16_t *>(fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->getValue())))) / 100.0f);
-	fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination->modulationScale = 1.0f;
+	updateModulationScale();
+}
+
+// Update scalar for currently selected modulation
+void updateModulationScale(void)
+{
+	fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination->modulationScale = *(static_cast<int16_t *>(fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->getValue())) / 100.0f;
 }
 
 // Informs destination parameters affected by a modulation source of said new source and scalar for all effects
@@ -413,7 +419,7 @@ void refreshModMatrix(void)
 		{
 			fx[i]->modMatrix[j].modSource = &(rawADCData[j]);
 			fx[i]->modMatrix[j].modDestination->modulationSource = fx[i]->modMatrix[j].modSource;
-			fx[i]->modMatrix[j].modDestination->modulationScale = 1.0f;
+			fx[i]->modMatrix[j].modDestination->modulationScale = *(static_cast<int16_t *>(fx[i]->modMatrix[j].modAmount->getValue())) / 100.0f;
 		}
 	}
 }

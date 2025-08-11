@@ -25,6 +25,7 @@ void incrementMenuItemIndexCpp(void);
 void decrementMenuItemIndexCpp(void);
 void populateMenuItemsCpp(void);
 void updateSelectedModDestinationCpp();
+void updateModulationScale();
 void refreshModMatrix(void);
 
 #ifdef __cplusplus

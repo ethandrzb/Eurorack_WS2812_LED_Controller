@@ -23,7 +23,7 @@
 // 4 chars + null char
 #define WS2812FX_PARAMETER_VALUE_STRING_LEN 5
 
-// MUST be consistent with ADC data type used for CV inputs
+// MUST be consistent with ADC data type width used for CV inputs
 #define RAW_MODULATION_MIN 0
 #define RAW_MODULATION_MAX UINT8_MAX
 
@@ -133,8 +133,7 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 
 			// This might cause an overflow!
 			// Make sure to use a sufficiently large data type
-//			this->modulatedValue = this->value + this->modulationMapper((T)((float)*(this->modulationSource)) * (this->modulationScale));
-			this->modulatedValue = this->value + this->modulationMapper(*(this->modulationSource));
+			this->modulatedValue = this->value + this->modulationMapper((T)(*(this->modulationSource))) * (this->modulationScale);
 
 			// Clip range of modulated value
 			if(this->modulatedValue > this->maxValue)
