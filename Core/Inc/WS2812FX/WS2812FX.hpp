@@ -34,11 +34,11 @@ class EffectParameterBase
 {
 	public:
 		std::string name;
+		uint16_t *modulationSource;
+		float modulationScale;
 		char valueString[WS2812FX_PARAMETER_VALUE_STRING_LEN];
-		//TODO: Add pointer to ADC data for modulation source assigned to this parameter
-		//TODO: Add boolean to specify whether parameter can be modulated in the mod matrix
 
-		EffectParameterBase(std::string name) : name(name) {}
+		EffectParameterBase(std::string name) : name(name), modulationSource(NULL), modulationScale(0.0f) {}
 		virtual ~EffectParameterBase() {}
 		virtual void *getValue() = 0;
 		virtual void *getValueRaw() = 0;
@@ -47,12 +47,10 @@ class EffectParameterBase
 		virtual void decrementValue() = 0;
 };
 
-//TODO: Make modulation a statically typed value that is cast to the correct type when it is applied to eliminate the need to track the data type of the destination parameter
 template <typename T> class EffectParameter : public EffectParameterBase
 {
 	public:
 		T value;
-		T modulation;
 		std::function<T(T)> modulationMapper;
 
 		EffectParameter(T value, std::string name) : EffectParameterBase(name), value(value) {}
@@ -63,9 +61,9 @@ template <typename T> class EffectParameter : public EffectParameterBase
 			this->value = newValue;
 		}
 
-		void setModulation(T newModulation)
+		void setModulationSource(uint16_t *newModulationSource)
 		{
-			this->modulation = newModulation;
+			this->modulationSource = newModulationSource;
 		}
 
 		void *getValue() override
@@ -94,7 +92,6 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 		//TODO: Add support for custom mapping functions
 		NumericEffectParameter(T value, std::string name, T minValue, T maxValue, T tickAmount) : EffectParameter<T>(value, name), minValue(minValue), maxValue(maxValue), tickAmount(tickAmount)
 		{
-			this->modulation = (T)0;
 			this->modulatedValue = this->value;
 
 			// Create linear mapping function from raw ADC values to min and max values for this parameter
@@ -127,9 +124,17 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 
 		void *getValue() override
 		{
+			// I feel like I should need this null check, but it causes problems when add it
+//			if(this->modulationSource == NULL)
+//			{
+////				return this->getValueRaw();
+//				return static_cast<void *>(&this->modulatedValue);
+//			}
+
 			// This might cause an overflow!
 			// Make sure to use a sufficiently large data type
-			this->modulatedValue = this->value + this->modulationMapper(this->modulation);
+//			this->modulatedValue = this->value + this->modulationMapper((T)((float)*(this->modulationSource)) * (this->modulationScale));
+			this->modulatedValue = this->value + this->modulationMapper(*(this->modulationSource));
 
 			// Clip range of modulated value
 			if(this->modulatedValue > this->maxValue)
@@ -189,7 +194,6 @@ class BooleanEffectParameter : public EffectParameter<bool>
 	public:
 		BooleanEffectParameter(bool value, std::string name) : EffectParameter<bool>(value, name)
 		{
-			this->modulation = false;
 			this->modulatedValue = false;
 		}
 
@@ -205,7 +209,13 @@ class BooleanEffectParameter : public EffectParameter<bool>
 
 		void *getValue() override
 		{
-			this->modulatedValue = this->value || this->modulation;
+			//See note in NumericEffectParameter::getValue about null check
+//			if(this->modulationSource == NULL)
+//			{
+//				return static_cast<void *>(&this->value);
+//			}
+
+			this->modulatedValue = this->value || (*(this->modulationSource) > 127);
 
 			return static_cast<void *>(&this->modulatedValue);
 		}
@@ -221,6 +231,7 @@ class BooleanEffectParameter : public EffectParameter<bool>
 		bool modulatedValue;
 };
 
+//TODO: Add custom mapping function for hue modulation to allow hue to wrap around
 class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 {
 	public:
@@ -256,13 +267,6 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 			_hue->setValue(hsv.hue);
 			_saturation->setValue(hsv.saturation);
 			_value->setValue(hsv.value);
-		}
-
-		void setModulation(colorHSV hsv)
-		{
-			_hue->setModulation(hsv.hue);
-			_saturation->setModulation(hsv.saturation);
-			_value->setModulation(hsv.value);
 		}
 
 		void incrementValueByIndex(uint8_t index)
@@ -333,7 +337,7 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 class ModMatrixEntry
 {
 	public:
-		uint8_t *modSource;
+		uint16_t *modSource;
 		EffectParameterBase* modDestination;
 		// Using an effect parameter to store the amount means we should be able to modulate modulation amounts with minimal effort
 		std::unique_ptr<NumericEffectParameter<int16_t>> modAmount;

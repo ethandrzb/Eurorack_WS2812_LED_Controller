@@ -80,6 +80,9 @@ void mainWhileCpp(void)
 
 	populateMenuItemsCpp();
 
+	// Assigns modulations defined in effect defaults
+	refreshModMatrix();
+
 	updateMenuCpp();
 
 	while(1)
@@ -90,25 +93,7 @@ void mainWhileCpp(void)
 		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, NUM_CV_INPUTS);
 
 		//NOTE: Noise on ADC inputs can cause the effect to appear to stutter
-		// Comment out the switch statement below if you're not sure why an effect is stuttering
-		// Apply modulation from CV inputs
-		switch(effectIndex)
-		{
-			case 0:
-				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(0)))->setModulation(rawADCData[0]);
-				(static_cast<NumericEffectParameter<float> *>(fx[effectIndex]->getParameter(1)))->setModulation(rawADCData[1]);
-				(static_cast<NumericEffectParameter<float> *>(fx[effectIndex]->getParameter(3)))->setModulation(rawADCData[2]);
-				break;
-			case 1:
-				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(0)))->setModulation(rawADCData[0]);
-				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(3)))->setModulation(rawADCData[1]);
-				break;
-			case 2:
-				(static_cast<NumericEffectParameter<int16_t> *>(fx[effectIndex]->getParameter(0)))->setModulation(rawADCData[0]);
-				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(1)))->setModulation(rawADCData[1]);
-				(static_cast<NumericEffectParameter<uint8_t> *>(fx[effectIndex]->getParameter(2)))->setModulation(rawADCData[2]);
-				break;
-		}
+		// Set modulation source of all parameters to null if you're not sure why an effect is stuttering
 	}
 }
 
@@ -402,11 +387,33 @@ void populateMenuItemsCpp(void)
 		}
 	}
 }
-
+//TODO: Move the two functions below to the WS2812Effect class
 // Assign destination selected by cursor to currently selected mod source
 void updateSelectedModDestinationCpp(void)
 {
+	// Remove modulation from previous destination
+	//TODO: Allow multiple destinations for the same source
+	fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination->modulationSource = NULL;
+
+	// Update mod slot with new destination
 	fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination = fx[effectIndex]->getExpandedParameters()[menuItemIndex].get();
 
-	//TODO: Update ADC reference inside effect parameter
+	// Update ADC reference and scale factor inside destination effect parameter
+	fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination->modulationSource = &(rawADCData[selectedModSourceIndex]);
+//	fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination->modulationScale = (((float)(*(static_cast<int16_t *>(fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->getValue())))) / 100.0f);
+	fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination->modulationScale = 1.0f;
+}
+
+// Informs destination parameters affected by a modulation source of said new source and scalar for all effects
+void refreshModMatrix(void)
+{
+	for(uint8_t i = 0; i < WS2812FX_NUM_EFFECTS; i++)
+	{
+		for(uint8_t j = 0; j < WS2812FX_EFFECT_MAX_MOD_SLOTS; j++)
+		{
+			fx[i]->modMatrix[j].modSource = &(rawADCData[j]);
+			fx[i]->modMatrix[j].modDestination->modulationSource = fx[i]->modMatrix[j].modSource;
+			fx[i]->modMatrix[j].modDestination->modulationScale = 1.0f;
+		}
+	}
 }
