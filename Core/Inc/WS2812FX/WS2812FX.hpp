@@ -354,7 +354,6 @@ class WS2812Effect
 {
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
-		std::shared_ptr<EffectParameterBase> params[WS2812FX_EFFECT_MAX_PARAMS];
 		ModMatrixEntry modMatrix[WS2812FX_EFFECT_MAX_MOD_SLOTS];
 		std::shared_ptr<ColorHSVEffectParameter> backgroundColorParameter = std::make_shared<ColorHSVEffectParameter>((colorHSV){0, 1.0f, 0.0f}, "Background");
 
@@ -374,23 +373,35 @@ class WS2812Effect
 		{
 			if(index < WS2812FX_EFFECT_MAX_PARAMS)
 			{
+				// Add to main parameter list
 				this->params[index] = std::make_shared<T>(newParam);
+
+				// Add to specific parameter list
+				if constexpr(std::is_same_v<T, ColorHSVEffectParameter>)
+				{
+					this->colorParameters.push_back(std::static_pointer_cast<ColorHSVEffectParameter>(this->params[index]));
+				}
+				else
+				{
+					this->numericParameters.push_back(this->params[index]);
+				}
 			}
 		}
 
 		std::vector<std::shared_ptr<EffectParameterBase>> getExpandedParameters()
 		{
 			// Only do this once per effect
-			if(params_expanded.size() > 0)
+			if(expandedParameters.size() > 0)
 			{
-				return params_expanded;
+				return expandedParameters;
 			}
 
 			// Add unused placeholder parameter as valid modulation destination to deactivate a mod slot
-			params_expanded.push_back(noneEffectParameter);
+			expandedParameters.push_back(noneEffectParameter);
 
 			for(int i = 0; i < WS2812FX_EFFECT_MAX_PARAMS; i++)
 			{
+				//TODO: Remove excess casting operations
 				// Ensure parameters are valid objects before adding them to either vector
 				if(dynamic_cast<ColorHSVEffectParameter *>(this->getParameter(i)))
 				{
@@ -402,13 +413,13 @@ class WS2812Effect
 					tmp->_value->name = tmp->name.substr(0, 8) + " Val";
 
 					// Break current color into sub parameters before adding to list
-					params_expanded.push_back(tmp->_hue);
-					params_expanded.push_back(tmp->_saturation);
-					params_expanded.push_back(tmp->_value);
+					expandedParameters.push_back(tmp->_hue);
+					expandedParameters.push_back(tmp->_saturation);
+					expandedParameters.push_back(tmp->_value);
 				}
 				else if(dynamic_cast<EffectParameterBase *>(this->getParameter(i)))
 				{
-					params_expanded.push_back(params[i]);
+					expandedParameters.push_back(params[i]);
 				}
 			}
 
@@ -418,18 +429,37 @@ class WS2812Effect
 			this->backgroundColorParameter->_value->name = "BG Val";
 
 			// Add background color sub parameters to list
-			params_expanded.push_back(this->backgroundColorParameter->_hue);
-			params_expanded.push_back(this->backgroundColorParameter->_saturation);
-			params_expanded.push_back(this->backgroundColorParameter->_value);
+			expandedParameters.push_back(this->backgroundColorParameter->_hue);
+			expandedParameters.push_back(this->backgroundColorParameter->_saturation);
+			expandedParameters.push_back(this->backgroundColorParameter->_value);
 
-			return params_expanded;
+			return expandedParameters;
+		}
+
+		std::vector<std::shared_ptr<EffectParameterBase>> getNumericParameters()
+		{
+			return numericParameters;
+		}
+
+		std::vector<std::shared_ptr<ColorHSVEffectParameter>> getColorParameters()
+		{
+			return colorParameters;
 		}
 
 		virtual void updateEffect() = 0;
 		virtual void initModMatrixDefaults() = 0;
 
 	private:
-		std::vector<std::shared_ptr<EffectParameterBase>> params_expanded;
+		// Main parameter list
+		std::shared_ptr<EffectParameterBase> params[WS2812FX_EFFECT_MAX_PARAMS];
+
+		// Main parameter list with complex parameters broken into sub parameters
+		std::vector<std::shared_ptr<EffectParameterBase>> expandedParameters;
+
+		 // Filtered versions of params
+		std::vector<std::shared_ptr<EffectParameterBase>> numericParameters;
+		std::vector<std::shared_ptr<ColorHSVEffectParameter>> colorParameters;
+
 		//TODO: Make one empty parameter and use for all effects instead of creating a separate empty parameter for each effect
 		// Should only be necessary if RAM becomes an issue
 		std::shared_ptr<NumericEffectParameter<uint8_t>> noneEffectParameter = std::make_shared<NumericEffectParameter<uint8_t>>(0, "None", 0, 1, 1);

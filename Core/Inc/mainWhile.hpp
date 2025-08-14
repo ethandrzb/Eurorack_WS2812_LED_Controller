@@ -23,7 +23,6 @@ void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
 void incrementMenuItemIndexCpp(void);
 void decrementMenuItemIndexCpp(void);
-void populateMenuItemsCpp(void);
 void updateSelectedModDestinationCpp();
 void updateModulationScale();
 void refreshModMatrix(void);
@@ -38,7 +37,6 @@ extern "C"
 	void decrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex);
 	void incrementMenuItemIndexC(void);
 	void decrementMenuItemIndexC(void);
-	void populateMenuItemsC(void);
 	void updateSelectedModDestinationC();
 #ifdef __cplusplus
 }

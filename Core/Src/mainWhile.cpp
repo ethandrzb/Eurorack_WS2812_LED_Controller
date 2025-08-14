@@ -39,11 +39,6 @@ extern "C"
 		decrementMenuItemIndexCpp();
 	}
 
-	void populateMenuItemsC(void)
-	{
-		populateMenuItemsCpp();
-	}
-
 	void updateSelectedModDestinationC(void)
 	{
 		updateSelectedModDestinationCpp();
@@ -60,8 +55,6 @@ extern uint8_t menu_layer;
 extern ADC_HandleTypeDef hadc1;
 extern uint16_t rawADCData[NUM_CV_INPUTS];
 
-std::vector<EffectParameterBase *> numericParams;
-std::vector<ColorHSVEffectParameter *> colors;
 std::vector<std::string> modMatrixSources = {"A", "B", "C"};
 
 colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
@@ -77,8 +70,6 @@ void mainWhileCpp(void)
 	fx[0] = &simpleBreathingEffect;
 	fx[1] = &meterEffect;
 	fx[2] = &rainbowEffect;
-
-	populateMenuItemsCpp();
 
 	// Assigns modulations defined in effect defaults
 	refreshModMatrix();
@@ -138,21 +129,21 @@ void updateMenuCpp(void)
 void drawMenuNumericParameter(void)
 {
 	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;
-	uint8_t end = ((uint8_t)(start + 4) > numericParams.size()) ? numericParams.size() : start + 4;
+	uint8_t end = ((uint8_t)(start + 4) > fx[effectIndex]->getNumericParameters().size()) ? fx[effectIndex]->getNumericParameters().size() : start + 4;
 
 	for(uint8_t i = start; i < end; i++)
 	{
 	  // Display menu item
 	  uint8_t y = (i - start) * 12 + 18;
 	  ssd1306_SetCursor(1, y);
-	  sprintf(OLED_buffer, "%s", numericParams[i]->name.c_str());
+	  sprintf(OLED_buffer, "%s", fx[effectIndex]->getNumericParameters()[i]->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
 	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == NUMERIC_PARAMETER_ROOT)) ? White : Black);
 
 	  // Display item value
 	  ssd1306_SetCursor(90, y);
-	  sprintf(OLED_buffer, "%-3s", numericParams[i]->getValueString());
+	  sprintf(OLED_buffer, "%-3s", fx[effectIndex]->getNumericParameters()[i]->getValueString());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)) ? Black : White);
 	}
@@ -161,14 +152,14 @@ void drawMenuNumericParameter(void)
 void drawMenuColorPalette(void)
 {
 	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;
-	uint8_t end = ((uint8_t)(start + 4) > colors.size()) ? colors.size() : start + 4;
+	uint8_t end = ((uint8_t)(start + 4) > fx[effectIndex]->getColorParameters().size()) ? fx[effectIndex]->getColorParameters().size() : start + 4;
 
 	for(uint8_t i = start; i < end; i++)
 	{
 	  // Display menu item
 	  uint8_t y = (i - start) * 12 + 18;
 	  ssd1306_SetCursor(1, y);
-	  sprintf(OLED_buffer, "%s", colors[i]->name.c_str());
+	  sprintf(OLED_buffer, "%s", fx[effectIndex]->getColorParameters()[i]->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
 	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == menuItemIndex)) ? White : Black);
@@ -194,7 +185,7 @@ void drawHSVPicker(void)
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 2) && (menu_layer == HSV_PICKER_ROOT)) ? Black : White);
 
 	// Display HSV values
-	colorHSV *hsv = static_cast<colorHSV *>(colors[menuItemIndex]->getValueRaw());
+	colorHSV *hsv = static_cast<colorHSV *>(fx[effectIndex]->getColorParameters()[menuItemIndex]->getValueRaw());
 	sprintf(OLED_buffer, "%3d", hsv->hue);
 	ssd1306_SetCursor(30, 18);
 	ssd1306_WriteString(OLED_buffer, Font_7x10, ((HSVPickerIndex == 0) && (menu_layer == HSV_PICKER_VALUE_SELECTED)) ? Black : White);
@@ -285,10 +276,10 @@ void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 	switch(menu_layer)
 	{
 		case NUMERIC_PARAMETER_VALUE_SELECTED:
-			numericParams[parameterIndex]->incrementValue();
+			fx[effectIndex]->getNumericParameters()[parameterIndex]->incrementValue();
 			break;
 		case HSV_PICKER_VALUE_SELECTED:
-			colors[parameterIndex]->incrementValueByIndex(parameterSubIndex);
+			fx[effectIndex]->getColorParameters()[parameterIndex]->incrementValueByIndex(parameterSubIndex);
 			break;
 		case MOD_MATRIX_AMOUNT_SELECTED:
 			fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->incrementValue();
@@ -302,10 +293,10 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 	switch(menu_layer)
 	{
 		case NUMERIC_PARAMETER_VALUE_SELECTED:
-			numericParams[parameterIndex]->decrementValue();
+			fx[effectIndex]->getNumericParameters()[parameterIndex]->decrementValue();
 			break;
 		case HSV_PICKER_VALUE_SELECTED:
-			colors[parameterIndex]->decrementValueByIndex(parameterSubIndex);
+			fx[effectIndex]->getColorParameters()[parameterIndex]->decrementValueByIndex(parameterSubIndex);
 			break;
 		case MOD_MATRIX_AMOUNT_SELECTED:
 			fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->decrementValue();
@@ -320,13 +311,13 @@ void incrementMenuItemIndexCpp(void)
 	switch(menu_layer)
 	{
 		case NUMERIC_PARAMETER_ROOT:
-			if(menuItemIndex < numericParams.size() - 1)
+			if(menuItemIndex < fx[effectIndex]->getNumericParameters().size() - 1)
 			{
 				menuItemIndex++;
 			}
 			break;
 		case COLOR_PALETTE_ROOT:
-			if(menuItemIndex < colors.size() - 1)
+			if(menuItemIndex < fx[effectIndex]->getColorParameters().size() - 1)
 			{
 				menuItemIndex++;
 			}
@@ -368,31 +359,6 @@ void decrementMenuItemIndexCpp(void)
 	}
 }
 
-// Groups the arbitrary parameters in each effect into numeric and color parameters based on type
-// These are used to populate the items for their respective menus
-//TODO: Make numericParams and colors vectors of vectors so we only have to do this once
-//TODO: Handle this inside WS2812Effect?
-void populateMenuItemsCpp(void)
-{
-	numericParams.clear();
-	colors.clear();
-
-	// Sort effect parameters into separate lists by type
-	for(int i = 0; i < WS2812FX_EFFECT_MAX_PARAMS; i++)
-	{
-		// Ensure parameters are valid objects before adding them to either vector
-		if(dynamic_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(i)))
-		{
-			colors.push_back(static_cast<ColorHSVEffectParameter *>(fx[effectIndex]->getParameter(i)));
-		}
-		else if(dynamic_cast<EffectParameterBase *>(fx[effectIndex]->getParameter(i)))
-		{
-			numericParams.push_back(fx[effectIndex]->getParameter(i));
-		}
-	}
-
-	colors.push_back(fx[effectIndex]->backgroundColorParameter.get());
-}
 //TODO: Move the two functions below to the WS2812Effect class
 // Assign destination selected by cursor to currently selected mod source and updates modulation scalar
 void updateSelectedModDestinationCpp(void)
