@@ -236,7 +236,7 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 	public:
 		std::shared_ptr<NumericEffectParameter<uint16_t>> _hue = std::make_shared<NumericEffectParameter<uint16_t>>(180, "Hue", 0, 360, 5);
 		std::shared_ptr<NumericEffectParameter<float>> _saturation = std::make_shared<NumericEffectParameter<float>>(1.0, "Saturation", 0, 1, 0.05);
-		std::shared_ptr<NumericEffectParameter<float>> _value = std::make_shared<NumericEffectParameter<float>>(0.2, "Value", 0, 1, 0.05);
+		std::shared_ptr<NumericEffectParameter<float>> _value = std::make_shared<NumericEffectParameter<float>>(0.2, "Value", 0, 1, 0.02);
 
 		ColorHSVEffectParameter(colorHSV hsv, std::string name) : EffectParameter<colorHSV>(hsv, name)
 		{
