@@ -15,7 +15,7 @@
 
 void mainWhileCpp(void);
 void updateMenuCpp(void);
-void drawMenuNumericParameter(void);
+void drawMenuSimpleParameter(void);
 void drawMenuColorPalette(void);
 void drawHSVPicker(void);
 void drawMenuModMatrix(void);

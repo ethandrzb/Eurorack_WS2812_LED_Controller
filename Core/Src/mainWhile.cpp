@@ -103,9 +103,9 @@ void updateMenuCpp(void)
 	// Draw appropriate menu for current state
 	switch(menu_layer)
 	{
-		case NUMERIC_PARAMETER_ROOT:
-		case NUMERIC_PARAMETER_VALUE_SELECTED:
-			drawMenuNumericParameter();
+		case SIMPLE_PARAMETER_ROOT:
+		case SIMPLE_PARAMETER_VALUE_SELECTED:
+			drawMenuSimpleParameter();
 			break;
 		case COLOR_PALETTE_ROOT:
 			drawMenuColorPalette();
@@ -126,26 +126,26 @@ void updateMenuCpp(void)
 	ssd1306_UpdateScreen();
 }
 //TODO: Merge this function with drawMenuColorPalette. A more generic function with parameters to describe the menu should work.
-void drawMenuNumericParameter(void)
+void drawMenuSimpleParameter(void)
 {
 	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;
-	uint8_t end = ((uint8_t)(start + 4) > fx[effectIndex]->getNumericParameters().size()) ? fx[effectIndex]->getNumericParameters().size() : start + 4;
+	uint8_t end = ((uint8_t)(start + 4) > fx[effectIndex]->getSimpleParameters().size()) ? fx[effectIndex]->getSimpleParameters().size() : start + 4;
 
 	for(uint8_t i = start; i < end; i++)
 	{
 	  // Display menu item
 	  uint8_t y = (i - start) * 12 + 18;
 	  ssd1306_SetCursor(1, y);
-	  sprintf(OLED_buffer, "%s", fx[effectIndex]->getNumericParameters()[i]->name.c_str());
+	  sprintf(OLED_buffer, "%s", fx[effectIndex]->getSimpleParameters()[i]->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
-	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == NUMERIC_PARAMETER_ROOT)) ? White : Black);
+	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == SIMPLE_PARAMETER_ROOT)) ? White : Black);
 
 	  // Display item value
 	  ssd1306_SetCursor(90, y);
-	  sprintf(OLED_buffer, "%-3s", fx[effectIndex]->getNumericParameters()[i]->getValueString());
+	  sprintf(OLED_buffer, "%-3s", fx[effectIndex]->getSimpleParameters()[i]->getValueString());
 
-	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == NUMERIC_PARAMETER_VALUE_SELECTED)) ? Black : White);
+	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == SIMPLE_PARAMETER_VALUE_SELECTED)) ? Black : White);
 	}
 }
 
@@ -275,8 +275,8 @@ void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 {
 	switch(menu_layer)
 	{
-		case NUMERIC_PARAMETER_VALUE_SELECTED:
-			fx[effectIndex]->getNumericParameters()[parameterIndex]->incrementValue();
+		case SIMPLE_PARAMETER_VALUE_SELECTED:
+			fx[effectIndex]->getSimpleParameters()[parameterIndex]->incrementValue();
 			break;
 		case HSV_PICKER_VALUE_SELECTED:
 			fx[effectIndex]->getColorParameters()[parameterIndex]->incrementValueByIndex(parameterSubIndex);
@@ -292,8 +292,8 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 {
 	switch(menu_layer)
 	{
-		case NUMERIC_PARAMETER_VALUE_SELECTED:
-			fx[effectIndex]->getNumericParameters()[parameterIndex]->decrementValue();
+		case SIMPLE_PARAMETER_VALUE_SELECTED:
+			fx[effectIndex]->getSimpleParameters()[parameterIndex]->decrementValue();
 			break;
 		case HSV_PICKER_VALUE_SELECTED:
 			fx[effectIndex]->getColorParameters()[parameterIndex]->decrementValueByIndex(parameterSubIndex);
@@ -310,8 +310,8 @@ void incrementMenuItemIndexCpp(void)
 {
 	switch(menu_layer)
 	{
-		case NUMERIC_PARAMETER_ROOT:
-			if(menuItemIndex < fx[effectIndex]->getNumericParameters().size() - 1)
+		case SIMPLE_PARAMETER_ROOT:
+			if(menuItemIndex < fx[effectIndex]->getSimpleParameters().size() - 1)
 			{
 				menuItemIndex++;
 			}

@@ -68,7 +68,7 @@ uint8_t menuItemIndex = 0;
 uint8_t selectedModSourceIndex = 0;
 uint8_t HSVPickerIndex = 0;
 
-menuLayer menu_layer = NUMERIC_PARAMETER_ROOT;
+menuLayer menu_layer = SIMPLE_PARAMETER_ROOT;
 uint8_t encoderLastDirectionForward = 0;
 
 #define UART_TRANSMIT_BUFFER_LENGTH 25
@@ -111,14 +111,14 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim == &htim3 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
 	{
-		// Menu layer transitions for numeric and color menus
+		// Menu layer transitions for simple and color menus
 		switch(menu_layer)
 		{
-			case NUMERIC_PARAMETER_ROOT:
-				menu_layer = NUMERIC_PARAMETER_VALUE_SELECTED;
+			case SIMPLE_PARAMETER_ROOT:
+				menu_layer = SIMPLE_PARAMETER_VALUE_SELECTED;
 				break;
-			case NUMERIC_PARAMETER_VALUE_SELECTED:
-				menu_layer = NUMERIC_PARAMETER_ROOT;
+			case SIMPLE_PARAMETER_VALUE_SELECTED:
+				menu_layer = SIMPLE_PARAMETER_ROOT;
 				break;
 			case COLOR_PALETTE_ROOT:
 				menu_layer = HSV_PICKER_ROOT;
@@ -151,7 +151,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	switch(GPIO_Pin)
 	{
 		case FX_CHANGE_BTN_Pin:
-			menu_layer = NUMERIC_PARAMETER_ROOT;
+			menu_layer = SIMPLE_PARAMETER_ROOT;
 			updateMenuC();
 			break;
 		case BACK_BTN_Pin:
@@ -164,12 +164,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 			switch(menu_layer)
 			{
-				case NUMERIC_PARAMETER_ROOT:
+				case SIMPLE_PARAMETER_ROOT:
 					menu_layer = COLOR_PALETTE_ROOT;
 					break;
-				case NUMERIC_PARAMETER_VALUE_SELECTED:
+				case SIMPLE_PARAMETER_VALUE_SELECTED:
 				case COLOR_PALETTE_ROOT:
-					menu_layer = NUMERIC_PARAMETER_ROOT;
+					menu_layer = SIMPLE_PARAMETER_ROOT;
 					break;
 				case HSV_PICKER_ROOT:
 					menu_layer = COLOR_PALETTE_ROOT;
@@ -178,7 +178,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 					menu_layer = HSV_PICKER_ROOT;
 					break;
 				case MOD_MATRIX_ROOT:
-					menu_layer = NUMERIC_PARAMETER_ROOT;
+					menu_layer = SIMPLE_PARAMETER_ROOT;
 					break;
 				case MOD_MATRIX_DESTINATION_SELECTED:
 					// Assign currently selected destination to this mod slot
@@ -234,7 +234,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 				// Trigger change based on current menu_layer
 				switch(menu_layer)
 				{
-					case NUMERIC_PARAMETER_ROOT:
+					case SIMPLE_PARAMETER_ROOT:
 					case COLOR_PALETTE_ROOT:
 					case HSV_PICKER_ROOT:
 					case MOD_MATRIX_ROOT:
@@ -249,7 +249,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 							decrementMenuItemIndexC();
 						}
 						break;
-					case NUMERIC_PARAMETER_VALUE_SELECTED:
+					case SIMPLE_PARAMETER_VALUE_SELECTED:
 					case MOD_MATRIX_AMOUNT_SELECTED:
 						if(encoderLastDirectionForward)
 						{

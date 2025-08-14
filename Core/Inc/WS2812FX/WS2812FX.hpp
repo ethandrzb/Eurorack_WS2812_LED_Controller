@@ -379,11 +379,20 @@ class WS2812Effect
 				// Add to specific parameter list
 				if constexpr(std::is_same_v<T, ColorHSVEffectParameter>)
 				{
+					// Remove backgroundColorParameter from end of list so inserted parameter takes its spot
+					this->colorParameters.pop_back();
+
+					// If backgroundColorParameter doesn't need to stay at the end of the list, remove the function calls before and after this line
 					this->colorParameters.push_back(std::static_pointer_cast<ColorHSVEffectParameter>(this->params[index]));
+
+					// Add backgroundColorParameter back to the end of the list
+					this->colorParameters.push_back(this->backgroundColorParameter);
+
 				}
+				// Everything else is a simple parameter with no sub parameters
 				else
 				{
-					this->numericParameters.push_back(this->params[index]);
+					this->simpleParameters.push_back(this->params[index]);
 				}
 			}
 		}
@@ -436,9 +445,9 @@ class WS2812Effect
 			return expandedParameters;
 		}
 
-		std::vector<std::shared_ptr<EffectParameterBase>> getNumericParameters()
+		std::vector<std::shared_ptr<EffectParameterBase>> getSimpleParameters()
 		{
-			return numericParameters;
+			return simpleParameters;
 		}
 
 		std::vector<std::shared_ptr<ColorHSVEffectParameter>> getColorParameters()
@@ -457,8 +466,8 @@ class WS2812Effect
 		std::vector<std::shared_ptr<EffectParameterBase>> expandedParameters;
 
 		 // Filtered versions of params
-		std::vector<std::shared_ptr<EffectParameterBase>> numericParameters;
-		std::vector<std::shared_ptr<ColorHSVEffectParameter>> colorParameters;
+		std::vector<std::shared_ptr<EffectParameterBase>> simpleParameters;
+		std::vector<std::shared_ptr<ColorHSVEffectParameter>> colorParameters = {backgroundColorParameter};
 
 		//TODO: Make one empty parameter and use for all effects instead of creating a separate empty parameter for each effect
 		// Should only be necessary if RAM becomes an issue
