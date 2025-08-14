@@ -289,6 +289,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 		HAL_UART_Transmit_IT(&huart2, UARTTransmitBuffer, UART_TRANSMIT_BUFFER_LENGTH);
 
+		if(menu_layer == COLOR_PALETTE_ROOT)
+		{
+			// Draw current FPS
+			ssd1306_SetCursor(100, 0);
+			ssd1306_WriteString((char *)UARTTransmitBuffer, Font_6x8, White);
+
+			ssd1306_UpdateScreen();
+		}
+
 		// Reset frame counter
 		WS2812FramesSent = 0;
 	}
