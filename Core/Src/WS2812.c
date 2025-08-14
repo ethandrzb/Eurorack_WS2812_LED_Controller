@@ -510,6 +510,15 @@ void WS2812_SetBackgroundColor(uint8_t red, uint8_t green, uint8_t blue)
 	background.blue = blue;
 }
 
+void WS2812_SetBackgroundColorHSV(colorHSV *hsv)
+{
+	colorRGB tmp = WS2812_HSVToRGB(hsv->hue, hsv->saturation, hsv->value);
+
+	background.red = tmp.red;
+	background.green = tmp.green;
+	background.blue = tmp.blue;
+}
+
 
 // Converts a HSV color to an RGB color struct
 // hue: [0,360)

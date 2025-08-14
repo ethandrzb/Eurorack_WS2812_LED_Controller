@@ -101,6 +101,7 @@ void WS2812_FillRainbow(colorHSV startingColor, int16_t deltaHue);
 
 // Utility functions
 void WS2812_SetBackgroundColor(uint8_t red, uint8_t green, uint8_t blue);
+void WS2812_SetBackgroundColorHSV(colorHSV *hsv);
 colorRGB WS2812_HSVToRGB(uint16_t hue, float saturation, float value);
 
 #ifdef __cplusplus

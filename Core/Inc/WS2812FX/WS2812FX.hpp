@@ -355,8 +355,8 @@ class WS2812Effect
 	public:
 		char name[WS2812FX_EFFECT_NAME_LEN];
 		std::shared_ptr<EffectParameterBase> params[WS2812FX_EFFECT_MAX_PARAMS];
-		std::vector<std::shared_ptr<EffectParameterBase>> params_expanded;
 		ModMatrixEntry modMatrix[WS2812FX_EFFECT_MAX_MOD_SLOTS];
+		std::shared_ptr<ColorHSVEffectParameter> backgroundColorParameter = std::make_shared<ColorHSVEffectParameter>((colorHSV){0, 1.0f, 0.0f}, "Background");
 
 		EffectParameterBase *getParameter(uint16_t index)
 		{
@@ -412,6 +412,16 @@ class WS2812Effect
 				}
 			}
 
+			// Rename background color sub parameters
+			this->backgroundColorParameter->_hue->name = "BG Hue";
+			this->backgroundColorParameter->_saturation->name = "BG Sat";
+			this->backgroundColorParameter->_value->name = "BG Val";
+
+			// Add background color sub parameters to list
+			params_expanded.push_back(this->backgroundColorParameter->_hue);
+			params_expanded.push_back(this->backgroundColorParameter->_saturation);
+			params_expanded.push_back(this->backgroundColorParameter->_value);
+
 			return params_expanded;
 		}
 
@@ -419,6 +429,7 @@ class WS2812Effect
 		virtual void initModMatrixDefaults() = 0;
 
 	private:
+		std::vector<std::shared_ptr<EffectParameterBase>> params_expanded;
 		//TODO: Make one empty parameter and use for all effects instead of creating a separate empty parameter for each effect
 		// Should only be necessary if RAM becomes an issue
 		std::shared_ptr<NumericEffectParameter<uint8_t>> noneEffectParameter = std::make_shared<NumericEffectParameter<uint8_t>>(0, "None", 0, 1, 1);

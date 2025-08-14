@@ -89,6 +89,9 @@ void mainWhileCpp(void)
 	{
 		fx[effectIndex]->updateEffect();
 
+		// Update background
+		WS2812_SetBackgroundColorHSV(static_cast<colorHSV *>(fx[effectIndex]->backgroundColorParameter->getValue()));
+
 		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, NUM_CV_INPUTS);
 
 		//NOTE: Noise on ADC inputs can cause the effect to appear to stutter
@@ -387,6 +390,8 @@ void populateMenuItemsCpp(void)
 			numericParams.push_back(fx[effectIndex]->getParameter(i));
 		}
 	}
+
+	colors.push_back(fx[effectIndex]->backgroundColorParameter.get());
 }
 //TODO: Move the two functions below to the WS2812Effect class
 // Assign destination selected by cursor to currently selected mod source and updates modulation scalar
