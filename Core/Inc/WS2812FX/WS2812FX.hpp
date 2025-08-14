@@ -421,7 +421,7 @@ class WS2812Effect
 	private:
 		//TODO: Make one empty parameter and use for all effects instead of creating a separate empty parameter for each effect
 		// Should only be necessary if RAM becomes an issue
-		std::shared_ptr<NumericEffectParameter<uint8_t>> noneEffectParameter = std::make_unique<NumericEffectParameter<uint8_t>>(0, "None", 0, 1, 1);
+		std::shared_ptr<NumericEffectParameter<uint8_t>> noneEffectParameter = std::make_shared<NumericEffectParameter<uint8_t>>(0, "None", 0, 1, 1);
 };
 }
 #endif
