@@ -359,7 +359,7 @@ void decrementMenuItemIndexCpp(void)
 	}
 }
 
-//TODO: Move the two functions below to the WS2812Effect class
+//TODO: Move the two functions below to the WS2812Effect or ModMatrixEntry class
 // Assign destination selected by cursor to currently selected mod source and updates modulation scalar
 void updateSelectedModDestinationCpp(void)
 {
