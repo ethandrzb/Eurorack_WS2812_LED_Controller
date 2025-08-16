@@ -18,13 +18,13 @@ class MeterEffect : public WS2812Effect
 public:
 	//TODO: Increase size of fill parameters to avoid overflow with larger LED strips
 	//TODO: Remove second meter from effect when effects can be designed/stacked instead of hardcoded
-	MeterEffect(uint8_t fill, colorHSV hsv, uint8_t flip, uint8_t mirror)
+	MeterEffect(uint16_t fill, colorHSV hsv, uint8_t flip, uint8_t mirror)
 	{
 		snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Meter");
 
 		// Parameters 0 and 3: Meter fill amount
-		this->setParameter(NumericEffectParameter<uint8_t>(fill, "Fill 0", 0, NUM_PHYSICAL_LEDS, 1), 0);
-		this->setParameter(NumericEffectParameter<uint8_t>(fill, "Fill 1", 0, NUM_PHYSICAL_LEDS, 1), 3);
+		this->setParameter(NumericEffectParameter<uint16_t>(fill, "Fill 0", 0, NUM_PHYSICAL_LEDS, 1), 0);
+		this->setParameter(NumericEffectParameter<uint16_t>(fill, "Fill 1", 0, NUM_PHYSICAL_LEDS, 1), 3);
 
 		// Parameters 1 and 4: Meter color
 		this->setParameter(ColorHSVEffectParameter(hsv, "Color 0"), 1);

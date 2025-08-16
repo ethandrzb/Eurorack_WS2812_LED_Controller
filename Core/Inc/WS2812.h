@@ -95,8 +95,8 @@ void WS2812_InitMultiCometEffect();
 void WS2812_AddComet(colorRGB color, uint8_t size);
 void WS2812_MultiCometEffect(void);
 void WS2812_CometEffect(void);
-void WS2812_SimpleMeterEffect(colorRGB color, uint8_t level, bool flip);
-void WS2812_MirroredMeterEffect(colorRGB color, uint8_t level, bool centered);
+void WS2812_SimpleMeterEffect(colorRGB color, uint16_t level, bool flip);
+void WS2812_MirroredMeterEffect(colorRGB color, uint16_t level, bool centered);
 void WS2812_FillRainbow(colorHSV startingColor, int16_t deltaHue);
 
 // Utility functions

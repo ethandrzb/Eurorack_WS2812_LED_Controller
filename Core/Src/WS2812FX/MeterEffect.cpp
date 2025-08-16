@@ -9,10 +9,10 @@
 
 void MeterEffect::updateEffect()
 {
-	uint8_t meterFill0 = *(static_cast<uint8_t *>(this->getParameter(0)->getValue()));
+	uint16_t meterFill0 = *(static_cast<uint16_t *>(this->getParameter(0)->getValue()));
 	colorHSV hsv0 = *(static_cast<colorHSV *>(this->getParameter(1)->getValue()));
 	uint8_t flip0 = *(static_cast<bool *>(this->getParameter(2)->getValue()));
-	uint8_t meterFill1 = *(static_cast<uint8_t *>(this->getParameter(3)->getValue()));
+	uint16_t meterFill1 = *(static_cast<uint16_t *>(this->getParameter(3)->getValue()));
 	colorHSV hsv1 = *(static_cast<colorHSV *>(this->getParameter(4)->getValue()));
 	uint8_t flip1 = *(static_cast<bool *>(this->getParameter(5)->getValue()));
 	uint8_t mirror0 = *(static_cast<bool *>(this->getParameter(6)->getValue()));

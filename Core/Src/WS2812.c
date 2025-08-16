@@ -351,7 +351,7 @@ void WS2812_CometEffect(void)
 // color: Color of filled LEDs
 // level: Number of LEDs to fill
 // flip: Changes fill direction
-void WS2812_SimpleMeterEffect(colorRGB color, uint8_t level, bool flip)
+void WS2812_SimpleMeterEffect(colorRGB color, uint16_t level, bool flip)
 {
 	// Clip level
 	level = (level <= NUM_LOGICAL_LEDS) ? level : NUM_LOGICAL_LEDS;
@@ -396,7 +396,7 @@ void WS2812_SimpleMeterEffect(colorRGB color, uint8_t level, bool flip)
 // level: Number of LEDs to fill
 // centered: If true, the meters are drawn from the middle LED in the strip towards the ends.
 	// Otherwise, the meters are drawn from each end towards the center of the strip
-void WS2812_MirroredMeterEffect(colorRGB color, uint8_t level, bool centered)
+void WS2812_MirroredMeterEffect(colorRGB color, uint16_t level, bool centered)
 {
 	// Half input level to account for the fact that two LEDs are filled for every increase in level
 	level >>= 1;
