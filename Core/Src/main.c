@@ -154,6 +154,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			menu_layer = SIMPLE_PARAMETER_ROOT;
 			updateMenuC();
 			break;
+		case TRIG_BTN_Pin:
 		case BACK_BTN_Pin:
 			//TODO: Find better solution for this when more state transitions require the cursor to remain in its current position
 			if(menu_layer != MOD_MATRIX_DESTINATION_SELECTED)
@@ -782,9 +783,6 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LED1_Pin|LED2_Pin|LED3_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, GPIO_PIN_RESET);
-
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
@@ -810,18 +808,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(FX_CHANGE_BTN_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : MOD_BTN_Pin */
-  GPIO_InitStruct.Pin = MOD_BTN_Pin;
+  /*Configure GPIO pins : MOD_BTN_Pin TRIG_BTN_Pin */
+  GPIO_InitStruct.Pin = MOD_BTN_Pin|TRIG_BTN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(MOD_BTN_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : LED4_Pin */
-  GPIO_InitStruct.Pin = LED4_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED4_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);

@@ -97,8 +97,9 @@ void Error_Handler(void);
 #define MOD_BTN_Pin GPIO_PIN_5
 #define MOD_BTN_GPIO_Port GPIOB
 #define MOD_BTN_EXTI_IRQn EXTI9_5_IRQn
-#define LED4_Pin GPIO_PIN_6
-#define LED4_GPIO_Port GPIOB
+#define TRIG_BTN_Pin GPIO_PIN_6
+#define TRIG_BTN_GPIO_Port GPIOB
+#define TRIG_BTN_EXTI_IRQn EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
 #define NUM_CV_INPUTS 3
