@@ -78,10 +78,8 @@ void Error_Handler(void);
 #define LED1_GPIO_Port GPIOA
 #define LED2_Pin GPIO_PIN_6
 #define LED2_GPIO_Port GPIOA
-#define LED3_Pin GPIO_PIN_7
-#define LED3_GPIO_Port GPIOA
 #define BACK_BTN_Pin GPIO_PIN_7
-#define BACK_BTN_GPIO_Port GPIOC
+#define BACK_BTN_GPIO_Port GPIOA
 #define BACK_BTN_EXTI_IRQn EXTI9_5_IRQn
 #define FX_CHANGE_BTN_Pin GPIO_PIN_10
 #define FX_CHANGE_BTN_GPIO_Port GPIOA
