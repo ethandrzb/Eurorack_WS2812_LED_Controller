@@ -138,6 +138,12 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 			case MOD_MATRIX_AMOUNT_SELECTED:
 				menu_layer = MOD_MATRIX_DESTINATION_SELECTED;
 				break;
+			case SETTINGS_ROOT:
+				menu_layer = SETTINGS_VALUE_SELECTED;
+				break;
+			case SETTINGS_VALUE_SELECTED:
+				menu_layer = SETTINGS_ROOT;
+				break;
 			default:
 				break;
 		}
@@ -154,7 +160,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			menu_layer = SIMPLE_PARAMETER_ROOT;
 			updateMenuC();
 			break;
-		case TRIG_BTN_Pin:
+		case SETTINGS_BTN_Pin:
+			if(menu_layer != SETTINGS_ROOT)
+			{
+				menu_layer = SETTINGS_ROOT;
+				updateMenuC();
+			}
+			break;
 		case BACK_BTN_Pin:
 			//TODO: Find better solution for this when more state transitions require the cursor to remain in its current position
 			if(menu_layer != MOD_MATRIX_DESTINATION_SELECTED)
@@ -168,6 +180,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 				case SIMPLE_PARAMETER_ROOT:
 					menu_layer = COLOR_PALETTE_ROOT;
 					break;
+				case SETTINGS_ROOT:
+				case SETTINGS_VALUE_SELECTED:
 				case SIMPLE_PARAMETER_VALUE_SELECTED:
 				case COLOR_PALETTE_ROOT:
 					menu_layer = SIMPLE_PARAMETER_ROOT;
@@ -240,6 +254,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 					case HSV_PICKER_ROOT:
 					case MOD_MATRIX_ROOT:
 					case MOD_MATRIX_DESTINATION_SELECTED:
+					case SETTINGS_ROOT:
 						// Use last encoder movement direction to determine whether to increment or decrement the current value
 						if(encoderLastDirectionForward)
 						{
@@ -252,6 +267,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 						break;
 					case SIMPLE_PARAMETER_VALUE_SELECTED:
 					case MOD_MATRIX_AMOUNT_SELECTED:
+					case SETTINGS_VALUE_SELECTED:
 						if(encoderLastDirectionForward)
 						{
 							incrementValueC(effectIndex, menuItemIndex, 0);
@@ -808,8 +824,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(FX_CHANGE_BTN_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : MOD_BTN_Pin TRIG_BTN_Pin */
-  GPIO_InitStruct.Pin = MOD_BTN_Pin|TRIG_BTN_Pin;
+  /*Configure GPIO pins : MOD_BTN_Pin SETTINGS_BTN_Pin */
+  GPIO_InitStruct.Pin = MOD_BTN_Pin|SETTINGS_BTN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);

@@ -63,6 +63,7 @@ SimpleBreathingEffect simpleBreathingEffect = SimpleBreathingEffect(10, 0.005, h
 MeterEffect meterEffect = MeterEffect(10, hsv, false, true);
 RainbowEffect rainbowEffect = RainbowEffect(3, 1, 1, hsv, false);
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
+std::vector<std::shared_ptr<NumericEffectParameter<uint16_t>>> settingParameters;
 
 void mainWhileCpp(void)
 {
@@ -70,6 +71,11 @@ void mainWhileCpp(void)
 	fx[0] = &simpleBreathingEffect;
 	fx[1] = &meterEffect;
 	fx[2] = &rainbowEffect;
+
+	// Collect settings
+	settingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(97, "Strip Length", 1, 1024, 1));
+	settingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Downsampling", 1, 10, 1));
+	settingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Fractal", 1, 10, 1));
 
 	// Assigns modulations defined in effect defaults
 	refreshModMatrix();
@@ -114,6 +120,16 @@ void updateMenuCpp(void)
 		case MOD_MATRIX_DESTINATION_SELECTED:
 		case MOD_MATRIX_AMOUNT_SELECTED:
 			drawMenuModMatrix();
+			break;
+		case SETTINGS_ROOT:
+		case SETTINGS_VALUE_SELECTED:
+			ssd1306_Fill(Black);
+			// Display title bar
+			ssd1306_SetCursor(0, 0);
+			sprintf(OLED_buffer, "Settings");
+			// Invert text color when FX_CHANGE_BTN held
+			ssd1306_WriteString(OLED_buffer, Font_11x18, White);
+			drawMenuSettings();
 			break;
 	}
 
@@ -271,6 +287,29 @@ void drawMenuModMatrix()
 	ssd1306_WriteString(OLED_buffer, Font_7x10, (menu_layer == MOD_MATRIX_AMOUNT_SELECTED) ? Black : White);
 }
 
+void drawMenuSettings(void)
+{
+	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;
+	uint8_t end = ((uint8_t)(start + 4) > settingParameters.size()) ? settingParameters.size() : start + 4;
+
+	for(uint8_t i = start; i < end; i++)
+	{
+	  // Display menu item
+	  uint8_t y = (i - start) * 12 + 18;
+	  ssd1306_SetCursor(1, y);
+	  sprintf(OLED_buffer, "%s", settingParameters[i]->name.c_str());
+
+	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
+	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == SETTINGS_ROOT)) ? White : Black);
+
+	  // Display item value
+	  ssd1306_SetCursor(90, y);
+	  sprintf(OLED_buffer, "%-3s", settingParameters[i]->getValueString());
+
+	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == SETTINGS_VALUE_SELECTED)) ? Black : White);
+	}
+}
+
 void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
 {
 	switch(menu_layer)
@@ -284,6 +323,9 @@ void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 		case MOD_MATRIX_AMOUNT_SELECTED:
 			fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->incrementValue();
 			updateModulationScale();
+			break;
+		case SETTINGS_VALUE_SELECTED:
+			settingParameters[parameterIndex]->incrementValue();
 			break;
 	}
 }
@@ -301,6 +343,9 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 		case MOD_MATRIX_AMOUNT_SELECTED:
 			fx[effectIndex]->modMatrix[selectedModSourceIndex].modAmount->decrementValue();
 			updateModulationScale();
+			break;
+		case SETTINGS_VALUE_SELECTED:
+			settingParameters[parameterIndex]->decrementValue();
 			break;
 	}
 }
@@ -336,6 +381,12 @@ void incrementMenuItemIndexCpp(void)
 			break;
 		case MOD_MATRIX_DESTINATION_SELECTED:
 			if(menuItemIndex < fx[effectIndex]->getExpandedParameters().size() - 1)
+			{
+				menuItemIndex++;
+			}
+			break;
+		case SETTINGS_ROOT:
+			if(menuItemIndex < settingParameters.size() - 1)
 			{
 				menuItemIndex++;
 			}
