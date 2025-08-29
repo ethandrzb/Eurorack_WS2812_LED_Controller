@@ -42,4 +42,5 @@ void MeterEffect::updateEffect()
 	}
 
 	WS2812_SendAll();
+	HAL_Delay(0);
 }
