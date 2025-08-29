@@ -63,7 +63,8 @@ SimpleBreathingEffect simpleBreathingEffect = SimpleBreathingEffect(10, 0.005, h
 MeterEffect meterEffect = MeterEffect(10, hsv, false, true);
 RainbowEffect rainbowEffect = RainbowEffect(3, 1, 1, hsv, false);
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
-std::vector<std::shared_ptr<NumericEffectParameter<uint16_t>>> settingParameters;
+std::vector<std::shared_ptr<NumericEffectParameter<uint16_t>>> WS2812SettingParameters;
+std::vector<uint16_t *> WS2812SettingValues;
 
 void mainWhileCpp(void)
 {
@@ -73,9 +74,12 @@ void mainWhileCpp(void)
 	fx[2] = &rainbowEffect;
 
 	// Collect settings
-	settingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(97, "Strip Length", 1, 1024, 1));
-	settingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Downsampling", 1, 10, 1));
-	settingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Fractal", 1, 10, 1));
+	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(97, "Strip Length", 1, 1024, 1));
+	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Downsampling", 1, 25, 1));
+//	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Fractal", 1, 10, 1));
+
+	WS2812SettingValues.push_back(&NUM_PHYSICAL_LEDS);
+	WS2812SettingValues.push_back(&DOWNSAMPLING_FACTOR);
 
 	// Assigns modulations defined in effect defaults
 	refreshModMatrix();
@@ -290,21 +294,21 @@ void drawMenuModMatrix()
 void drawMenuSettings(void)
 {
 	uint8_t start = (menuItemIndex > 3) ? menuItemIndex - 3 : 0;
-	uint8_t end = ((uint8_t)(start + 4) > settingParameters.size()) ? settingParameters.size() : start + 4;
+	uint8_t end = ((uint8_t)(start + 4) > WS2812SettingParameters.size()) ? WS2812SettingParameters.size() : start + 4;
 
 	for(uint8_t i = start; i < end; i++)
 	{
 	  // Display menu item
 	  uint8_t y = (i - start) * 12 + 18;
 	  ssd1306_SetCursor(1, y);
-	  sprintf(OLED_buffer, "%s", settingParameters[i]->name.c_str());
+	  sprintf(OLED_buffer, "%s", WS2812SettingParameters[i]->name.c_str());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, White);
 	  ssd1306_DrawRectangle(0, y - 1, 89, y + 9, ((i == menuItemIndex) && (menu_layer == SETTINGS_ROOT)) ? White : Black);
 
 	  // Display item value
 	  ssd1306_SetCursor(90, y);
-	  sprintf(OLED_buffer, "%-3s", settingParameters[i]->getValueString());
+	  sprintf(OLED_buffer, "%-3s", WS2812SettingParameters[i]->getValueString());
 
 	  ssd1306_WriteString(OLED_buffer, Font_7x10, ((i == menuItemIndex) && (menu_layer == SETTINGS_VALUE_SELECTED)) ? Black : White);
 	}
@@ -325,7 +329,8 @@ void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 			updateModulationScale();
 			break;
 		case SETTINGS_VALUE_SELECTED:
-			settingParameters[parameterIndex]->incrementValue();
+			WS2812SettingParameters[parameterIndex]->incrementValue();
+			*(WS2812SettingValues[parameterIndex]) = *(static_cast<uint16_t *>(WS2812SettingParameters[parameterIndex]->getValue()));
 			break;
 	}
 }
@@ -345,7 +350,8 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 			updateModulationScale();
 			break;
 		case SETTINGS_VALUE_SELECTED:
-			settingParameters[parameterIndex]->decrementValue();
+			WS2812SettingParameters[parameterIndex]->decrementValue();
+			*(WS2812SettingValues[parameterIndex]) = *(static_cast<uint16_t *>(WS2812SettingParameters[parameterIndex]->getValue()));
 			break;
 	}
 }
@@ -386,7 +392,7 @@ void incrementMenuItemIndexCpp(void)
 			}
 			break;
 		case SETTINGS_ROOT:
-			if(menuItemIndex < settingParameters.size() - 1)
+			if(menuItemIndex < WS2812SettingParameters.size() - 1)
 			{
 				menuItemIndex++;
 			}

@@ -20,14 +20,17 @@ extern "C"
 
 // NUM_PHYSICAL_LEDS should be evenly divisible by DOWNSAMPLING_FACTOR
 // Round NUM_PHYSICAL_LEDS up to the nearest multiple, even if your strip has fewer than that amount
-#define NUM_PHYSICAL_LEDS 97
-#define DOWNSAMPLING_FACTOR 1
+#define MAX_NUM_PHYSICAL_LEDS 1024
+extern uint16_t NUM_PHYSICAL_LEDS;
 
-#ifdef DOWNSAMPLING_FACTOR
+//TODO: Change to power of 2 and bit shift in sendAll?
+extern uint16_t DOWNSAMPLING_FACTOR;
+
+//#ifdef DOWNSAMPLING_FACTOR
 #define NUM_LOGICAL_LEDS (NUM_PHYSICAL_LEDS / DOWNSAMPLING_FACTOR)
-#else
-#define NUM_LOGICAL_LEDS NUM_PHYSICAL_LEDS
-#endif
+//#else
+//#define NUM_LOGICAL_LEDS NUM_PHYSICAL_LEDS
+//#endif
 
 #define NUM_LED_PARAMS 3
 #define NUM_MAX_COMETS 10

@@ -12,11 +12,14 @@
 #include <math.h>
 #include "WS2812.h"
 
-uint8_t LEDData[NUM_LOGICAL_LEDS][NUM_LED_PARAMS];
+uint8_t LEDData[MAX_NUM_PHYSICAL_LEDS][NUM_LED_PARAMS];
 
 colorRGB background = {.red = 0, .blue = 0, .green = 0};
 
 comet comets[NUM_MAX_COMETS];
+
+uint16_t NUM_PHYSICAL_LEDS = 97;
+uint16_t DOWNSAMPLING_FACTOR = 1;
 
 // Change to SPI handle connected to LEDs
 extern SPI_HandleTypeDef hspi3;
@@ -211,11 +214,19 @@ uint8_t *WS2812_GetSingleLEDData(uint32_t red, uint32_t green, uint32_t blue)
 
 void WS2812_SendAll(void)
 {
-	uint8_t *data[NUM_LOGICAL_LEDS];
-	uint8_t sendData[24 * NUM_PHYSICAL_LEDS];
+	// Sample NUM_LOGICAL_LEDS and NUM_PHYSICAL_LEDS in case they change while this function is running
+	const uint16_t _DOWNSAMPLING_FACTOR = DOWNSAMPLING_FACTOR;
+	const uint16_t _NUM_PHYSICAL_LEDS = NUM_PHYSICAL_LEDS;
+
+	// Pad _NUM_PHYSICAL_LEDS to be divisible by downsampling factor
+	const uint16_t _NUM_PHYSICAL_LEDS_PADDED = _NUM_PHYSICAL_LEDS + (_DOWNSAMPLING_FACTOR - (_NUM_PHYSICAL_LEDS % _DOWNSAMPLING_FACTOR));
+	const uint16_t _NUM_LOGICAL_LEDS_PADDED = _NUM_PHYSICAL_LEDS_PADDED / _DOWNSAMPLING_FACTOR;
+
+	uint8_t *data[_NUM_LOGICAL_LEDS_PADDED];
+	uint8_t sendData[24 * _NUM_PHYSICAL_LEDS_PADDED];
 
 	// Convert to 1D array
-	for(int i = 0; i < NUM_LOGICAL_LEDS; i++)
+	for(int i = 0; i < _NUM_LOGICAL_LEDS_PADDED; i++)
 	{
 		// Apply background color
 		WS2812_SetLEDAdditive(i, background.red, background.green, background.blue);
@@ -223,7 +234,7 @@ void WS2812_SendAll(void)
 		// Get data for current LED
 		data[i] = WS2812_GetSingleLEDData(LEDData[i][0], LEDData[i][1], LEDData[i][2]);
 
-		for(int groupIndex = 0; groupIndex < DOWNSAMPLING_FACTOR; groupIndex++)
+		for(int groupIndex = 0; groupIndex < _DOWNSAMPLING_FACTOR; groupIndex++)
 		{
 			// Append to data to be sent
 			for(int j = 0; j < 24; j++)
@@ -233,7 +244,7 @@ void WS2812_SendAll(void)
 				__DSB();
 				__ISB();
 
-				sendData[(i * 24 * DOWNSAMPLING_FACTOR) + (groupIndex * 24) + j] = data[i][j];
+				sendData[(i * 24 * _DOWNSAMPLING_FACTOR) + (groupIndex * 24) + j] = data[i][j];
 			}
 		}
 	}
@@ -243,7 +254,7 @@ void WS2812_SendAll(void)
 #endif
 
 	// Send data to strip
-	HAL_SPI_Transmit_DMA(&hspi3, sendData, 24 * NUM_PHYSICAL_LEDS);
+	HAL_SPI_Transmit_DMA(&hspi3, sendData, 24 * _NUM_PHYSICAL_LEDS_PADDED);
 }
 
 #endif
