@@ -2,6 +2,7 @@
 #include "WS2812FX/SimpleBreathingEffect.hpp"
 #include "WS2812FX/MeterEffect.hpp"
 #include "WS2812FX/RainbowEffect.hpp"
+#include "WS2812FX/CometEffect.hpp"
 #include "../../Drivers/ssd1306/ssd1306.h"
 #include "main.h"
 
@@ -62,6 +63,7 @@ colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 0.25};
 SimpleBreathingEffect simpleBreathingEffect = SimpleBreathingEffect(10, 0.005, hsv, 0.25);
 MeterEffect meterEffect = MeterEffect(10, hsv, false, true);
 RainbowEffect rainbowEffect = RainbowEffect(3, 1, 1, hsv, false);
+CometEffect cometEffect = CometEffect(10, 2, hsv, 50);
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 std::vector<std::shared_ptr<NumericEffectParameter<uint16_t>>> WS2812SettingParameters;
 std::vector<uint16_t *> WS2812SettingValues;
@@ -72,6 +74,7 @@ void mainWhileCpp(void)
 	fx[0] = &simpleBreathingEffect;
 	fx[1] = &meterEffect;
 	fx[2] = &rainbowEffect;
+	fx[3] = &cometEffect;
 
 	// Collect settings
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(97, "Strip Length", 1, 1024, 1));

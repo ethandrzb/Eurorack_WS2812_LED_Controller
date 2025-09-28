@@ -29,7 +29,6 @@ extern SPI_HandleTypeDef hspi3;
 extern volatile uint16_t WS2812FramesSent;
 #endif
 
-
 // Sets the color of the LED at index to the specified RGB values in the LEDData buffer
 void WS2812_SetLED(uint16_t index, uint8_t red, uint8_t green, uint8_t blue, bool additive)
 {
