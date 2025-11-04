@@ -1,0 +1,14 @@
+At 2.5 MBits/sec, each bit is 0.4 us long
+
+All timings have 150 ns tolerance
+
+WS2812B
+
+Send 0: 0.4 us high, 0.85 low ==> send 100
+Send 1: 0.8 us high, 0.45 us low ==> send 110
+
+
+WS2811
+
+Send 0: 0.5 us high, 2.0 us low ==> send 100000
+Send 1: 1.2 us high, 1.3 us low ==> 111000
