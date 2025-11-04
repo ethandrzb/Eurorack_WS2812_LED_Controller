@@ -17,6 +17,9 @@ void RainbowEffect::updateEffect()
 
 	static uint16_t currentHue = 0;
 
+	// Apply value to frame timer
+	TIM7->ARR = stepDelay * 10;
+
 	currentHue = (currentHue < 360) ? currentHue + scrollHue : 0;
 
 	if(!manualMode)
@@ -27,5 +30,4 @@ void RainbowEffect::updateEffect()
 
 	WS2812_FillRainbow(hsv, density);
 	WS2812_SendAll();
-//	HAL_Delay(stepDelay);
 }

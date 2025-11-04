@@ -21,6 +21,9 @@ void MeterEffect::updateEffect()
 	colorRGB rgb0 = WS2812_HSVToRGB(hsv0.hue, hsv0.saturation, hsv0.value);
 	colorRGB rgb1 = WS2812_HSVToRGB(hsv1.hue, hsv1.saturation, hsv1.value);
 
+	// Use static frame period
+	TIM7->ARR = 50;
+
 	WS2812_ClearLEDs();
 
 	if(mirror0)
@@ -42,5 +45,4 @@ void MeterEffect::updateEffect()
 	}
 
 	WS2812_SendAll();
-//	HAL_Delay(0);
 }

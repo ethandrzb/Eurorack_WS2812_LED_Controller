@@ -24,9 +24,9 @@ extern TIM_HandleTypeDef htim7;
 
 colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 0.25};
-SimpleBreathingEffect simpleBreathingEffect = SimpleBreathingEffect(10, 0.005, hsv, 0.25);
+SimpleBreathingEffect simpleBreathingEffect = SimpleBreathingEffect(20, 0.005, hsv, 0.25);
 MeterEffect meterEffect = MeterEffect(10, hsv, false, true);
-RainbowEffect rainbowEffect = RainbowEffect(3, 1, 1, hsv, false);
+RainbowEffect rainbowEffect = RainbowEffect(3, 1, 4, hsv, false);
 CometEffect cometEffect = CometEffect(10, 2, hsv, 50);
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 std::vector<std::shared_ptr<NumericEffectParameter<uint16_t>>> WS2812SettingParameters;
@@ -43,12 +43,10 @@ void mainWhileCpp(void)
 	// Collect settings
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(97, "Strip Length", 1, 1024, 1));
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Downsampling", 1, 25, 1));
-	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(100, "Frame period", 10, 1000, 10));
 //	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Fractal", 1, 10, 1));
 
 	WS2812SettingValues.push_back(&NUM_PHYSICAL_LEDS);
 	WS2812SettingValues.push_back(&DOWNSAMPLING_FACTOR);
-	WS2812SettingValues.push_back((uint16_t *)&(TIM7->ARR));
 
 	// Assigns modulations defined in effect defaults
 	refreshModMatrix();

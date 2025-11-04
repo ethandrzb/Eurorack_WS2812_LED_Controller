@@ -7,8 +7,6 @@
 
 #include "WS2812FX/CometEffect.hpp"
 
-// TODO: Change this function to be called repeatedly instead of blocking until a complete breathing cycle has completed
-// The current behavior causes the next effect to be queued until this function finishes instead of immediately going to the new effect
 void CometEffect::updateEffect()
 {
 	uint8_t stepDelay = *(static_cast<uint8_t *>(this->getParameter(0)->getValue()));
@@ -17,6 +15,9 @@ void CometEffect::updateEffect()
 	uint8_t interval = *(static_cast<uint8_t *>(this->getParameter(3)->getValue()));
 
 	static uint8_t iterations = 0;
+
+	// Apply value to frame timer
+	TIM7->ARR = stepDelay * 10;
 
 	if(iterations > interval)
 	{
@@ -30,6 +31,4 @@ void CometEffect::updateEffect()
 	WS2812_MultiCometEffect();
 	WS2812_SendAll();
 	iterations++;
-
-//	HAL_Delay(stepDelay);
 }

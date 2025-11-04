@@ -7,8 +7,6 @@
 
 #include "WS2812FX/SimpleBreathingEffect.hpp"
 
-// TODO: Change this function to be called repeatedly instead of blocking until a complete breathing cycle has completed
-// The current behavior causes the next effect to be queued until this function finishes instead of immediately going to the new effect
 void SimpleBreathingEffect::updateEffect()
 {
 	static bool direction = true;
@@ -20,6 +18,9 @@ void SimpleBreathingEffect::updateEffect()
 	float maxValue = *(static_cast<float *>(this->getParameter(3)->getValue()));
 
 	colorRGB rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, hsv.value);
+
+	// Apply value to frame timer
+	TIM7->ARR = stepDelay * 10;
 
 	if(direction)
 	{

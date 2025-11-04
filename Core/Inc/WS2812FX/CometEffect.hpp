@@ -21,7 +21,7 @@ class CometEffect : public WS2812Effect
 			snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Comet");
 
 			// Parameter 0: Step delay
-			this->setParameter(NumericEffectParameter<uint8_t>(stepDelay, "Step Delay", 0, 100, 1), 0);
+			this->setParameter(NumericEffectParameter<uint8_t>(stepDelay, "Step Delay", 1, 100, 1), 0);
 
 			// Parameter 1: Comet size
 			this->setParameter(NumericEffectParameter<uint8_t>(cometSize, "Comet Size", 1, 20, 1), 1);

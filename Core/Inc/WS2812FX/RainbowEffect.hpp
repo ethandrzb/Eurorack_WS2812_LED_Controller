@@ -29,7 +29,7 @@ class RainbowEffect : public WS2812Effect
 			this->setParameter(NumericEffectParameter<uint8_t>(scrollHue, "Scroll hue", 0, 100, 1), 1);
 
 			// Parameter 2: Scroll step delay
-			this->setParameter(NumericEffectParameter<uint8_t>(stepDelay, "Scroll delay", 0, 100, 1), 2);
+			this->setParameter(NumericEffectParameter<uint8_t>(stepDelay, "Scroll delay", 1, 100, 1), 2);
 
 			// Parameter 3: Starting color
 			this->setParameter(ColorHSVEffectParameter(startHSV, "Start color"), 3);
