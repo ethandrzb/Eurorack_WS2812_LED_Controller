@@ -248,7 +248,7 @@ void WS2812_SendAll(void)
 #endif
 
 	// Send data to strip
-	HAL_SPI_Transmit_DMA(&hspi3, sendData, 24 * _NUM_PHYSICAL_LEDS_PADDED);
+	HAL_SPI_Transmit_DMA(&LED_SPI, sendData, 24 * _NUM_PHYSICAL_LEDS_PADDED);
 }
 
 #endif
