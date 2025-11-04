@@ -31,5 +31,5 @@ void CometEffect::updateEffect()
 	WS2812_SendAll();
 	iterations++;
 
-	HAL_Delay(stepDelay);
+//	HAL_Delay(stepDelay);
 }

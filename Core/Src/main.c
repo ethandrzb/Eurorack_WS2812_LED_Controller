@@ -55,6 +55,7 @@ DMA_HandleTypeDef hdma_spi3_tx;
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim6;
+TIM_HandleTypeDef htim7;
 
 UART_HandleTypeDef huart2;
 
@@ -92,6 +93,7 @@ static void MX_SPI3_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_TIM7_Init(void);
 /* USER CODE BEGIN PFP */
 /* USER CODE END PFP */
 
@@ -297,11 +299,15 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef * htim)
 	}
 }
 
-#ifdef ENABLE_FPS_COUNTER
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+	if(htim == &htim7)
+	{
+		updateEffectC();
+	}
+#ifdef ENABLE_FPS_COUNTER
 	// FPS timer
-	if(htim == &htim6)
+	else if(htim == &htim6)
 	{
 		// String operations are too slow to have in an ISR, even if preempted by a higher priority interrupt
 		sprintf((char *)UARTTransmitBuffer, "%d fps\n", WS2812FramesSent);
@@ -317,8 +323,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		// Reset frame counter
 		WS2812FramesSent = 0;
 	}
-}
 #endif
+}
 
 /* USER CODE END 0 */
 
@@ -359,6 +365,7 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM1_Init();
   MX_ADC1_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 
   // Initialize OLED
@@ -384,6 +391,8 @@ int main(void)
 #ifdef ENABLE_FPS_COUNTER
   HAL_TIM_Base_Start_IT(&htim6);
 #endif
+
+  // Frame timer is started in mainWhiteCpp
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -724,6 +733,44 @@ static void MX_TIM6_Init(void)
   /* USER CODE BEGIN TIM6_Init 2 */
 
   /* USER CODE END TIM6_Init 2 */
+
+}
+
+/**
+  * @brief TIM7 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM7_Init(void)
+{
+
+  /* USER CODE BEGIN TIM7_Init 0 */
+
+  /* USER CODE END TIM7_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM7_Init 1 */
+
+  /* USER CODE END TIM7_Init 1 */
+  htim7.Instance = TIM7;
+  htim7.Init.Prescaler = 8000-1;
+  htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim7.Init.Period = 100-1;
+  htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim7, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM7_Init 2 */
+
+  /* USER CODE END TIM7_Init 2 */
 
 }
 

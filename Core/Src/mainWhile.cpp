@@ -8,44 +8,6 @@
 
 #include <vector>
 
-extern "C"
-{
-	void mainWhileC(void)
-	{
-		mainWhileCpp();
-	}
-
-	void updateMenuC(void)
-	{
-		updateMenuCpp();
-	}
-
-	void incrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
-	{
-		incrementValueCpp(effectIndex, parameterIndex, parameterSubIndex);
-	}
-
-	void decrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
-	{
-		decrementValueCpp(effectIndex, parameterIndex, parameterSubIndex);
-	}
-
-	void incrementMenuItemIndexC(void)
-	{
-		incrementMenuItemIndexCpp();
-	}
-
-	void decrementMenuItemIndexC(void)
-	{
-		decrementMenuItemIndexCpp();
-	}
-
-	void updateSelectedModDestinationC(void)
-	{
-		updateSelectedModDestinationCpp();
-	}
-}
-
 extern uint8_t effectIndex;
 extern uint8_t menuItemIndex;
 extern uint8_t HSVPickerIndex;
@@ -57,6 +19,8 @@ extern ADC_HandleTypeDef hadc1;
 extern uint16_t rawADCData[NUM_CV_INPUTS];
 
 std::vector<std::string> modMatrixSources = {"A", "B", "C"};
+
+extern TIM_HandleTypeDef htim7;
 
 colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 0.25};
@@ -79,24 +43,29 @@ void mainWhileCpp(void)
 	// Collect settings
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(97, "Strip Length", 1, 1024, 1));
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Downsampling", 1, 25, 1));
+	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(100, "Frame period", 10, 1000, 10));
 //	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Fractal", 1, 10, 1));
 
 	WS2812SettingValues.push_back(&NUM_PHYSICAL_LEDS);
 	WS2812SettingValues.push_back(&DOWNSAMPLING_FACTOR);
+	WS2812SettingValues.push_back((uint16_t *)&(TIM7->ARR));
 
 	// Assigns modulations defined in effect defaults
 	refreshModMatrix();
 
 	updateMenuCpp();
 
+	// Start frame timer
+	HAL_TIM_Base_Start_IT(&htim7);
+
 	while(1)
 	{
-		fx[effectIndex]->updateEffect();
+//		fx[effectIndex]->updateEffect();
 
-		// Update background
-		WS2812_SetBackgroundColorHSV(static_cast<colorHSV *>(fx[effectIndex]->backgroundColorParameter->getValue()));
-
-		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, NUM_CV_INPUTS);
+//		// Update background
+//		WS2812_SetBackgroundColorHSV(static_cast<colorHSV *>(fx[effectIndex]->backgroundColorParameter->getValue()));
+//
+//		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, NUM_CV_INPUTS);
 
 		//NOTE: Noise on ADC inputs can cause the effect to appear to stutter
 		// Set modulation source of all parameters to null if you're not sure why an effect is stuttering
@@ -252,7 +221,7 @@ void drawHSVPicker(void)
 }
 
 // Display list of available destinations and highlight chosen one for selected mod source
-void drawMenuModMatrix()
+void drawMenuModMatrix(void)
 {
 	uint8_t startSource = (selectedModSourceIndex > 3) ? selectedModSourceIndex - 3 : 0;
 	uint8_t endSource = ((uint8_t)(startSource + 4) > modMatrixSources.size()) ? modMatrixSources.size() : startSource + 4;
@@ -452,5 +421,52 @@ void refreshModMatrix(void)
 			fx[i]->modMatrix[j].modDestination->modulationSource = fx[i]->modMatrix[j].modSource;
 			fx[i]->modMatrix[j].modDestination->modulationScale = *(static_cast<int16_t *>(fx[i]->modMatrix[j].modAmount->getValue())) / 100.0f;
 		}
+	}
+}
+
+extern "C"
+{
+	void mainWhileC(void)
+	{
+		mainWhileCpp();
+	}
+
+	void updateMenuC(void)
+	{
+		updateMenuCpp();
+	}
+
+	void incrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
+	{
+		incrementValueCpp(effectIndex, parameterIndex, parameterSubIndex);
+	}
+
+	void decrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
+	{
+		decrementValueCpp(effectIndex, parameterIndex, parameterSubIndex);
+	}
+
+	void incrementMenuItemIndexC(void)
+	{
+		incrementMenuItemIndexCpp();
+	}
+
+	void decrementMenuItemIndexC(void)
+	{
+		decrementMenuItemIndexCpp();
+	}
+
+	void updateSelectedModDestinationC(void)
+	{
+		updateSelectedModDestinationCpp();
+	}
+	void updateEffectC(void)
+	{
+		fx[effectIndex]->updateEffect();
+
+		// Update background
+		WS2812_SetBackgroundColorHSV(static_cast<colorHSV *>(fx[effectIndex]->backgroundColorParameter->getValue()));
+
+		HAL_ADC_Start_DMA(&hadc1, (uint32_t *) rawADCData, NUM_CV_INPUTS);
 	}
 }

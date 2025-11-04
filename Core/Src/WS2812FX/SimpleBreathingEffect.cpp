@@ -11,6 +11,9 @@
 // The current behavior causes the next effect to be queued until this function finishes instead of immediately going to the new effect
 void SimpleBreathingEffect::updateEffect()
 {
+	static bool direction = true;
+	static float currentValue = 0.0;
+
 	uint8_t stepDelay = *(static_cast<uint8_t *>(this->getParameter(0)->getValue()));
 	float stepSize = *(static_cast<float *>(this->getParameter(1)->getValue()));
 	colorHSV hsv = *(static_cast<colorHSV *>(this->getParameter(2)->getValue()));
@@ -18,18 +21,38 @@ void SimpleBreathingEffect::updateEffect()
 
 	colorRGB rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, hsv.value);
 
-	for(float i = 0.0; i < maxValue; i += stepSize)
+	if(direction)
 	{
-		rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, i);
-		WS2812_SetAllLEDs(rgb.red, rgb.green, rgb.blue);
-		WS2812_SendAll();
-		HAL_Delay(stepDelay);
+		// Increase to max value
+		if(currentValue < maxValue)
+		{
+			rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, currentValue);
+			WS2812_SetAllLEDs(rgb.red, rgb.green, rgb.blue);
+			WS2812_SendAll();
+
+			currentValue += stepSize;
+		}
+		// Reverse direction when max value reached
+		else
+		{
+			direction = !direction;
+		}
 	}
-	for(float i = maxValue; i >= 0; i -= stepSize)
+	else
 	{
-		rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, i);
-		WS2812_SetAllLEDs(rgb.red, rgb.green, rgb.blue);
-		WS2812_SendAll();
-		HAL_Delay(stepDelay);
+		// Decrease to 0 value
+		if(currentValue > 0)
+		{
+			rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, currentValue);
+			WS2812_SetAllLEDs(rgb.red, rgb.green, rgb.blue);
+			WS2812_SendAll();
+
+			currentValue -= stepSize;
+		}
+		// Reverse direction when 0 value reached
+		else
+		{
+			direction = !direction;
+		}
 	}
 }
