@@ -43,10 +43,11 @@ void mainWhileCpp(void)
 	// Collect settings
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(97, "Strip Length", 1, 1024, 1));
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Downsampling", 1, 25, 1));
-//	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Fractal", 1, 10, 1));
+	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Fractal", 1, 50, 1));
 
 	WS2812SettingValues.push_back(&NUM_PHYSICAL_LEDS);
 	WS2812SettingValues.push_back(&DOWNSAMPLING_FACTOR);
+	WS2812SettingValues.push_back(&FRACTAL_GROUP_SIZE);
 
 	// Assigns modulations defined in effect defaults
 	refreshModMatrix();

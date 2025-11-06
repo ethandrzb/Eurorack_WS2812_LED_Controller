@@ -20,6 +20,7 @@ comet comets[NUM_MAX_COMETS];
 
 uint16_t NUM_PHYSICAL_LEDS = 97;
 uint16_t DOWNSAMPLING_FACTOR = 1;
+uint16_t FRACTAL_GROUP_SIZE = 1;
 
 // Change to SPI handle connected to LEDs
 extern SPI_HandleTypeDef hspi3;
@@ -213,9 +214,10 @@ uint8_t *WS2812_GetSingleLEDData(uint32_t red, uint32_t green, uint32_t blue)
 
 void WS2812_SendAll(void)
 {
-	// Sample NUM_LOGICAL_LEDS and NUM_PHYSICAL_LEDS in case they change while this function is running
-	const uint16_t _DOWNSAMPLING_FACTOR = DOWNSAMPLING_FACTOR;
+	// Sample DOWNSAMPLING_FACTOR and NUM_PHYSICAL_LEDS in case they change while this function is running
 	const uint16_t _NUM_PHYSICAL_LEDS = NUM_PHYSICAL_LEDS;
+	const uint16_t _DOWNSAMPLING_FACTOR = DOWNSAMPLING_FACTOR;
+	const uint16_t _FRACTAL_GROUP_SIZE = FRACTAL_GROUP_SIZE;
 
 	// Pad _NUM_PHYSICAL_LEDS to be divisible by downsampling factor
 	const uint16_t _NUM_PHYSICAL_LEDS_PADDED = _NUM_PHYSICAL_LEDS + (_DOWNSAMPLING_FACTOR - (_NUM_PHYSICAL_LEDS % _DOWNSAMPLING_FACTOR));
@@ -231,7 +233,14 @@ void WS2812_SendAll(void)
 		WS2812_SetLEDAdditive(i, background.red, background.green, background.blue);
 
 		// Get data for current LED
-		data[i] = WS2812_GetSingleLEDData(LEDData[i][0], LEDData[i][1], LEDData[i][2]);
+		if(_FRACTAL_GROUP_SIZE <= 1)
+		{
+			data[i] = WS2812_GetSingleLEDData(LEDData[i][0], LEDData[i][1], LEDData[i][2]);
+		}
+		else
+		{
+			data[i] = WS2812_GetSingleLEDData(LEDData[i % _FRACTAL_GROUP_SIZE][0], LEDData[i % _FRACTAL_GROUP_SIZE][1], LEDData[i % _FRACTAL_GROUP_SIZE][2]);
+		}
 
 		for(int groupIndex = 0; groupIndex < _DOWNSAMPLING_FACTOR; groupIndex++)
 		{

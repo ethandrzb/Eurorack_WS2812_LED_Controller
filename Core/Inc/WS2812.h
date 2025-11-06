@@ -26,6 +26,8 @@ extern uint16_t NUM_PHYSICAL_LEDS;
 //TODO: Change to power of 2 and bit shift in sendAll?
 extern uint16_t DOWNSAMPLING_FACTOR;
 
+extern uint16_t FRACTAL_GROUP_SIZE;
+
 //#ifdef DOWNSAMPLING_FACTOR
 #define NUM_LOGICAL_LEDS (NUM_PHYSICAL_LEDS / DOWNSAMPLING_FACTOR)
 //#else
@@ -49,7 +51,7 @@ extern uint16_t DOWNSAMPLING_FACTOR;
 
 // Calculate and send FPS over USART2
 // WARNING: Enabling this feature is known to cause flickering each time the value is calculated
-//#define ENABLE_FPS_COUNTER
+#define ENABLE_FPS_COUNTER
 
 #ifndef MAX
 #define MAX(x,y) (x > y) ? x : y
