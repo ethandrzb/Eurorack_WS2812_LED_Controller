@@ -241,7 +241,8 @@ void WS2812_SendAll(void)
 		}
 		else
 		{
-			data[i] = WS2812_GetSingleLEDData(LEDData[i % _FRACTAL_GROUP_SIZE][0], LEDData[i % _FRACTAL_GROUP_SIZE][1], LEDData[i % _FRACTAL_GROUP_SIZE][2]);
+			uint16_t LEDIndex = (i % _FRACTAL_GROUP_SIZE) * _FRACTAL_FACTOR;
+			data[i] = WS2812_GetSingleLEDData(LEDData[LEDIndex][0], LEDData[LEDIndex][1], LEDData[LEDIndex][2]);
 		}
 
 		for(int groupIndex = 0; groupIndex < _DOWNSAMPLING_FACTOR; groupIndex++)
