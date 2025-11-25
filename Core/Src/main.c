@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "../../Drivers/ssd1306/ssd1306.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include "WS2812.h"
 //#include "WS2812FX.hpp"
@@ -75,9 +76,12 @@ uint8_t encoderLastDirectionForward = 0;
 #define UART_TRANSMIT_BUFFER_LENGTH 25
 uint8_t UARTTransmitBuffer[UART_TRANSMIT_BUFFER_LENGTH];
 
-#ifdef ENABLE_FPS_COUNTER
+#ifdef ENABLE_PERFORMANCE_MONITOR
 volatile uint16_t WS2812FramesSent;
 #endif
+
+float cpuUsage = 0.0f;
+volatile bool overrunDetected = false;
 
 uint16_t rawADCData[NUM_CV_INPUTS];
 /* USER CODE END PV */
@@ -303,19 +307,49 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim == &htim7)
 	{
+		// Skip rendering this frame if the last one took too long
+		if(overrunDetected)
+		{
+			// Consume overrun and test again
+			// Consecutive overruns are possible if updateEffectC is really slow
+			overrunDetected = (htim->Instance->SR != 0);
+			return;
+		}
+
+		// Actual render (update) step
 		updateEffectC();
+
+		// Detect overruns after updating effect
+		overrunDetected = (htim->Instance->SR != 0);
+
+#ifdef ENABLE_PERFORMANCE_MONITOR
+		cpuUsage = (((float)htim->Instance->CNT) / htim->Instance->ARR) * 100.0f;
+#endif
 	}
-#ifdef ENABLE_FPS_COUNTER
+#ifdef ENABLE_PERFORMANCE_MONITOR
 	// FPS timer
 	else if(htim == &htim6)
 	{
 		// String operations are too slow to have in an ISR, even if preempted by a higher priority interrupt
-		sprintf((char *)UARTTransmitBuffer, "%d fps\n", WS2812FramesSent);
+		sprintf((char *)UARTTransmitBuffer, "%d\n", WS2812FramesSent);
 
-		HAL_UART_Transmit_IT(&huart2, UARTTransmitBuffer, UART_TRANSMIT_BUFFER_LENGTH);
+//		HAL_UART_Transmit_IT(&huart2, UARTTransmitBuffer, UART_TRANSMIT_BUFFER_LENGTH);
 
 		// Draw current FPS
 		ssd1306_SetCursor(100, 0);
+		ssd1306_WriteString((char *)UARTTransmitBuffer, Font_6x8, White);
+
+		if(!overrunDetected)
+		{
+			// Draw current CPU usage
+			sprintf((char *)UARTTransmitBuffer, "%-4.0f", cpuUsage);
+		}
+		else
+		{
+			sprintf((char *)UARTTransmitBuffer, "OVER");
+		}
+
+		ssd1306_SetCursor(100, 9);
 		ssd1306_WriteString((char *)UARTTransmitBuffer, Font_6x8, White);
 
 		ssd1306_UpdateScreen();
@@ -388,7 +422,7 @@ int main(void)
   WS2812_SetBackgroundColor(0, 0, 0);
   WS2812_SendAll();
 
-#ifdef ENABLE_FPS_COUNTER
+#ifdef ENABLE_PERFORMANCE_MONITOR
   HAL_TIM_Base_Start_IT(&htim6);
 #endif
 

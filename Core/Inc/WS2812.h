@@ -51,7 +51,7 @@ extern uint16_t FRACTAL_FACTOR;
 
 // Calculate and send FPS over USART2
 // WARNING: Enabling this feature is known to cause flickering each time the value is calculated
-#define ENABLE_FPS_COUNTER
+#define ENABLE_PERFORMANCE_MONITOR
 
 #ifndef MAX
 #define MAX(x,y) (x > y) ? x : y

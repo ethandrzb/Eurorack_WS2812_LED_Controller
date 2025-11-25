@@ -26,7 +26,7 @@ uint16_t FRACTAL_FACTOR = 1;
 extern SPI_HandleTypeDef hspi3;
 #define LED_SPI hspi3
 
-#ifdef ENABLE_FPS_COUNTER
+#ifdef ENABLE_PERFORMANCE_MONITOR
 extern volatile uint16_t WS2812FramesSent;
 #endif
 
@@ -255,7 +255,7 @@ void WS2812_SendAll(void)
 		}
 	}
 
-#ifdef ENABLE_FPS_COUNTER
+#ifdef ENABLE_PERFORMANCE_MONITOR
 	WS2812FramesSent++;
 #endif
 
