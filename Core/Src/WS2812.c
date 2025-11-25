@@ -20,7 +20,7 @@ comet comets[NUM_MAX_COMETS];
 
 uint16_t NUM_PHYSICAL_LEDS = 97;
 uint16_t DOWNSAMPLING_FACTOR = 1;
-uint16_t FRACTAL_GROUP_SIZE = 1;
+uint16_t FRACTAL_FACTOR = 1;
 
 // Change to SPI handle connected to LEDs
 extern SPI_HandleTypeDef hspi3;
@@ -217,11 +217,13 @@ void WS2812_SendAll(void)
 	// Sample DOWNSAMPLING_FACTOR and NUM_PHYSICAL_LEDS in case they change while this function is running
 	const uint16_t _NUM_PHYSICAL_LEDS = NUM_PHYSICAL_LEDS;
 	const uint16_t _DOWNSAMPLING_FACTOR = DOWNSAMPLING_FACTOR;
-	const uint16_t _FRACTAL_GROUP_SIZE = FRACTAL_GROUP_SIZE;
+	const uint16_t _FRACTAL_FACTOR = FRACTAL_FACTOR;
 
 	// Pad _NUM_PHYSICAL_LEDS to be divisible by downsampling factor
 	const uint16_t _NUM_PHYSICAL_LEDS_PADDED = _NUM_PHYSICAL_LEDS + (_DOWNSAMPLING_FACTOR - (_NUM_PHYSICAL_LEDS % _DOWNSAMPLING_FACTOR));
 	const uint16_t _NUM_LOGICAL_LEDS_PADDED = _NUM_PHYSICAL_LEDS_PADDED / _DOWNSAMPLING_FACTOR;
+
+	const uint16_t _FRACTAL_GROUP_SIZE = _NUM_PHYSICAL_LEDS / _FRACTAL_FACTOR;
 
 	uint8_t *data[_NUM_LOGICAL_LEDS_PADDED];
 	uint8_t sendData[24 * _NUM_PHYSICAL_LEDS_PADDED];

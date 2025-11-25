@@ -26,7 +26,7 @@ extern uint16_t NUM_PHYSICAL_LEDS;
 //TODO: Change to power of 2 and bit shift in sendAll?
 extern uint16_t DOWNSAMPLING_FACTOR;
 
-extern uint16_t FRACTAL_GROUP_SIZE;
+extern uint16_t FRACTAL_FACTOR;
 
 //#ifdef DOWNSAMPLING_FACTOR
 #define NUM_LOGICAL_LEDS (NUM_PHYSICAL_LEDS / DOWNSAMPLING_FACTOR)

@@ -49,7 +49,7 @@ void mainWhileCpp(void)
 
 	WS2812SettingValues.push_back(&NUM_PHYSICAL_LEDS);
 	WS2812SettingValues.push_back(&DOWNSAMPLING_FACTOR);
-	WS2812SettingValues.push_back(&FRACTAL_GROUP_SIZE);
+	WS2812SettingValues.push_back(&FRACTAL_FACTOR);
 
 	// Assigns modulations defined in effect defaults
 	refreshModMatrix();
