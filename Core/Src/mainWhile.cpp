@@ -32,6 +32,8 @@ WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 std::vector<std::shared_ptr<NumericEffectParameter<uint16_t>>> WS2812SettingParameters;
 std::vector<uint16_t *> WS2812SettingValues;
 
+bool updateMenu = false;
+
 void mainWhileCpp(void)
 {
 	// Collect effects
@@ -59,6 +61,11 @@ void mainWhileCpp(void)
 
 	while(1)
 	{
+		if(updateMenu)
+		{
+			updateMenuCpp();
+			updateMenu = false;
+		}
 //		fx[effectIndex]->updateEffect();
 
 //		// Update background
@@ -432,7 +439,8 @@ extern "C"
 
 	void updateMenuC(void)
 	{
-		updateMenuCpp();
+		updateMenu = true;
+//		updateMenuCpp();
 	}
 
 	void incrementValueC(uint8_t effectIndex, uint8_t parameterIndex, uint8_t parameterSubIndex)
