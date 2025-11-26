@@ -223,7 +223,7 @@ void WS2812_SendAll(void)
 	const uint16_t _NUM_PHYSICAL_LEDS_PADDED = _NUM_PHYSICAL_LEDS + (_DOWNSAMPLING_FACTOR - (_NUM_PHYSICAL_LEDS % _DOWNSAMPLING_FACTOR));
 	const uint16_t _NUM_LOGICAL_LEDS_PADDED = _NUM_PHYSICAL_LEDS_PADDED / _DOWNSAMPLING_FACTOR;
 
-	const uint16_t _FRACTAL_GROUP_SIZE = _NUM_PHYSICAL_LEDS / _FRACTAL_FACTOR;
+	const uint16_t _FRACTAL_GROUP_SIZE = _NUM_LOGICAL_LEDS_PADDED / _FRACTAL_FACTOR;
 
 	uint8_t *data[_NUM_LOGICAL_LEDS_PADDED];
 	uint8_t sendData[24 * _NUM_PHYSICAL_LEDS_PADDED];
@@ -237,10 +237,13 @@ void WS2812_SendAll(void)
 		// Get data for current LED
 		if(_FRACTAL_GROUP_SIZE <= 1)
 		{
+			// Fractal effect disabled
 			data[i] = WS2812_GetSingleLEDData(LEDData[i][0], LEDData[i][1], LEDData[i][2]);
 		}
 		else
 		{
+			// Fractal effect enabled
+			//TODO: Figure out why fractal doesn't line up with the end of the strip correctly
 			uint16_t LEDIndex = (i % _FRACTAL_GROUP_SIZE) * _FRACTAL_FACTOR;
 			data[i] = WS2812_GetSingleLEDData(LEDData[LEDIndex][0], LEDData[LEDIndex][1], LEDData[LEDIndex][2]);
 		}
