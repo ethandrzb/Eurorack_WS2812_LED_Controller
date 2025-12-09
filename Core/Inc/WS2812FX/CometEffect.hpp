@@ -32,6 +32,9 @@ class CometEffect : public WS2812Effect
 			// Parameter 3: Interval between comet triggers
 			this->setParameter(NumericEffectParameter<uint8_t>(interval, "Comet Interval", 1, 100, 5), 3);
 
+			// Parameter 4: Comet trigger
+			this->setParameter(BooleanEffectParameter(false, "Trigger comet"), 4);
+
 			this->initModMatrixDefaults();
 
 			WS2812_InitMultiCometEffect();
@@ -51,6 +54,10 @@ class CometEffect : public WS2812Effect
 			this->modMatrix[2].modSource = NULL;
 			this->modMatrix[2].modDestination = static_cast<ColorHSVEffectParameter *>(this->getParameter(2))->_hue.get();
 			this->modMatrix[2].modAmount->setValue(0);
+
+			this->modMatrix[4].modSource = NULL;
+			this->modMatrix[4].modDestination = this->getParameter(4);
+			this->modMatrix[4].modAmount->setValue(100);
 		}
 
 		void updateEffect() override;
