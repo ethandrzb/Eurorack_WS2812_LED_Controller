@@ -19,7 +19,9 @@
 #define WS2812FX_EFFECT_NAME_LEN 11
 #define WS2812FX_EFFECT_PARAM_LEN 11
 #define WS2812FX_EFFECT_MAX_PARAMS 8
-#define WS2812FX_EFFECT_MAX_MOD_SLOTS 3
+
+// Assign all mod sources to CV inputs
+#define WS2812FX_EFFECT_MAX_MOD_SLOTS NUM_CV_INPUTS
 // 4 chars + null char
 #define WS2812FX_PARAMETER_VALUE_STRING_LEN 5
 
@@ -343,11 +345,12 @@ class ModMatrixEntry
 
 		ModMatrixEntry()
 		{
-			//TODO: Prefix names of amount parameter with identifier to differentiate them from other mod amounts
-			this->modAmount = std::make_unique<NumericEffectParameter<int16_t>>(5, "Mod Amount", -100, 100, 1);
-		}
+			this->modSource = NULL;
+			this->modDestination = NULL;
 
-		//TODO: Write a function to convert modAmount to a percentage of the range of modDestination and apply this value to modDestination
+			//TODO: Prefix names of amount parameter with identifier to differentiate them from other mod amounts
+			this->modAmount = std::make_unique<NumericEffectParameter<int16_t>>(0, "Mod Amount", -100, 100, 1);
+		}
 };
 
 class WS2812Effect

@@ -47,15 +47,15 @@ public:
 	{
 		this->modMatrix[0].modSource = NULL;
 		this->modMatrix[0].modDestination = this->getParameter(0);
-		this->modMatrix[0].modAmount->setValue(100);
+		this->modMatrix[0].modAmount->setValue(0);
 
 		this->modMatrix[1].modSource = NULL;
 		this->modMatrix[1].modDestination = this->getParameter(3);
-		this->modMatrix[1].modAmount->setValue(100);
+		this->modMatrix[1].modAmount->setValue(0);
 
 		this->modMatrix[2].modSource = NULL;
 		this->modMatrix[2].modDestination = static_cast<ColorHSVEffectParameter *>(this->getParameter(1))->_hue.get();
-		this->modMatrix[2].modAmount->setValue(100);
+		this->modMatrix[2].modAmount->setValue(0);
 	}
 
 	void updateEffect() override;

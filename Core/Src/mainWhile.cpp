@@ -18,7 +18,7 @@ extern uint8_t menu_layer;
 extern ADC_HandleTypeDef hadc1;
 extern uint16_t rawADCData[NUM_CV_INPUTS];
 
-std::vector<std::string> modMatrixSources = {"A", "B", "C"};
+std::vector<std::string> modMatrixSources = {"A", "B", "C", "D", "E", "F", "G", "H"};
 
 extern TIM_HandleTypeDef htim7;
 

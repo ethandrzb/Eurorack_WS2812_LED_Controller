@@ -102,7 +102,7 @@ void Error_Handler(void);
 #define SETTINGS_BTN_EXTI_IRQn EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
-#define NUM_CV_INPUTS 3
+#define NUM_CV_INPUTS 8
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
