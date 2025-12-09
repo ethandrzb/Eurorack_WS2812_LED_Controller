@@ -544,6 +544,13 @@ colorRGB WS2812_HSVToRGB(uint16_t hue, float saturation, float value)
 {
 	colorRGB retVal = {.red = 0, .green = 0, .blue = 0};
 
+	// Wrap extreme hue values around
+	// Change to modulus if argument is not clipped (e.g., by NumericEffectParameter's ModulationMapper)
+	if(hue >= 360)
+	{
+		hue -= 360;
+	}
+
 	float chroma = value * saturation;
 	float x = chroma * (1.0f - fabs(fmod(((double)hue / 60.0f), 2.0) - 1.0f));
 	float m = value - chroma;
