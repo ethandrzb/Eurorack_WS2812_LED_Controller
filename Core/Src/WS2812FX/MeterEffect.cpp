@@ -9,40 +9,42 @@
 
 void MeterEffect::updateEffect()
 {
-	uint16_t meterFill0 = *(static_cast<uint16_t *>(this->getParameter(0)->getValue()));
-	colorHSV hsv0 = *(static_cast<colorHSV *>(this->getParameter(1)->getValue()));
-	uint8_t flip0 = *(static_cast<bool *>(this->getParameter(2)->getValue()));
-	uint16_t meterFill1 = *(static_cast<uint16_t *>(this->getParameter(3)->getValue()));
-	colorHSV hsv1 = *(static_cast<colorHSV *>(this->getParameter(4)->getValue()));
-	uint8_t flip1 = *(static_cast<bool *>(this->getParameter(5)->getValue()));
-	uint8_t mirror0 = *(static_cast<bool *>(this->getParameter(6)->getValue()));
-	uint8_t mirror1 = *(static_cast<bool *>(this->getParameter(7)->getValue()));
+	uint16_t meterFillAmounts[NUM_METERS];
+	colorHSV hsvColors[NUM_METERS];
+	bool flips[NUM_METERS];
+	bool mirrors[NUM_METERS];
 
-	colorRGB rgb0 = WS2812_HSVToRGB(hsv0.hue, hsv0.saturation, hsv0.value);
-	colorRGB rgb1 = WS2812_HSVToRGB(hsv1.hue, hsv1.saturation, hsv1.value);
+	colorRGB rgbColors[NUM_METERS];
+
+	// Retrieve parameters for each meter
+	for(int i = 0; i < NUM_METERS; i++)
+	{
+		meterFillAmounts[i] = *(static_cast<uint16_t *>(this->getParameter(NUM_METER_PARAMETERS * i)->getValue()));
+		hsvColors[i] = *(static_cast<colorHSV *>(this->getParameter((NUM_METER_PARAMETERS * i) + 1)->getValue()));
+		flips[i] = *(static_cast<bool *>(this->getParameter((NUM_METER_PARAMETERS * i) + 2)->getValue()));
+		mirrors[i] = *(static_cast<bool *>(this->getParameter((NUM_METER_PARAMETERS * i) + 3)->getValue()));
+
+		rgbColors[i] = WS2812_HSVToRGB(hsvColors[i].hue, hsvColors[i].saturation, hsvColors[i].value);
+	}
 
 	// Use static frame period
 	TIM7->ARR = 50;
 
 	WS2812_ClearLEDs();
 
-	if(mirror0)
+	// Draw meters
+	for(uint8_t i = 0; i < NUM_METERS; i++)
 	{
-		WS2812_MirroredMeterEffect(rgb0, meterFill0, flip0);
-	}
-	else
-	{
-		WS2812_SimpleMeterEffect(rgb0, meterFill0, flip0);
+		if(mirrors[i])
+		{
+			WS2812_MirroredMeterEffect(rgbColors[i], meterFillAmounts[i], flips[i]);
+		}
+		else
+		{
+			WS2812_SimpleMeterEffect(rgbColors[i], meterFillAmounts[i], flips[i]);
+		}
 	}
 
-	if(mirror1)
-	{
-		WS2812_MirroredMeterEffect(rgb1, meterFill1, flip1);
-	}
-	else
-	{
-		WS2812_SimpleMeterEffect(rgb1, meterFill1, flip1);
-	}
 
 	WS2812_SendAll();
 }

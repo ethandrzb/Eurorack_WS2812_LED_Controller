@@ -16,28 +16,33 @@ using namespace WS2812FX;
 class MeterEffect : public WS2812Effect
 {
 public:
+	const uint8_t NUM_METERS = 4;
+	const uint8_t NUM_METER_PARAMETERS = 4;
 	//TODO: Increase size of fill parameters to avoid overflow with larger LED strips
 	//TODO: Remove second meter from effect when effects can be designed/stacked instead of hardcoded
 	MeterEffect(uint16_t fill, colorHSV hsv, uint8_t flip, uint8_t mirror)
 	{
 		snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Meter");
 
-		// Parameters 0 and 3: Meter fill amount
-		this->setParameter(NumericEffectParameter<uint16_t>(fill, "Fill 0", 0, NUM_PHYSICAL_LEDS, 1), 0);
-		this->setParameter(NumericEffectParameter<uint16_t>(fill, "Fill 1", 0, NUM_PHYSICAL_LEDS, 1), 3);
+		for(uint8_t i = 0; i < NUM_METERS; i++)
+		{
+			// Each meter, i , of the NUM_METERS meters created has 4 parameters indexed starting at zero
+			// from the meter's 0th parameter (Fill) to its 3rd (Mirror)
+			// Parameter Index | Description
+			//       i         | Meter i fill amount
+			//     i + 1       | Meter i color
+			//     i + 2       | Flip meter i
+			//     i + 3       | Mirror meter i
+			this->setParameter(NumericEffectParameter<uint16_t>(fill, "Fill " + std::to_string(i), 0, NUM_PHYSICAL_LEDS, 1), (NUM_METER_PARAMETERS * i));
+			this->setParameter(ColorHSVEffectParameter(hsv, "Color " + std::to_string(i)), (NUM_METER_PARAMETERS * i + 1));
+			this->setParameter(BooleanEffectParameter(flip, "Flip " + std::to_string(i)), (NUM_METER_PARAMETERS * i + 2));
+			this->setParameter(BooleanEffectParameter(mirror, "Mirror " + std::to_string(i)), (NUM_METER_PARAMETERS * i + 3));
 
-		// Parameters 1 and 4: Meter color
-		this->setParameter(ColorHSVEffectParameter(hsv, "Color 0"), 1);
-		hsv.hue = (hsv.hue + 180) % 360;
-		this->setParameter(ColorHSVEffectParameter(hsv, "Color 1"), 4);
-
-		// Parameters 2 and 5: Flip meter
-		this->setParameter(BooleanEffectParameter(flip, "Flip 0"), 2);
-		this->setParameter(BooleanEffectParameter(!flip, "Flip 1"), 5);
-
-		// Parameters 6 and 7: Mirror meter
-		this->setParameter(BooleanEffectParameter(mirror, "Mirror 0"), 6);
-		this->setParameter(BooleanEffectParameter(mirror, "Mirror 1"), 7);
+			// Vary initial parameters
+			fill += 5;
+			hsv.hue = (hsv.hue + 90) % 360;
+			flip = !flip;
+		}
 
 		this->initModMatrixDefaults();
 	}
@@ -45,17 +50,18 @@ public:
 	// Init default mod matrix for this effect
 	void initModMatrixDefaults() override
 	{
-		this->modMatrix[0].modSource = NULL;
-		this->modMatrix[0].modDestination = this->getParameter(0);
-		this->modMatrix[0].modAmount->setValue(0);
+		for(uint8_t i = 0; i < NUM_METERS; i++)
+		{
+			// Map meter fill amounts to CV inputs A-D
+			this->modMatrix[i].modSource = NULL;
+			this->modMatrix[i].modDestination = this->getParameter(4 * i);
+			this->modMatrix[i].modAmount->setValue(100);
 
-		this->modMatrix[1].modSource = NULL;
-		this->modMatrix[1].modDestination = this->getParameter(3);
-		this->modMatrix[1].modAmount->setValue(0);
-
-		this->modMatrix[2].modSource = NULL;
-		this->modMatrix[2].modDestination = static_cast<ColorHSVEffectParameter *>(this->getParameter(1))->_hue.get();
-		this->modMatrix[2].modAmount->setValue(0);
+			// Map meter hues to CV inputs E-H
+			this->modMatrix[i + 4].modSource = NULL;
+			this->modMatrix[i + 4].modDestination = static_cast<ColorHSVEffectParameter *>(this->getParameter((NUM_METER_PARAMETERS * i + 1)))->_hue.get();
+			this->modMatrix[i + 4].modAmount->setValue(0);
+		}
 	}
 
 	void updateEffect() override;
