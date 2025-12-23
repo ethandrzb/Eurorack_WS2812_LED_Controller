@@ -27,7 +27,7 @@ colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 0.25};
 SimpleBreathingEffect simpleBreathingEffect = SimpleBreathingEffect(20, 0.005, hsv, 0.25);
 MeterEffect meterEffect = MeterEffect(10, hsv, false, true);
 RainbowEffect rainbowEffect = RainbowEffect(3, 1, 4, hsv, false);
-CometEffect cometEffect = CometEffect(10, 2, hsv, 50);
+CometEffect cometEffect = CometEffect(2, hsv, 50, 1);
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 std::vector<std::shared_ptr<NumericEffectParameter<uint16_t>>> WS2812SettingParameters;
 std::vector<uint16_t *> WS2812SettingValues;
@@ -405,7 +405,7 @@ void updateSelectedModDestinationCpp(void)
 	// Update mod slot with new destination
 	fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination = fx[effectIndex]->getExpandedParameters()[menuItemIndex].get();
 
-	// Update ADC reference and scale factor inside destination effect parameter
+	// Update ADC reference inside destination effect parameter
 	fx[effectIndex]->modMatrix[selectedModSourceIndex].modDestination->modulationSource = &(rawADCData[selectedModSourceIndex]);
 	updateModulationScale();
 }
@@ -439,6 +439,8 @@ extern "C"
 
 	void updateMenuC(void)
 	{
+		// Schedule next menu update after current effect frame has been rendered and sent to strip
+		// This prioritizes the responsiveness of the effect over the menu
 		updateMenu = true;
 //		updateMenuCpp();
 	}

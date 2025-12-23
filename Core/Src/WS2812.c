@@ -278,6 +278,8 @@ void WS2812_InitMultiCometEffect(void)
 		comets[i].color.green = 0;
 		comets[i].color.blue = 0;
 		comets[i].size = 0;
+		comets[i].speed = 1;
+		comets[i].forward = true;
 		comets[i].active = false;
 	}
 }
@@ -285,7 +287,7 @@ void WS2812_InitMultiCometEffect(void)
 // Adds a comet to be processed by WS2812_MultiCometEffect
 // color: Color of comet
 // size: number of pixels used for body of comet
-void WS2812_AddComet(colorRGB color, uint8_t size)
+void WS2812_AddComet(colorRGB color, uint8_t size, uint8_t speed, bool forward)
 {
 	uint16_t index = 0;
 
@@ -300,9 +302,12 @@ void WS2812_AddComet(colorRGB color, uint8_t size)
 		return;
 	}
 
-	comets[index].position = 0;
+	comets[index].position = forward ? 0 : NUM_LOGICAL_LEDS;
 	comets[index].color = color;
 	comets[index].size = size;
+	comets[index].speed = speed;
+	comets[index].ticksElapsed = 0;
+	comets[index].forward = forward;
 	comets[index].active = true;
 }
 
@@ -317,12 +322,12 @@ void WS2812_MultiCometEffect(void)
 	{
 		if(comets[i].active)
 		{
-			// Deactivate comets when head reaches the end of the LED strip
+			// Deactivate comets when head reaches one end of the LED strip
 			// -1 accounts for the fact that comets are drawn from [position, position + size], NOT [position + 1, position + 1 + size]
 //			if(comets[i].position >= (NUM_LEDS - (comets[i].size - 1)))
 			// Deactivate comet when it reaches the end of the strip
 			// This is safe because WS2812_SetLED only sets the LED if it is in bounds
-			if(comets[i].position >= NUM_LOGICAL_LEDS)
+			if(((comets[i].forward) && (comets[i].position >= NUM_LOGICAL_LEDS)) || ((!comets[i].forward) && (comets[i].position <= 0)))
 			{
 				comets[i].active = false;
 			}
@@ -331,10 +336,17 @@ void WS2812_MultiCometEffect(void)
 				// Draw comet
 				for(int j = 0; j < comets[i].size; j++)
 				{
-					WS2812_SetLED(j + comets[i].position, comets[i].color.red, comets[i].color.green, comets[i].color.blue, false);
+					WS2812_SetLED(j + comets[i].position, comets[i].color.red, comets[i].color.green, comets[i].color.blue, true);
 				}
 
-				comets[i].position++;
+				// Advanced comet position after specified number of frames have elapsed
+				if(comets[i].ticksElapsed % comets[i].speed == 0)
+				{
+					comets[i].position += (comets[i].forward) ? 1 : -1;
+				}
+
+				// Increment number of frames this comet has lived and wrap around by speed
+				comets[i].ticksElapsed = (comets[i].ticksElapsed >= comets[i].speed) ? 0 : comets[i].ticksElapsed + 1;
 			}
 		}
 	}
