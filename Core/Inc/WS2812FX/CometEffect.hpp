@@ -30,13 +30,10 @@ class CometEffect : public WS2812Effect
 			this->setParameter(NumericEffectParameter<uint8_t>(speed, "Comet Speed", 1, 100, 1), 2);
 
 			// Parameter 3: Interval between comet triggers
-			this->setParameter(NumericEffectParameter<uint8_t>(interval, "Comet Interval", 1, 100, 5), 3);
+			this->setParameter(NumericEffectParameter<uint8_t>(interval, "Comet Interval", 0, 100, 5), 3);
 
-			// Parameter 4: Comet trigger
-			this->setParameter(BooleanEffectParameter(false, "Trigger comet"), 4);
-
-			// Parameter 5: Comet direction
-			this->setParameter(BooleanEffectParameter(true, "Comet direction"), 5);
+			// Parameter 4: Comet direction
+			this->setParameter(BooleanEffectParameter(true, "Comet direction"), 4);
 
 			this->initModMatrixDefaults();
 
@@ -59,15 +56,15 @@ class CometEffect : public WS2812Effect
 			this->modMatrix[2].modAmount->setValue(100);
 
 			this->modMatrix[3].modSource = NULL;
-			this->modMatrix[3].modDestination = this->getParameter(4);
+			this->modMatrix[3].modDestination = this->getParameter(5);
 			this->modMatrix[3].modAmount->setValue(100);
-
-			this->modMatrix[4].modSource = NULL;
-			this->modMatrix[4].modDestination = this->getParameter(5);
-			this->modMatrix[4].modAmount->setValue(100);
 		}
 
 		void updateEffect() override;
+		void trig0Callback(void) override;
+		void trig1Callback(void) override;
+		void trig2Callback(void) override;
+		void trig3Callback(void) override;
 };
 
 #endif /* INC_WS2812FX_COMETEFFECT_HPP_ */

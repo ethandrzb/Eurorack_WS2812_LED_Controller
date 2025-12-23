@@ -72,14 +72,18 @@ void Error_Handler(void);
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
 #define B1_EXTI_IRQn EXTI15_10_IRQn
-#define CV_IN5_Pin GPIO_PIN_0
-#define CV_IN5_GPIO_Port GPIOC
-#define CV_IN4_Pin GPIO_PIN_1
-#define CV_IN4_GPIO_Port GPIOC
-#define CV_IN7_Pin GPIO_PIN_2
-#define CV_IN7_GPIO_Port GPIOC
-#define CV_IN6_Pin GPIO_PIN_3
-#define CV_IN6_GPIO_Port GPIOC
+#define GATE_IN1_Pin GPIO_PIN_0
+#define GATE_IN1_GPIO_Port GPIOC
+#define GATE_IN1_EXTI_IRQn EXTI0_IRQn
+#define GATE_IN0_Pin GPIO_PIN_1
+#define GATE_IN0_GPIO_Port GPIOC
+#define GATE_IN0_EXTI_IRQn EXTI1_IRQn
+#define GATE_IN3_Pin GPIO_PIN_2
+#define GATE_IN3_GPIO_Port GPIOC
+#define GATE_IN3_EXTI_IRQn EXTI2_IRQn
+#define GATE_IN2_Pin GPIO_PIN_3
+#define GATE_IN2_GPIO_Port GPIOC
+#define GATE_IN2_EXTI_IRQn EXTI3_IRQn
 #define CV_IN0_Pin GPIO_PIN_0
 #define CV_IN0_GPIO_Port GPIOA
 #define CV_IN1_Pin GPIO_PIN_1
@@ -118,7 +122,8 @@ void Error_Handler(void);
 #define SETTINGS_BTN_EXTI_IRQn EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
-#define NUM_CV_INPUTS 8
+#define NUM_CV_INPUTS 4
+#define NUM_GATE_INPUTS 4
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

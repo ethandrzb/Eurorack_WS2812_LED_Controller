@@ -458,6 +458,27 @@ class WS2812Effect
 			return colorParameters;
 		}
 
+		// Callback stubs for trigger inputs
+		virtual void trig0Callback(void)
+		{
+			return;
+		}
+
+		virtual void trig1Callback(void)
+		{
+			return;
+		}
+
+		virtual void trig2Callback(void)
+		{
+			return;
+		}
+
+		virtual void trig3Callback(void)
+		{
+			return;
+		}
+
 		virtual void updateEffect() = 0;
 		virtual void initModMatrixDefaults() = 0;
 

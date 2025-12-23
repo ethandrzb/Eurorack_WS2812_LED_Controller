@@ -13,15 +13,14 @@ void CometEffect::updateEffect()
 	colorHSV cometColor = *(static_cast<colorHSV *>(this->getParameter(1)->getValue()));
 	uint8_t speed = *(static_cast<uint8_t *>(this->getParameter(2)->getValue()));
 	uint8_t interval = *(static_cast<uint8_t *>(this->getParameter(3)->getValue()));
-	bool triggerComet = *(static_cast<bool *>(this->getParameter(4)->getValue()));
-	bool direction = *(static_cast<bool *>(this->getParameter(5)->getValue()));
+	bool direction = *(static_cast<bool *>(this->getParameter(4)->getValue()));
 
 	static uint8_t iterations = 0;
 
 	// Use static frame period
 	TIM7->ARR = 50;
 
-	if(iterations > interval)
+	if((interval > 0) && (iterations > interval))
 	{
 		iterations = 0;
 
@@ -30,16 +29,35 @@ void CometEffect::updateEffect()
 		WS2812_AddComet(color, cometSize, speed, direction);
 	}
 
-	if(triggerComet)
-	{
-		colorRGB color = {.red = 128, .green = 128, .blue = 128};
-
-		WS2812_AddComet(color, cometSize, speed, direction);
-
-		(static_cast<BooleanEffectParameter *>(this->getParameter(4)))->setValue(false);
-	}
-
 	WS2812_MultiCometEffect();
 	WS2812_SendAll();
 	iterations++;
+}
+
+void CometEffect::trig0Callback(void)
+{
+	colorRGB color = {.red = 128, .green = 128, .blue = 128};
+
+	WS2812_AddComet(color, 5, 4, true);
+}
+
+void CometEffect::trig1Callback(void)
+{
+	colorRGB color = {.red = 168, .green = 0, .blue = 0};
+
+	WS2812_AddComet(color, 1, 1, false);
+}
+
+void CometEffect::trig2Callback(void)
+{
+	colorRGB color = {.red = 0, .green = 128, .blue = 0};
+
+	WS2812_AddComet(color, 3, 3, true);
+}
+
+void CometEffect::trig3Callback(void)
+{
+	colorRGB color = {.red = 0, .green = 0, .blue = 128};
+
+	WS2812_AddComet(color, 2, 2, false);
 }

@@ -18,7 +18,7 @@ extern uint8_t menu_layer;
 extern ADC_HandleTypeDef hadc1;
 extern uint16_t rawADCData[NUM_CV_INPUTS];
 
-std::vector<std::string> modMatrixSources = {"A", "B", "C", "D", "E", "F", "G", "H"};
+std::vector<std::string> modMatrixSources = {"A", "B", "C", "D"};
 
 extern TIM_HandleTypeDef htim7;
 
@@ -435,6 +435,26 @@ extern "C"
 	void mainWhileC(void)
 	{
 		mainWhileCpp();
+	}
+
+	void gateInput0HighCallbackC(void)
+	{
+		fx[effectIndex]->trig0Callback();
+	}
+
+	void gateInput1HighCallbackC(void)
+	{
+		fx[effectIndex]->trig1Callback();
+	}
+
+	void gateInput2HighCallbackC(void)
+	{
+		fx[effectIndex]->trig2Callback();
+	}
+
+	void gateInput3HighCallbackC(void)
+	{
+		fx[effectIndex]->trig3Callback();
 	}
 
 	void updateMenuC(void)

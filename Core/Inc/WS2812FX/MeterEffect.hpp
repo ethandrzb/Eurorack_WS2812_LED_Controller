@@ -16,10 +16,9 @@ using namespace WS2812FX;
 class MeterEffect : public WS2812Effect
 {
 public:
-	const uint8_t NUM_METERS = 4;
+	const uint8_t NUM_METERS = 2;
 	const uint8_t NUM_METER_PARAMETERS = 4;
 	//TODO: Increase size of fill parameters to avoid overflow with larger LED strips
-	//TODO: Remove second meter from effect when effects can be designed/stacked instead of hardcoded
 	MeterEffect(uint16_t fill, colorHSV hsv, uint8_t flip, uint8_t mirror)
 	{
 		snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Meter");
@@ -52,15 +51,15 @@ public:
 	{
 		for(uint8_t i = 0; i < NUM_METERS; i++)
 		{
-			// Map meter fill amounts to CV inputs A-D
+			// Map meter fill amounts to CV inputs A and B
 			this->modMatrix[i].modSource = NULL;
 			this->modMatrix[i].modDestination = this->getParameter(4 * i);
 			this->modMatrix[i].modAmount->setValue(100);
 
-			// Map meter hues to CV inputs E-H
-			this->modMatrix[i + 4].modSource = NULL;
-			this->modMatrix[i + 4].modDestination = static_cast<ColorHSVEffectParameter *>(this->getParameter((NUM_METER_PARAMETERS * i + 1)))->_hue.get();
-			this->modMatrix[i + 4].modAmount->setValue(0);
+			// Map meter hues to CV inputs C and D
+			this->modMatrix[i + 2].modSource = NULL;
+			this->modMatrix[i + 2].modDestination = static_cast<ColorHSVEffectParameter *>(this->getParameter((NUM_METER_PARAMETERS * i + 1)))->_hue.get();
+			this->modMatrix[i + 2].modAmount->setValue(0);
 		}
 	}
 
