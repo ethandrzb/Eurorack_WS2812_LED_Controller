@@ -52,15 +52,20 @@ class EffectParameterBase
 template <typename T> class EffectParameter : public EffectParameterBase
 {
 	public:
-		T value;
+		T *value;
 		std::function<T(T)> modulationMapper;
 
-		EffectParameter(T value, std::string name) : EffectParameterBase(name), value(value) {}
+		EffectParameter(T value, std::string name) : EffectParameterBase(name)
+		{
+			this->value = (T*) calloc(1, sizeof(T));
+			*(this->value) = value;
+		}
+
 		virtual ~EffectParameter() {}
 
 		void setValue(T newValue)
 		{
-			this->value = newValue;
+			*(this->value) = newValue;
 		}
 
 		void setModulationSource(uint16_t *newModulationSource)
@@ -70,13 +75,13 @@ template <typename T> class EffectParameter : public EffectParameterBase
 
 		void *getValue() override
 		{
-			return static_cast<void *>(&(this->value));
+			return static_cast<void *>(this->value);
 		}
 
 		// Not adding modulation to value here because not every type supports the '+'
 		void *getValueRaw() override
 		{
-			return static_cast<void *>(&(this->value));
+			return static_cast<void *>(this->value);
 		}
 
 		char *getValueString() override
@@ -94,7 +99,7 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 		//TODO: Add support for custom mapping functions
 		NumericEffectParameter(T value, std::string name, T minValue, T maxValue, T tickAmount) : EffectParameter<T>(value, name), minValue(minValue), maxValue(maxValue), tickAmount(tickAmount)
 		{
-			this->modulatedValue = this->value;
+			this->modulatedValue = *(this->value);
 
 			// Create linear mapping function from raw ADC values to min and max values for this parameter
 			this->modulationMapper = [=](T raw) {
@@ -116,12 +121,12 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 
 		void incrementValue() override
 		{
-			this->value = (this->value < this->maxValue) ? this->value + this->tickAmount : this->maxValue;
+			*(this->value) = (*(this->value) < this->maxValue) ? *(this->value) + this->tickAmount : this->maxValue;
 		}
 
 		void decrementValue() override
 		{
-			this->value = (this->value > this->minValue) ? this->value - this->tickAmount : this->minValue;
+			*(this->value) = (*(this->value) > this->minValue) ? *(this->value) - this->tickAmount : this->minValue;
 		}
 
 		void *getValue() override
@@ -135,7 +140,7 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 
 			// This might cause an overflow!
 			// Make sure to use a sufficiently large data type
-			this->modulatedValue = this->value + this->modulationMapper((T)(*(this->modulationSource))) * (this->modulationScale);
+			this->modulatedValue = *(this->value) + this->modulationMapper((T)(*(this->modulationSource))) * (this->modulationScale);
 
 			// Clip range of modulated value
 			if(this->modulatedValue > this->maxValue)
@@ -200,12 +205,12 @@ class BooleanEffectParameter : public EffectParameter<bool>
 
 		void incrementValue() override
 		{
-			this->value = true;
+			*(this->value) = true;
 		}
 
 		void decrementValue() override
 		{
-			this->value = false;
+			*(this->value) = false;
 		}
 
 		void *getValue() override
@@ -216,7 +221,7 @@ class BooleanEffectParameter : public EffectParameter<bool>
 //				return static_cast<void *>(&this->value);
 //			}
 
-			this->modulatedValue = this->value || (*(this->modulationSource) > 127);
+			this->modulatedValue = *(this->value) || (*(this->modulationSource) > 127);
 
 			return static_cast<void *>(&this->modulatedValue);
 		}
@@ -309,21 +314,21 @@ class ColorHSVEffectParameter : public EffectParameter<colorHSV>
 		// Reconstruct colorHSV struct from values in NumericEffectParameters
 		void *getValue() override
 		{
-			this->value.hue = *(static_cast<uint16_t *>(_hue->getValue()));
-			this->value.saturation = *(static_cast<float *>(_saturation->getValue()));
-			this->value.value = *(static_cast<float *>(_value->getValue()));
+			this->value->hue = *(static_cast<uint16_t *>(_hue->getValue()));
+			this->value->saturation = *(static_cast<float *>(_saturation->getValue()));
+			this->value->value = *(static_cast<float *>(_value->getValue()));
 
-			return static_cast<void *>(&(value));
+			return static_cast<void *>(this->value);
 		}
 
 		// Reconstruct colorHSV struct from values in NumericEffectParameters
 		void *getValueRaw() override
 		{
-			this->value.hue = *(static_cast<uint16_t *>(_hue->getValueRaw()));
-			this->value.saturation = *(static_cast<float *>(_saturation->getValueRaw()));
-			this->value.value = *(static_cast<float *>(_value->getValueRaw()));
+			this->value->hue = *(static_cast<uint16_t *>(_hue->getValueRaw()));
+			this->value->saturation = *(static_cast<float *>(_saturation->getValueRaw()));
+			this->value->value = *(static_cast<float *>(_value->getValueRaw()));
 
-			return static_cast<void *>(&(value));
+			return static_cast<void *>(this->value);
 		}
 
 		// Shouldn't I need an override here?
