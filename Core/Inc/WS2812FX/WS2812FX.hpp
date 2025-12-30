@@ -243,7 +243,7 @@ class BooleanEffectParameter : public EffectParameter<bool>
 
 		char *getValueString() override
 		{
-			snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "[%s]", (value) ? "x" : " ");
+			snprintf(this->valueString, WS2812FX_PARAMETER_VALUE_STRING_LEN, "[%s]", (*value) ? "x" : " ");
 
 			return this->valueString;
 		}
