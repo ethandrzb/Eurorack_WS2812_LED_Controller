@@ -59,6 +59,37 @@ void WS2812_SetLEDAdditive(uint16_t index, uint8_t red, uint8_t green, uint8_t b
 	WS2812_SetLED(index, red, green, blue, true);
 }
 
+// Sets one or more LEDs at the specified to the specified color to create the illusion of non-discrete position
+void WS2812_SetLEDFloat(float index, uint8_t red, uint8_t green, uint8_t blue, bool additive)
+{
+	//TODO: Create blur factor to smear colors
+
+	// Round index to nearest integers
+	uint16_t leftIndex = floor(index);
+	uint16_t rightIndex = ceil(index);
+
+	// Find closeness to each side (1 == coincident, 0 == entirely on other side)
+	float leftFactor = 1.0f - fabs(index - leftIndex);
+	float rightFactor = 1.0f - fabs(index - rightIndex);
+
+	// Scale input color based on alignment with each side
+	uint8_t leftRed = (uint8_t)(red * leftFactor);
+	uint8_t leftGreen = (uint8_t)(green * leftFactor);
+	uint8_t leftBlue = (uint8_t)(blue * leftFactor);
+
+	uint8_t rightRed = (uint8_t)(red * rightFactor);
+	uint8_t rightGreen = (uint8_t)(green * rightFactor);
+	uint8_t rightBlue = (uint8_t)(blue * rightFactor);
+
+	WS2812_SetLED(leftIndex, leftRed, leftGreen, leftBlue, additive);
+
+	// Skip second set operation if index is perfectly aligned with one LED
+	if(rightIndex != leftIndex)
+	{
+		WS2812_SetLED(rightIndex, rightRed, rightGreen, rightBlue, additive);
+	}
+}
+
 // Sets the color of all LEDs to the specified RGB color
 void WS2812_SetAllLEDs(uint32_t red, uint32_t green, uint32_t blue)
 {

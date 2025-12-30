@@ -61,7 +61,6 @@ extern uint16_t FRACTAL_FACTOR;
 #define MIN(x,y) ((x) < (y)) ? (x) : (y)
 #endif
 
-
 typedef struct colorRGB
 {
 	uint8_t red;
@@ -90,6 +89,7 @@ typedef struct comet
 // Base LED functions
 void WS2812_SetLED(uint16_t index, uint8_t red, uint8_t green, uint8_t blue, bool additive);
 void WS2812_SetLEDAdditive(uint16_t index, uint8_t red, uint8_t green, uint8_t blue);
+void WS2812_SetLEDFloat(float index, uint8_t red, uint8_t green, uint8_t blue, bool additive);
 void WS2812_SetAllLEDs(uint32_t red, uint32_t green, uint32_t blue);
 void WS2812_ClearLEDs(void);
 void WS2812_FadeAll(uint8_t denominator);
