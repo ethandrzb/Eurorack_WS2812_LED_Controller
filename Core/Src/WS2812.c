@@ -563,6 +563,10 @@ colorRGB WS2812_HSVToRGB(uint16_t hue, float saturation, float value)
 		hue -= 360;
 	}
 
+	// Clip max saturation and value
+	saturation = MIN(MAX(saturation, 0.0f), 1.0f);
+	value = MIN(MAX(value, 0.0f), 1.0f);
+
 	float chroma = value * saturation;
 	float x = chroma * (1.0f - fabs(fmod(((double)hue / 60.0f), 2.0) - 1.0f));
 	float m = value - chroma;

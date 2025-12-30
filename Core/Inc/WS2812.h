@@ -54,8 +54,13 @@ extern uint16_t FRACTAL_FACTOR;
 //#define ENABLE_PERFORMANCE_MONITOR
 
 #ifndef MAX
-#define MAX(x,y) (x > y) ? x : y
+#define MAX(x,y) ((x) > (y)) ? (x) : (y)
 #endif
+
+#ifndef MIN
+#define MIN(x,y) ((x) < (y)) ? (x) : (y)
+#endif
+
 
 typedef struct colorRGB
 {
