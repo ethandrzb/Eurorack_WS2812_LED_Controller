@@ -32,7 +32,7 @@ public:
 			//     i + 1       | Meter i color
 			//     i + 2       | Flip meter i
 			//     i + 3       | Mirror meter i
-			this->setParameter(NumericEffectParameter<uint16_t>(fill, "Fill " + std::to_string(i), 0, NUM_PHYSICAL_LEDS, 1), (NUM_METER_PARAMETERS * i));
+			this->setParameter(NumericEffectParameter<uint16_t>(fill, "Fill % " + std::to_string(i), 0, 100, 1), (NUM_METER_PARAMETERS * i));
 			this->setParameter(ColorHSVEffectParameter(hsv, "Color " + std::to_string(i)), (NUM_METER_PARAMETERS * i + 1));
 			this->setParameter(BooleanEffectParameter(flip, "Flip " + std::to_string(i)), (NUM_METER_PARAMETERS * i + 2));
 			this->setParameter(BooleanEffectParameter(mirror, "Mirror " + std::to_string(i)), (NUM_METER_PARAMETERS * i + 3));

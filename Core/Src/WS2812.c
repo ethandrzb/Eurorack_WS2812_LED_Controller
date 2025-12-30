@@ -420,11 +420,22 @@ void WS2812_CometEffect(void)
 // color: Color of filled LEDs
 // level: Number of LEDs to fill
 // flip: Changes fill direction
-// continuous: If true, far ends of meter are rendered
-void WS2812_SimpleMeterEffect(colorRGB color, float level, bool flip, bool continuous)
+// percentageMode: If true, interpret level argument as fraction of strip to fill. Else, interpret as fractional number of LEDs to fill.
+void WS2812_SimpleMeterEffect(colorRGB color, float level, bool flip, bool percentageMode)
 {
-	// Clip level
-	level = (level <= NUM_LOGICAL_LEDS) ? level : NUM_LOGICAL_LEDS;
+	if(percentageMode)
+	{
+		// Clip to 100%
+		level = (level <= 1.0f) ? level : 1.0f;
+
+		// Interpret level as percentage of full strip
+		level *= NUM_LOGICAL_LEDS;
+	}
+	else
+	{
+		// Clip level
+		level = (level <= NUM_LOGICAL_LEDS) ? level : NUM_LOGICAL_LEDS;
+	}
 
 	// Fill low index to high index
 	if(flip)
