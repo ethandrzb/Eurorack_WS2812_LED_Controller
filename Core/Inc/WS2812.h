@@ -90,6 +90,7 @@ typedef struct comet
 void WS2812_SetLED(uint16_t index, uint8_t red, uint8_t green, uint8_t blue, bool additive);
 void WS2812_SetLEDAdditive(uint16_t index, uint8_t red, uint8_t green, uint8_t blue);
 void WS2812_SetLEDFloat(float index, uint8_t red, uint8_t green, uint8_t blue, bool additive);
+void WS2812_SetLEDFloatAdditive(float index, uint8_t red, uint8_t green, uint8_t blue);
 void WS2812_SetAllLEDs(uint32_t red, uint32_t green, uint32_t blue);
 void WS2812_ClearLEDs(void);
 void WS2812_FadeAll(uint8_t denominator);
@@ -108,7 +109,7 @@ void WS2812_InitMultiCometEffect();
 void WS2812_AddComet(colorRGB color, uint8_t size, uint8_t speed, bool forward);
 void WS2812_MultiCometEffect(void);
 void WS2812_CometEffect(void);
-void WS2812_SimpleMeterEffect(colorRGB color, uint16_t level, bool flip);
+void WS2812_SimpleMeterEffect(colorRGB color, float level, bool flip, bool continuous);
 void WS2812_MirroredMeterEffect(colorRGB color, uint16_t level, bool centered);
 void WS2812_FillRainbow(colorHSV startingColor, int16_t deltaHue);
 

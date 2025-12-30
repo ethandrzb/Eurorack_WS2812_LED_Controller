@@ -53,7 +53,7 @@ void WS2812_SetLED(uint16_t index, uint8_t red, uint8_t green, uint8_t blue, boo
 	}
 }
 
-// Adds the RGB color values to the LED at index in the LEDData buffer
+// Alias for SetLED with additive set to true
 void WS2812_SetLEDAdditive(uint16_t index, uint8_t red, uint8_t green, uint8_t blue)
 {
 	WS2812_SetLED(index, red, green, blue, true);
@@ -88,6 +88,12 @@ void WS2812_SetLEDFloat(float index, uint8_t red, uint8_t green, uint8_t blue, b
 	{
 		WS2812_SetLED(rightIndex, rightRed, rightGreen, rightBlue, additive);
 	}
+}
+
+// Alias for SetLEDFloat with additive set to true
+void WS2812_SetLEDFloatAdditive(float index, uint8_t red, uint8_t green, uint8_t blue)
+{
+	WS2812_SetLEDFloat(index, red, green, blue, true);
 }
 
 // Sets the color of all LEDs to the specified RGB color
@@ -414,7 +420,8 @@ void WS2812_CometEffect(void)
 // color: Color of filled LEDs
 // level: Number of LEDs to fill
 // flip: Changes fill direction
-void WS2812_SimpleMeterEffect(colorRGB color, uint16_t level, bool flip)
+// continuous: If true, far ends of meter are rendered
+void WS2812_SimpleMeterEffect(colorRGB color, float level, bool flip, bool continuous)
 {
 	// Clip level
 	level = (level <= NUM_LOGICAL_LEDS) ? level : NUM_LOGICAL_LEDS;
