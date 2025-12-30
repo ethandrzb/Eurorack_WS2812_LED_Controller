@@ -477,13 +477,25 @@ void WS2812_SimpleMeterEffect(colorRGB color, float level, bool flip, bool perce
 // level: Number of LEDs to fill
 // centered: If true, the meters are drawn from the middle LED in the strip towards the ends.
 	// Otherwise, the meters are drawn from each end towards the center of the strip
-void WS2812_MirroredMeterEffect(colorRGB color, uint16_t level, bool centered)
+// percentageMode: If true, interpret level argument as fraction of strip to fill. Else, interpret as fractional number of LEDs to fill.
+void WS2812_MirroredMeterEffect(colorRGB color, float level, bool centered, bool percentageMode)
 {
-	// Half input level to account for the fact that two LEDs are filled for every increase in level
-	level >>= 1;
+	if(percentageMode)
+	{
+		// Clip to 100%
+		level = (level <= 1.0f) ? level : 1.0f;
 
-	// Clip level
-	level = (level <= NUM_LOGICAL_LEDS >> 1) ? level : NUM_LOGICAL_LEDS >> 1;
+		// Interpret level as percentage of half the strip
+		level *= (NUM_LOGICAL_LEDS >> 1);
+	}
+	else
+	{
+		// Half input level to account for the fact that two LEDs are filled for every increase in level
+		level /= 2.0f;
+
+		// Clip level
+		level = (level <= NUM_LOGICAL_LEDS >> 1) ? level : NUM_LOGICAL_LEDS >> 1;
+	}
 
 	if(centered)
 	{
