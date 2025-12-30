@@ -55,17 +55,32 @@ template <typename T> class EffectParameter : public EffectParameterBase
 		T *value;
 		std::function<T(T)> modulationMapper;
 
+		// Construct from value of type T
 		EffectParameter(T value, std::string name) : EffectParameterBase(name)
 		{
+			// Allocate memory for internal object
 			this->value = (T*) calloc(1, sizeof(T));
 			*(this->value) = value;
 		}
+
+		// Construct from pointer to type T
+		// Not used yet
+//		EffectParameter(T *value, std::string name) : EffectParameterBase(name), value(value) {}
 
 		virtual ~EffectParameter() {}
 
 		void setValue(T newValue)
 		{
 			*(this->value) = newValue;
+		}
+
+		// Changes the pointer to the internal variable and copies the old value to the new pointer
+		void setValuePointer(T *newValuePointer)
+		{
+			T tmp = *(this->value);
+
+			this->value = newValuePointer;
+			*(this->value) = tmp;
 		}
 
 		void setModulationSource(uint16_t *newModulationSource)

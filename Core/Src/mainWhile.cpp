@@ -30,7 +30,6 @@ RainbowEffect rainbowEffect = RainbowEffect(3, 1, 4, hsv, false);
 CometEffect cometEffect = CometEffect(2, hsv, 50, 1);
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 std::vector<std::shared_ptr<NumericEffectParameter<uint16_t>>> WS2812SettingParameters;
-std::vector<uint16_t *> WS2812SettingValues;
 
 bool updateMenu = false;
 
@@ -47,9 +46,10 @@ void mainWhileCpp(void)
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Downsampling", 1, 25, 1));
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Fractal", 1, 50, 1));
 
-	WS2812SettingValues.push_back(&NUM_PHYSICAL_LEDS);
-	WS2812SettingValues.push_back(&DOWNSAMPLING_FACTOR);
-	WS2812SettingValues.push_back(&FRACTAL_FACTOR);
+	// Change setting parameter pointers to target variables
+	WS2812SettingParameters[0]->setValuePointer(&NUM_PHYSICAL_LEDS);
+	WS2812SettingParameters[1]->setValuePointer(&DOWNSAMPLING_FACTOR);
+	WS2812SettingParameters[2]->setValuePointer(&FRACTAL_FACTOR);
 
 	// Assigns modulations defined in effect defaults
 	refreshModMatrix();
@@ -308,7 +308,6 @@ void incrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 			break;
 		case SETTINGS_VALUE_SELECTED:
 			WS2812SettingParameters[parameterIndex]->incrementValue();
-			*(WS2812SettingValues[parameterIndex]) = *(static_cast<uint16_t *>(WS2812SettingParameters[parameterIndex]->getValue()));
 			break;
 	}
 }
@@ -329,7 +328,6 @@ void decrementValueCpp(uint8_t effectIndex, uint8_t parameterIndex, uint8_t para
 			break;
 		case SETTINGS_VALUE_SELECTED:
 			WS2812SettingParameters[parameterIndex]->decrementValue();
-			*(WS2812SettingValues[parameterIndex]) = *(static_cast<uint16_t *>(WS2812SettingParameters[parameterIndex]->getValue()));
 			break;
 	}
 }
