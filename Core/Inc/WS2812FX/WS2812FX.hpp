@@ -27,7 +27,7 @@
 
 // MUST be consistent with ADC data type width used for CV inputs
 #define RAW_MODULATION_MIN 0
-#define RAW_MODULATION_MAX UINT8_MAX
+#define RAW_MODULATION_MAX 1023
 
 namespace WS2812FX
 {
