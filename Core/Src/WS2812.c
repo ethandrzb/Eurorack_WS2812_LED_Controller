@@ -425,6 +425,7 @@ void WS2812_CometEffect(void)
 // level: Number of LEDs to fill
 // flip: Changes fill direction
 // percentageMode: If true, interpret level argument as fraction of strip to fill. Else, interpret as fractional number of LEDs to fill.
+// discrete: If true, meter length is truncated to nearest integer index
 void WS2812_SimpleMeterEffect(colorRGB color, float level, bool flip, bool percentageMode, bool discrete)
 {
 	if(percentageMode)
@@ -498,7 +499,8 @@ void WS2812_SimpleMeterEffect(colorRGB color, float level, bool flip, bool perce
 // centered: If true, the meters are drawn from the middle LED in the strip towards the ends.
 	// Otherwise, the meters are drawn from each end towards the center of the strip
 // percentageMode: If true, interpret level argument as fraction of strip to fill. Else, interpret as fractional number of LEDs to fill.
-void WS2812_MirroredMeterEffect(colorRGB color, float level, bool centered, bool percentageMode)
+// discrete: If true, meter length is truncated to nearest integer index
+void WS2812_MirroredMeterEffect(colorRGB color, float level, bool centered, bool percentageMode, bool discrete)
 {
 	if(percentageMode)
 	{
@@ -517,51 +519,70 @@ void WS2812_MirroredMeterEffect(colorRGB color, float level, bool centered, bool
 		level = (level <= NUM_LOGICAL_LEDS >> 1) ? level : NUM_LOGICAL_LEDS >> 1;
 	}
 
-	if(centered)
+	if(discrete)
 	{
-		for(int i = 0; i < NUM_LOGICAL_LEDS; i++)
+		if(centered)
 		{
-			// Split strip into 3 zones and fill accordingly
-			// Zone 1: Unfilled [0, (NUM_LEDS >> 1) - level)
-			if(i < (NUM_LOGICAL_LEDS >> 1) - level)
+			for(int i = 0; i < NUM_LOGICAL_LEDS; i++)
 			{
-				WS2812_SetLEDAdditive(i, 0, 0, 0);
+				// Split strip into 3 zones and fill accordingly
+				// Zone 1: Unfilled [0, (NUM_LEDS >> 1) - level)
+				if(i < (NUM_LOGICAL_LEDS >> 1) - level)
+				{
+					WS2812_SetLEDAdditive(i, 0, 0, 0);
+				}
+				// Zone 2: Filled [(NUM_LEDS >> 1) - level, (NUM_LEDS >> 1) + level]
+				else if(i < (NUM_LOGICAL_LEDS >> 1) + level)
+				{
+					WS2812_SetLEDAdditive(i, color.red, color.green, color.blue);
+				}
+				// Zone 3: Unfilled ((NUM_LEDS >> 1) + level, NUM_LEDS)
+				else
+				{
+					WS2812_SetLEDAdditive(i, 0, 0, 0);
+				}
 			}
-			// Zone 2: Filled [(NUM_LEDS >> 1) - level, (NUM_LEDS >> 1) + level]
-			else if(i < (NUM_LOGICAL_LEDS >> 1) + level)
+		}
+		else
+		{
+			// Reverse fill amount to preserve higher level ==> more LEDs filled
+			level = (NUM_LOGICAL_LEDS >> 1) - level;
+
+			for(int i = 0; i < NUM_LOGICAL_LEDS; i++)
 			{
-				WS2812_SetLEDAdditive(i, color.red, color.green, color.blue);
-			}
-			// Zone 3: Unfilled ((NUM_LEDS >> 1) + level, NUM_LEDS)
-			else
-			{
-				WS2812_SetLEDAdditive(i, 0, 0, 0);
+				// Split strip into 3 zones and fill accordingly
+				// Zone 1: Filled [0, (NUM_LEDS >> 1) - level)
+				if(i < (NUM_LOGICAL_LEDS >> 1) - level)
+				{
+					WS2812_SetLEDAdditive(i, color.red, color.green, color.blue);
+				}
+				// Zone 2: Unfilled [(NUM_LEDS >> 1) - level, (NUM_LEDS >> 1) + level]
+				else if(i < (NUM_LOGICAL_LEDS >> 1) + level)
+				{
+					WS2812_SetLEDAdditive(i, 0, 0, 0);
+				}
+				// Zone 3: Filled ((NUM_LEDS >> 1) + level, NUM_LEDS)
+				else
+				{
+					WS2812_SetLEDAdditive(i, color.red, color.green, color.blue);
+				}
 			}
 		}
 	}
 	else
 	{
-		// Reverse fill amount to preserve higher level ==> more LEDs filled
-		level = (NUM_LOGICAL_LEDS >> 1) - level;
-
-		for(int i = 0; i < NUM_LOGICAL_LEDS; i++)
+		if(centered)
 		{
-			// Split strip into 3 zones and fill accordingly
-			// Zone 1: Filled [0, (NUM_LEDS >> 1) - level)
-			if(i < (NUM_LOGICAL_LEDS >> 1) - level)
-			{
-				WS2812_SetLEDAdditive(i, color.red, color.green, color.blue);
-			}
-			// Zone 2: Unfilled [(NUM_LEDS >> 1) - level, (NUM_LEDS >> 1) + level]
-			else if(i < (NUM_LOGICAL_LEDS >> 1) + level)
-			{
-				WS2812_SetLEDAdditive(i, 0, 0, 0);
-			}
-			// Zone 3: Filled ((NUM_LEDS >> 1) + level, NUM_LEDS)
-			else
-			{
-				WS2812_SetLEDAdditive(i, color.red, color.green, color.blue);
-			}
+			WS2812_DrawLine((NUM_LOGICAL_LEDS >> 1) - level, level * 2.0f, color.red, color.green, color.blue, true);
+		}
+		else
+		{
+			// The meters advanced towards the center from the far ends of the strip
+			// This can be implemented as two SimpleMeterEffects with opposing flip arguments to make them start from opposite sides of the strip
+			// The "level" argument was already processed at the start of this function, so we pass it as-is to SimpleMeterEffect
+			// and set the arguments to always interpret the level as a value, regardless of percentageMode in this function
+			WS2812_SimpleMeterEffect(color, level, false, false, false);
+			WS2812_SimpleMeterEffect(color, level, true, false, false);
 		}
 	}
 }

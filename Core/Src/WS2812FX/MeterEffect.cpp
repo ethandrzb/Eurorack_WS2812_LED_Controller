@@ -37,7 +37,7 @@ void MeterEffect::updateEffect()
 	{
 		if(mirrors[i])
 		{
-			WS2812_MirroredMeterEffect(rgbColors[i], meterFillAmounts[i] / 100.0f, flips[i], true);
+			WS2812_MirroredMeterEffect(rgbColors[i], meterFillAmounts[i] / 100.0f, flips[i], true, false);
 		}
 		else
 		{
