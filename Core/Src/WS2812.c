@@ -60,40 +60,44 @@ void WS2812_SetLEDAdditive(uint16_t index, uint8_t red, uint8_t green, uint8_t b
 }
 
 // Sets one or more LEDs at the specified to the specified color to create the illusion of non-discrete position
-void WS2812_SetLEDFloat(float index, uint8_t red, uint8_t green, uint8_t blue, bool additive)
+void WS2812_DrawLine(float position, float length, uint8_t red, uint8_t green, uint8_t blue, bool additive)
 {
-	//TODO: Create blur factor to smear colors
+	uint16_t index;
+	float remaining;
 
-	// Round index to nearest integers
-	uint16_t leftIndex = floor(index);
-	uint16_t rightIndex = ceil(index);
+	// Determine fraction of first LED to draw
+	float firstLEDFraction = 1.0f - (position - ((uint16_t) position));
 
-	// Find closeness to each side (1 == coincident, 0 == entirely on other side)
-	float leftFactor = 1.0f - fabs(index - leftIndex);
-	float rightFactor = 1.0f - fabs(index - rightIndex);
+	// Use length as fraction if length is very small (less than one LED)
+	firstLEDFraction = MIN(firstLEDFraction, length);
 
-	// Scale input color based on alignment with each side
-	uint8_t leftRed = (uint8_t)(red * leftFactor);
-	uint8_t leftGreen = (uint8_t)(green * leftFactor);
-	uint8_t leftBlue = (uint8_t)(blue * leftFactor);
+	// Clip length to prevent out-of-bounds indexing
+	remaining = MIN(length, NUM_LOGICAL_LEDS - position);
 
-	uint8_t rightRed = (uint8_t)(red * rightFactor);
-	uint8_t rightGreen = (uint8_t)(green * rightFactor);
-	uint8_t rightBlue = (uint8_t)(blue * rightFactor);
+	// Cast position to integer index
+	index = position;
 
-	WS2812_SetLED(leftIndex, leftRed, leftGreen, leftBlue, additive);
-
-	// Skip second set operation if index is perfectly aligned with one LED
-	if(rightIndex != leftIndex)
+	// Draw first LED
+	if(remaining > 0.0f)
 	{
-		WS2812_SetLED(rightIndex, rightRed, rightGreen, rightBlue, additive);
+		WS2812_SetLEDAdditive(index, red * firstLEDFraction, green * firstLEDFraction, blue * firstLEDFraction);
+		index++;
+		remaining -= firstLEDFraction;
 	}
-}
 
-// Alias for SetLEDFloat with additive set to true
-void WS2812_SetLEDFloatAdditive(float index, uint8_t red, uint8_t green, uint8_t blue)
-{
-	WS2812_SetLEDFloat(index, red, green, blue, true);
+	// Draw middle LEDs
+	while(remaining > 1.0f)
+	{
+		WS2812_SetLEDAdditive(index, red, green, blue);
+		index++;
+		remaining--;
+	}
+
+	// Draw last LED
+	if(remaining > 0.0f)
+	{
+		WS2812_SetLEDAdditive(index, red * remaining, green * remaining, blue * remaining);
+	}
 }
 
 // Sets the color of all LEDs to the specified RGB color
@@ -421,7 +425,7 @@ void WS2812_CometEffect(void)
 // level: Number of LEDs to fill
 // flip: Changes fill direction
 // percentageMode: If true, interpret level argument as fraction of strip to fill. Else, interpret as fractional number of LEDs to fill.
-void WS2812_SimpleMeterEffect(colorRGB color, float level, bool flip, bool percentageMode)
+void WS2812_SimpleMeterEffect(colorRGB color, float level, bool flip, bool percentageMode, bool discrete)
 {
 	if(percentageMode)
 	{
@@ -437,37 +441,53 @@ void WS2812_SimpleMeterEffect(colorRGB color, float level, bool flip, bool perce
 		level = (level <= NUM_LOGICAL_LEDS) ? level : NUM_LOGICAL_LEDS;
 	}
 
-	// Fill low index to high index
-	if(flip)
+	// Only render discrete LEDS
+	if(discrete)
 	{
-		// Filled portion
-		for(int i = 0; i < level; i++)
+		// Fill low index to high index
+		if(!flip)
 		{
-			WS2812_SetLEDAdditive(i, color.red, color.green, color.blue);
-		}
+			// Filled portion
+			for(int i = 0; i < level; i++)
+			{
+				WS2812_SetLEDAdditive(i, color.red, color.green, color.blue);
+			}
 
-		// Unfilled portion
-		for(int i = level; i < NUM_LOGICAL_LEDS; i++)
+			// Unfilled portion
+			for(int i = level; i < NUM_LOGICAL_LEDS; i++)
+			{
+				WS2812_SetLEDAdditive(i, 0, 0, 0);
+			}
+		}
+		// Fill high index to low index
+		else
 		{
-			WS2812_SetLEDAdditive(i, 0, 0, 0);
+			// Reverse fill amount to preserve higher level ==> more LEDs filled
+			level = NUM_LOGICAL_LEDS - level;
+
+			// Unfilled portion
+			for(int i = 0; i < level; i++)
+			{
+				WS2812_SetLEDAdditive(i, 0, 0, 0);
+			}
+
+			// Filled portion
+			for(int i = level; i < NUM_LOGICAL_LEDS; i++)
+			{
+				WS2812_SetLEDAdditive(i, color.red, color.green, color.blue);
+			}
 		}
 	}
-	// Fill high index to low index
+	// Render fractional LEDs
 	else
 	{
-		// Reverse fill amount to preserve higher level ==> more LEDs filled
-		level = NUM_LOGICAL_LEDS - level;
-
-		// Unfilled portion
-		for(int i = 0; i < level; i++)
+		if(!flip)
 		{
-			WS2812_SetLEDAdditive(i, 0, 0, 0);
+			WS2812_DrawLine(0.0f, level, color.red, color.green, color.blue, true);
 		}
-
-		// Filled portion
-		for(int i = level; i < NUM_LOGICAL_LEDS; i++)
+		else
 		{
-			WS2812_SetLEDAdditive(i, color.red, color.green, color.blue);
+			WS2812_DrawLine(NUM_LOGICAL_LEDS - level, level, color.red, color.green, color.blue, true);
 		}
 	}
 }

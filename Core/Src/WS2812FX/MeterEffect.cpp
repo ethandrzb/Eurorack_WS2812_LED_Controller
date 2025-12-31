@@ -41,7 +41,7 @@ void MeterEffect::updateEffect()
 		}
 		else
 		{
-			WS2812_SimpleMeterEffect(rgbColors[i], meterFillAmounts[i] / 100.0f, flips[i], true);
+			WS2812_SimpleMeterEffect(rgbColors[i], meterFillAmounts[i] / 100.0f, flips[i], true, false);
 		}
 	}
 
