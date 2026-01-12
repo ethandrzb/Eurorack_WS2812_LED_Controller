@@ -29,7 +29,7 @@ MeterEffect meterEffect = MeterEffect(10, hsv, false, true);
 RainbowEffect rainbowEffect = RainbowEffect(3, 1, 4, hsv, false);
 CometEffect cometEffect = CometEffect(2, hsv, 50, 1);
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
-std::vector<std::shared_ptr<NumericEffectParameter<uint16_t>>> WS2812SettingParameters;
+std::vector<std::shared_ptr<NumericEffectParameter<int16_t>>> WS2812SettingParameters;
 
 bool updateMenu = false;
 
@@ -42,14 +42,16 @@ void mainWhileCpp(void)
 	fx[3] = &cometEffect;
 
 	// Collect settings
-	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(227, "Strip Length", 1, 1024, 1));
-	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Downsampling", 1, 25, 1));
-	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Fractal", 1, 50, 1));
+	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(227, "Strip Length", 1, 1024, 1));
+	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(1, "Downsampling", 1, 25, 1));
+	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(1, "Fractal", 1, 50, 1));
+	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(4, "Offset", -25, 25, 1));
 
 	// Change setting parameter pointers to target variables
 	WS2812SettingParameters[0]->setValuePointer(&NUM_PHYSICAL_LEDS);
 	WS2812SettingParameters[1]->setValuePointer(&DOWNSAMPLING_FACTOR);
 	WS2812SettingParameters[2]->setValuePointer(&FRACTAL_FACTOR);
+	WS2812SettingParameters[3]->setValuePointer(&PHYSICAL_INDEX_OFFSET);
 
 	// Assigns modulations defined in effect defaults
 	refreshModMatrix();

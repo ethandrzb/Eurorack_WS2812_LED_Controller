@@ -21,10 +21,12 @@ extern "C"
 #define MAX_NUM_PHYSICAL_LEDS 1024
 
 // User-defined number of LEDs in strip
-extern uint16_t NUM_PHYSICAL_LEDS;
+extern int16_t NUM_PHYSICAL_LEDS;
 
-extern uint16_t DOWNSAMPLING_FACTOR;
-extern uint16_t FRACTAL_FACTOR;
+extern int16_t DOWNSAMPLING_FACTOR;
+extern int16_t FRACTAL_FACTOR;
+
+extern int16_t PHYSICAL_INDEX_OFFSET;
 
 // Pad NUM_PHYSICAL_LEDS to always be divisible by DOWNSAMPLING_FACTOR
 //TODO: You might want to perform the same padding operation with FRACTAL_FACTOR too

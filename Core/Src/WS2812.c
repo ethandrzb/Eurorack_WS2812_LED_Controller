@@ -18,9 +18,10 @@ colorRGB background = {.red = 0, .blue = 0, .green = 0};
 
 comet comets[NUM_MAX_COMETS];
 
-uint16_t NUM_PHYSICAL_LEDS = 97;
-uint16_t DOWNSAMPLING_FACTOR = 1;
-uint16_t FRACTAL_FACTOR = 1;
+int16_t NUM_PHYSICAL_LEDS = 97;
+int16_t DOWNSAMPLING_FACTOR = 1;
+int16_t FRACTAL_FACTOR = 1;
+int16_t PHYSICAL_INDEX_OFFSET = 0;
 
 // Change to SPI handle connected to LEDs
 extern SPI_HandleTypeDef hspi3;
@@ -256,10 +257,11 @@ uint8_t *WS2812_GetSingleLEDData(uint32_t red, uint32_t green, uint32_t blue)
 void WS2812_SendAll(void)
 {
 	// Sample DOWNSAMPLING_FACTOR and NUM_PHYSICAL_LEDS in case they change while this function is running
-	const uint16_t _NUM_PHYSICAL_LEDS_PADDED = NUM_PHYSICAL_LEDS_PADDED;
-	const uint16_t _DOWNSAMPLING_FACTOR = DOWNSAMPLING_FACTOR;
-	const uint16_t _FRACTAL_FACTOR = FRACTAL_FACTOR;
+	const int16_t _NUM_PHYSICAL_LEDS_PADDED = NUM_PHYSICAL_LEDS_PADDED;
+	const int16_t _DOWNSAMPLING_FACTOR = DOWNSAMPLING_FACTOR;
+	const int16_t _FRACTAL_FACTOR = FRACTAL_FACTOR;
 	const uint16_t _NUM_LOGICAL_LEDS = NUM_LOGICAL_LEDS;
+	const int16_t _PHYSICAL_INDEX_OFFSET = PHYSICAL_INDEX_OFFSET;
 
 	const uint16_t _FRACTAL_GROUP_SIZE = _NUM_LOGICAL_LEDS / _FRACTAL_FACTOR;
 
@@ -269,22 +271,14 @@ void WS2812_SendAll(void)
 	// Convert to 1D array
 	for(int i = 0; i < _NUM_LOGICAL_LEDS; i++)
 	{
+		// Compute index of current LED to be drawn to index i in the strip using the phyiscal offset and fractal settings
+		uint16_t LEDIndex = ((i - _PHYSICAL_INDEX_OFFSET + _NUM_LOGICAL_LEDS) % _FRACTAL_GROUP_SIZE) * _FRACTAL_FACTOR;
+
 		// Apply background color
-		WS2812_SetLEDAdditive(i, background.red, background.green, background.blue);
+		WS2812_SetLEDAdditive(LEDIndex, background.red, background.green, background.blue);
 
 		// Get data for current LED
-		if(_FRACTAL_GROUP_SIZE <= 1)
-		{
-			// Fractal effect disabled
-			data[i] = WS2812_GetSingleLEDData(LEDData[i][0], LEDData[i][1], LEDData[i][2]);
-		}
-		else
-		{
-			// Fractal effect enabled
-			//TODO: Figure out why fractal doesn't line up with the end of the strip correctly
-			uint16_t LEDIndex = (i % _FRACTAL_GROUP_SIZE) * _FRACTAL_FACTOR;
-			data[i] = WS2812_GetSingleLEDData(LEDData[LEDIndex][0], LEDData[LEDIndex][1], LEDData[LEDIndex][2]);
-		}
+		data[i] = WS2812_GetSingleLEDData(LEDData[LEDIndex][0], LEDData[LEDIndex][1], LEDData[LEDIndex][2]);
 
 		for(int groupIndex = 0; groupIndex < _DOWNSAMPLING_FACTOR; groupIndex++)
 		{
