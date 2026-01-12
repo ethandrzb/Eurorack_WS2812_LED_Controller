@@ -42,7 +42,7 @@ void mainWhileCpp(void)
 	fx[3] = &cometEffect;
 
 	// Collect settings
-	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(97, "Strip Length", 1, 1024, 1));
+	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(227, "Strip Length", 1, 1024, 1));
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Downsampling", 1, 25, 1));
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<uint16_t>>(1, "Fractal", 1, 50, 1));
 

@@ -256,21 +256,18 @@ uint8_t *WS2812_GetSingleLEDData(uint32_t red, uint32_t green, uint32_t blue)
 void WS2812_SendAll(void)
 {
 	// Sample DOWNSAMPLING_FACTOR and NUM_PHYSICAL_LEDS in case they change while this function is running
-	const uint16_t _NUM_PHYSICAL_LEDS = NUM_PHYSICAL_LEDS;
+	const uint16_t _NUM_PHYSICAL_LEDS_PADDED = NUM_PHYSICAL_LEDS_PADDED;
 	const uint16_t _DOWNSAMPLING_FACTOR = DOWNSAMPLING_FACTOR;
 	const uint16_t _FRACTAL_FACTOR = FRACTAL_FACTOR;
+	const uint16_t _NUM_LOGICAL_LEDS = NUM_LOGICAL_LEDS;
 
-	// Pad _NUM_PHYSICAL_LEDS to be divisible by downsampling factor
-	const uint16_t _NUM_PHYSICAL_LEDS_PADDED = _NUM_PHYSICAL_LEDS + (_DOWNSAMPLING_FACTOR - (_NUM_PHYSICAL_LEDS % _DOWNSAMPLING_FACTOR));
-	const uint16_t _NUM_LOGICAL_LEDS_PADDED = _NUM_PHYSICAL_LEDS_PADDED / _DOWNSAMPLING_FACTOR;
+	const uint16_t _FRACTAL_GROUP_SIZE = _NUM_LOGICAL_LEDS / _FRACTAL_FACTOR;
 
-	const uint16_t _FRACTAL_GROUP_SIZE = _NUM_LOGICAL_LEDS_PADDED / _FRACTAL_FACTOR;
-
-	uint8_t *data[_NUM_LOGICAL_LEDS_PADDED];
+	uint8_t *data[_NUM_LOGICAL_LEDS];
 	uint8_t sendData[24 * _NUM_PHYSICAL_LEDS_PADDED];
 
 	// Convert to 1D array
-	for(int i = 0; i < _NUM_LOGICAL_LEDS_PADDED; i++)
+	for(int i = 0; i < _NUM_LOGICAL_LEDS; i++)
 	{
 		// Apply background color
 		WS2812_SetLEDAdditive(i, background.red, background.green, background.blue);
@@ -353,6 +350,7 @@ void WS2812_AddComet(colorRGB color, uint8_t size, uint8_t speed, bool forward)
 }
 
 // Draws all comets to LEDData and updates their position
+//TODO: Add support for floating point positioning using WS2812_DrawLine
 void WS2812_MultiCometEffect(void)
 {
 	// Fade LEDs one step

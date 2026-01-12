@@ -18,21 +18,19 @@ extern "C"
 #include <string.h>
 
 
-// NUM_PHYSICAL_LEDS should be evenly divisible by DOWNSAMPLING_FACTOR
-// Round NUM_PHYSICAL_LEDS up to the nearest multiple, even if your strip has fewer than that amount
 #define MAX_NUM_PHYSICAL_LEDS 1024
+
+// User-defined number of LEDs in strip
 extern uint16_t NUM_PHYSICAL_LEDS;
 
-//TODO: Change to power of 2 and bit shift in sendAll?
 extern uint16_t DOWNSAMPLING_FACTOR;
-
 extern uint16_t FRACTAL_FACTOR;
 
-//#ifdef DOWNSAMPLING_FACTOR
-#define NUM_LOGICAL_LEDS (NUM_PHYSICAL_LEDS / DOWNSAMPLING_FACTOR)
-//#else
-//#define NUM_LOGICAL_LEDS NUM_PHYSICAL_LEDS
-//#endif
+// Pad NUM_PHYSICAL_LEDS to always be divisible by DOWNSAMPLING_FACTOR
+//TODO: You might want to perform the same padding operation with FRACTAL_FACTOR too
+#define NUM_PHYSICAL_LEDS_PADDED (NUM_PHYSICAL_LEDS + (DOWNSAMPLING_FACTOR - (NUM_PHYSICAL_LEDS % DOWNSAMPLING_FACTOR)))
+
+#define NUM_LOGICAL_LEDS (NUM_PHYSICAL_LEDS_PADDED / DOWNSAMPLING_FACTOR)
 
 #define NUM_LED_PARAMS 3
 #define NUM_MAX_COMETS 30
