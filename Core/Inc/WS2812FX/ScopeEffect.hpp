@@ -42,21 +42,12 @@ class ScopeEffect : public WS2812Effect
 		// Init default mod matrix for this effect
 		void initModMatrixDefaults() override
 		{
-			this->modMatrix[0].modSource = NULL;
-			this->modMatrix[0].modDestination = this->getParameter(3);
-			this->modMatrix[0].modAmount->setValue(100);
-
-			this->modMatrix[1].modSource = NULL;
-			this->modMatrix[1].modDestination = this->getParameter(6);
-			this->modMatrix[1].modAmount->setValue(100);
-
-			this->modMatrix[2].modSource = NULL;
-			this->modMatrix[2].modDestination = this->getParameter(9);
-			this->modMatrix[2].modAmount->setValue(100);
-
-			this->modMatrix[2].modSource = NULL;
-			this->modMatrix[2].modDestination = this->getParameter(12);
-			this->modMatrix[2].modAmount->setValue(100);
+			for(uint8_t i = 0; i < NUM_TRACES; i++)
+			{
+				this->modMatrix[i].modSource = NULL;
+				this->modMatrix[i].modDestination = static_cast<ColorHSVEffectParameter *>(this->getParameter(1 + (NUM_TRACE_PARAMETERS * i)))->_value.get();
+				this->modMatrix[i].modAmount->setValue(100);
+			}
 		}
 
 		void updateEffect() override;
