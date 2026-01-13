@@ -49,7 +49,8 @@ public:
 	// Init default mod matrix for this effect
 	void initModMatrixDefaults() override
 	{
-		for(uint8_t i = 0; i < NUM_METERS; i++)
+		// Only pre-map modulation for first two meters
+		for(uint8_t i = 0; i < 2; i++)
 		{
 			// Map meter fill amounts to CV inputs A and B
 			this->modMatrix[i].modSource = NULL;
