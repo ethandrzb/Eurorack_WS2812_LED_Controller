@@ -146,6 +146,8 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 
 		void *getValue() override
 		{
+			const uint16_t noiseThreshold = 10;
+			const uint16_t numValidReadingsToOpenGate = 10;
 			// I feel like I should need this null check, but it causes problems when add it
 //			if(this->modulationSource == NULL)
 //			{
@@ -155,7 +157,29 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 
 			// This might cause an overflow!
 			// Make sure to use a sufficiently large data type
-			this->modulatedValue = *(this->value) + this->modulationMapper((T)(*(this->modulationSource))) * (this->modulationScale);
+			uint16_t rawModulationValue = *(this->modulationSource);
+			T modulation = this->modulationMapper((T)(*(this->modulationSource)));
+
+			// Count consecutive readings above noise threshold
+			if(rawModulationValue >= noiseThreshold)
+			{
+				if(numValidReadings < numValidReadingsToOpenGate)
+				{
+					numValidReadings++;
+				}
+			}
+			else
+			{
+				numValidReadings = 0;
+			}
+
+			// Floor modulation if we haven't received enough valid readings
+			if(numValidReadings < numValidReadingsToOpenGate)
+			{
+				modulation = 0;
+			}
+
+			this->modulatedValue = *(this->value) + modulation * (this->modulationScale);
 
 			// Clip range of modulated value
 			if(this->modulatedValue > this->maxValue)
@@ -208,6 +232,7 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 		T minValue;
 		T maxValue;
 		T tickAmount;
+		uint16_t numValidReadings;
 };
 
 class BooleanEffectParameter : public EffectParameter<bool>
