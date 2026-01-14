@@ -29,6 +29,8 @@
 #define RAW_MODULATION_MIN 0
 #define RAW_MODULATION_MAX 1023
 
+#define ENABLE_CV_NOISE_GATE
+
 namespace WS2812FX
 {
 
@@ -146,8 +148,12 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 
 		void *getValue() override
 		{
+#ifdef ENABLE_CV_NOISE_GATE
 			const uint16_t noiseThreshold = 10;
 			const uint16_t numValidReadingsToOpenGate = 10;
+			const uint16_t numInvalidReadingsBeforeGateCloses = 10;
+			uint16_t rawModulationValue = *(this->modulationSource);
+#endif
 			// I feel like I should need this null check, but it causes problems when add it
 //			if(this->modulationSource == NULL)
 //			{
@@ -157,28 +163,42 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 
 			// This might cause an overflow!
 			// Make sure to use a sufficiently large data type
-			uint16_t rawModulationValue = *(this->modulationSource);
 			T modulation = this->modulationMapper((T)(*(this->modulationSource)));
 
+#ifdef ENABLE_CV_NOISE_GATE
 			// Count consecutive readings above noise threshold
 			if(rawModulationValue >= noiseThreshold)
 			{
 				if(numValidReadings < numValidReadingsToOpenGate)
 				{
 					numValidReadings++;
+
+					numInvalidReadings = 0;
 				}
 			}
+			// Invalid reading
 			else
 			{
-				numValidReadings = 0;
+				// Delay closing noise gate until we receive numInvalidReadingsBeforeGateCloses invalid readings
+				if(numInvalidReadings < numInvalidReadingsBeforeGateCloses)
+				{
+					numInvalidReadings++;
+				}
+				// Close noise gate and reset
+				else
+				{
+//					numInvalidReadings = numInvalidReadingsBeforeGateCloses;
+					numValidReadings = 0;
+				}
 			}
 
-			// Floor modulation if we haven't received enough valid readings
+//			 Floor modulation if we haven't received enough valid readings
 			if(numValidReadings < numValidReadingsToOpenGate)
 			{
 				modulation = 0;
 			}
 
+#endif
 			this->modulatedValue = *(this->value) + modulation * (this->modulationScale);
 
 			// Clip range of modulated value
@@ -233,6 +253,7 @@ template <typename T> class NumericEffectParameter : public EffectParameter<T>
 		T maxValue;
 		T tickAmount;
 		uint16_t numValidReadings;
+		uint16_t numInvalidReadings;
 };
 
 class BooleanEffectParameter : public EffectParameter<bool>
