@@ -27,7 +27,7 @@ colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 0.25};
 colorHSV hsvScope = {.hue = hsv.hue, .saturation = hsv.saturation, .value = 0.0f};
 SimpleBreathingEffect simpleBreathingEffect = SimpleBreathingEffect(20, 0.005, hsv, 0.25);
-MeterEffect meterEffect = MeterEffect(10, hsv, false, true);
+MeterEffect meterEffect = MeterEffect(0.1, hsv, false, true);
 RainbowEffect rainbowEffect = RainbowEffect(3, 3, 10, hsv, false);
 CometEffect cometEffect = CometEffect(2, hsv, 50, 1);
 ScopeEffect scopeEffect = ScopeEffect(5, hsvScope);

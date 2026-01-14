@@ -9,7 +9,7 @@
 
 void MeterEffect::updateEffect()
 {
-	uint16_t meterFillAmounts[NUM_METERS];
+	float meterFillFractions[NUM_METERS];
 	colorHSV hsvColors[NUM_METERS];
 	bool flips[NUM_METERS];
 	bool mirrors[NUM_METERS];
@@ -19,7 +19,7 @@ void MeterEffect::updateEffect()
 	// Retrieve parameters for each meter
 	for(int i = 0; i < NUM_METERS; i++)
 	{
-		meterFillAmounts[i] = *(static_cast<uint16_t *>(this->getParameter(NUM_METER_PARAMETERS * i)->getValue()));
+		meterFillFractions[i] = *(static_cast<float *>(this->getParameter(NUM_METER_PARAMETERS * i)->getValue()));
 		hsvColors[i] = *(static_cast<colorHSV *>(this->getParameter((NUM_METER_PARAMETERS * i) + 1)->getValue()));
 		flips[i] = *(static_cast<bool *>(this->getParameter((NUM_METER_PARAMETERS * i) + 2)->getValue()));
 		mirrors[i] = *(static_cast<bool *>(this->getParameter((NUM_METER_PARAMETERS * i) + 3)->getValue()));
@@ -37,11 +37,11 @@ void MeterEffect::updateEffect()
 	{
 		if(mirrors[i])
 		{
-			WS2812_MirroredMeterEffect(rgbColors[i], meterFillAmounts[i] / 100.0f, flips[i], true, false);
+			WS2812_MirroredMeterEffect(rgbColors[i], meterFillFractions[i], flips[i], true, false);
 		}
 		else
 		{
-			WS2812_SimpleMeterEffect(rgbColors[i], meterFillAmounts[i] / 100.0f, flips[i], true, false);
+			WS2812_SimpleMeterEffect(rgbColors[i], meterFillFractions[i], flips[i], true, false);
 		}
 	}
 
