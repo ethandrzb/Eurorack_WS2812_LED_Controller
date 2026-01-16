@@ -4,6 +4,7 @@
 #include "WS2812FX/RainbowEffect.hpp"
 #include "WS2812FX/CometEffect.hpp"
 #include "WS2812FX/ScopeEffect.hpp"
+#include "WS2812FX/BlobEffect.hpp"
 #include "../../Drivers/ssd1306/ssd1306.h"
 #include "main.h"
 
@@ -31,6 +32,7 @@ MeterEffect meterEffect = MeterEffect(0.1, hsv, false, true);
 RainbowEffect rainbowEffect = RainbowEffect(3, 3, 10, hsv, false);
 CometEffect cometEffect = CometEffect(2, hsv, 50, 1);
 ScopeEffect scopeEffect = ScopeEffect(5, hsvScope);
+BlobEffect blobEffect = BlobEffect(0.0f, 0.15f, hsv, true);
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 std::vector<std::shared_ptr<NumericEffectParameter<int16_t>>> WS2812SettingParameters;
 
@@ -44,8 +46,10 @@ void mainWhileCpp(void)
 	fx[2] = &rainbowEffect;
 	fx[3] = &cometEffect;
 	fx[4] = &scopeEffect;
+	fx[5] = &blobEffect;
 
 	// Collect settings
+	// Fixture has 227 physical LEDs, test strip has 97
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(227, "Strip Length", 1, 1024, 1));
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(1, "Downsampling", 1, 25, 1));
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(1, "Fractal", 1, 50, 1));
