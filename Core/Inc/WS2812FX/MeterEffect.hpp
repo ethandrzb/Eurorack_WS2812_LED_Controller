@@ -1,5 +1,5 @@
 /*
- * SimpleMeterEffect.hpp
+ * MeterEffect.hpp
  *
  *  Created on: Feb 8, 2025
  *      Author: ethan
@@ -16,7 +16,7 @@ using namespace WS2812FX;
 class MeterEffect : public WS2812Effect
 {
 public:
-	const uint8_t NUM_METERS = 2;
+	const uint8_t NUM_METERS = 4;
 	const uint8_t NUM_METER_PARAMETERS = 4;
 	//TODO: Increase size of fill parameters to avoid overflow with larger LED strips
 	MeterEffect(float fillFraction, colorHSV hsv, uint8_t flip, uint8_t mirror)

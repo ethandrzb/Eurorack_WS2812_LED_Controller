@@ -1,5 +1,5 @@
 /*
- * SimpleMeterEffect.cpp
+ * MeterEffect.cpp
  *
  *  Created on: Feb 8, 2025
  *      Author: ethan
