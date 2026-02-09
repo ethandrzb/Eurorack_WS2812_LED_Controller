@@ -7,6 +7,8 @@
 
 #include <WS2812FX/SpotlightEffect.hpp>
 
+bool trig0Active = false;
+
 void SpotlightEffect::updateEffect()
 {
 	uint16_t dwRaw = *(static_cast<uint16_t *>(this->getParameter(0)->getValue()));
@@ -14,6 +16,7 @@ void SpotlightEffect::updateEffect()
 	uint16_t maxActiveSpots = *(static_cast<uint16_t *>(this->getParameter(2)->getValue()));
 	uint16_t spawnPeriod = *(static_cast<uint16_t *>(this->getParameter(3)->getValue()));
 	colorHSV color = *(static_cast<colorHSV *>(this->getParameter(4)->getValue()));
+	bool manualMode = *(static_cast<bool *>(this->getParameter(5)->getValue()));
 
 	static uint16_t iterations = 0;
 
@@ -34,7 +37,7 @@ void SpotlightEffect::updateEffect()
 		{
 			case SPOTLIGHT_IDLE:
 				// This should work, but there might be a data reuse bug in here
-				if(iterations >= spawnPeriod)
+				if(((iterations >= spawnPeriod) && !manualMode) || trig0Active)
 				{
 					spot->state = SPOTLIGHT_INCREASING;
 
@@ -42,8 +45,17 @@ void SpotlightEffect::updateEffect()
 					spot->dw = dwScaled;
 					spot->w = 0.0f;
 					spot->x = (float)(rand() % 100) / 100.0f;
+				}
 
+				// Reset spawn triggers
+				if(iterations >= spawnPeriod)
+				{
 					iterations = 0;
+				}
+
+				if(trig0Active)
+				{
+					trig0Active = false;
 				}
 				break;
 			case SPOTLIGHT_INCREASING:
@@ -82,4 +94,9 @@ void SpotlightEffect::updateEffect()
 
 	WS2812_SendAll();
 	iterations++;
+}
+
+void SpotlightEffect::trig0Callback()
+{
+	trig0Active = true;
 }

@@ -40,15 +40,16 @@ typedef struct spotlight
 class SpotlightEffect : public WS2812Effect
 {
 public:
-	SpotlightEffect(float dw, float wMax, uint16_t maxActiveSpots, uint16_t spawnPeriod, colorHSV hsv)
+	SpotlightEffect(float dw, float wMax, uint16_t maxActiveSpots, uint16_t spawnPeriod, colorHSV hsv, bool manualMode)
 	{
 		snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Spotlight");
 
-		this->setParameter(NumericEffectParameter<uint16_t>(dw, "Width step size", 1, 15, 1), 0);
+		this->setParameter(NumericEffectParameter<uint16_t>(dw, "Width step size", 1, 50, 1), 0);
 		this->setParameter(NumericEffectParameter<float>(wMax, "Max width", 0.01f, 1.0f, 0.01), 1);
 		this->setParameter(NumericEffectParameter<uint16_t>(maxActiveSpots, "Max spots", 1, MAX_ACTIVE_SPOTS, 1), 2);
 		this->setParameter(NumericEffectParameter<uint16_t>(spawnPeriod, "Spawn period", 0, 100, 5), 3);
 		this->setParameter(ColorHSVEffectParameter(hsv, "Spot color"), 4);
+		this->setParameter(BooleanEffectParameter(manualMode, "Manual mode"), 5);
 
 		// Initialize all spotlights
 		for(int i = 0; i < MAX_ACTIVE_SPOTS; i++)
@@ -74,6 +75,8 @@ public:
 	}
 
 	void updateEffect() override;
+
+	void trig0Callback(void) override;
 private:
 	spotlight *spots[MAX_ACTIVE_SPOTS];
 };
