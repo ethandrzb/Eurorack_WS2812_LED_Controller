@@ -44,9 +44,9 @@ public:
 	{
 		snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Spotlight");
 
-		this->setParameter(NumericEffectParameter<float>(dw, "Width step size", 0.005, 0.15, 0.005), 0);
-		this->setParameter(NumericEffectParameter<float>(wMax, "Max width", 0, 1, 0.05), 1);
-		this->setParameter(NumericEffectParameter<uint16_t>(maxActiveSpots, "Max active spots", 1, MAX_ACTIVE_SPOTS, 1), 2);
+		this->setParameter(NumericEffectParameter<uint16_t>(dw, "Width step size", 1, 15, 1), 0);
+		this->setParameter(NumericEffectParameter<float>(wMax, "Max width", 0.01f, 1.0f, 0.01), 1);
+		this->setParameter(NumericEffectParameter<uint16_t>(maxActiveSpots, "Max spots", 1, MAX_ACTIVE_SPOTS, 1), 2);
 		this->setParameter(NumericEffectParameter<uint16_t>(spawnPeriod, "Spawn period", 0, 100, 5), 3);
 		this->setParameter(ColorHSVEffectParameter(hsv, "Spot color"), 4);
 

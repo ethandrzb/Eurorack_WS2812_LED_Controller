@@ -25,16 +25,20 @@ std::vector<std::string> modMatrixSources = {"A", "B", "C", "D"};
 
 extern TIM_HandleTypeDef htim7;
 
-colorRGB rgb = {.red = 0, .green = 0, .blue = 0};
+// Initial colors
 colorHSV hsv = {.hue = 200, .saturation = 1.0, .value = 0.25};
 colorHSV hsvScope = {.hue = hsv.hue, .saturation = hsv.saturation, .value = 0.0f};
+colorHSV hsvSpotlight = {.hue = 55, .saturation = 1.0f, .value = 0.25f};
+
+// Effects
 SimpleBreathingEffect simpleBreathingEffect = SimpleBreathingEffect(20, 0.005, hsv, 0.25);
 MeterEffect meterEffect = MeterEffect(0.1, hsv, false, true);
 RainbowEffect rainbowEffect = RainbowEffect(3, 3, 10, hsv, false);
 CometEffect cometEffect = CometEffect(2, hsv, 50, 1);
 ScopeEffect scopeEffect = ScopeEffect(5, hsvScope);
 BlobEffect blobEffect = BlobEffect(0.0f, 0.15f, hsv, true);
-SpotlightEffect spotlightEffect = SpotlightEffect(0.005, 0.1, 5, 100, hsv);
+SpotlightEffect spotlightEffect = SpotlightEffect(2, 0.1, 5, 15, hsvSpotlight);
+
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 std::vector<std::shared_ptr<NumericEffectParameter<int16_t>>> WS2812SettingParameters;
 

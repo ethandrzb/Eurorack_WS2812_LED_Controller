@@ -9,13 +9,16 @@
 
 void SpotlightEffect::updateEffect()
 {
-	float dw = *(static_cast<float *>(this->getParameter(0)->getValue()));
+	uint16_t dwRaw = *(static_cast<uint16_t *>(this->getParameter(0)->getValue()));
 	float wMax = *(static_cast<float *>(this->getParameter(1)->getValue()));
 	uint16_t maxActiveSpots = *(static_cast<uint16_t *>(this->getParameter(2)->getValue()));
 	uint16_t spawnPeriod = *(static_cast<uint16_t *>(this->getParameter(3)->getValue()));
 	colorHSV color = *(static_cast<colorHSV *>(this->getParameter(4)->getValue()));
 
 	static uint16_t iterations = 0;
+
+	// Scale dw
+	float dwScaled = dwRaw / 1000.0f;
 
 	// Use static frame period
 	TIM7->ARR = 50;
@@ -36,7 +39,7 @@ void SpotlightEffect::updateEffect()
 					spot->state = SPOTLIGHT_INCREASING;
 
 					spot->color = WS2812_HSVToRGB(color.hue, color.saturation, color.value);
-					spot->dw = dw;
+					spot->dw = dwScaled;
 					spot->w = 0.0f;
 					spot->x = (float)(rand() % 100) / 100.0f;
 
