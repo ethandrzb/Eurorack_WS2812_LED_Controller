@@ -19,7 +19,7 @@ class BlobEffect : public WS2812Effect
 public:
 	const uint8_t NUM_BLOBS = 1;
 	const uint8_t NUM_BLOB_PARAMETERS = 4;
-	//TODO: Increase size of fill parameters to avoid overflow with larger LED strips
+
 	BlobEffect(float startFraction, float endFraction, colorHSV hsv, uint8_t isConstantLength)
 	{
 		snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Blob");
