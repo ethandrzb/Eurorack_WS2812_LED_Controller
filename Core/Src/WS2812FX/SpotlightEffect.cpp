@@ -68,7 +68,7 @@ void SpotlightEffect::updateEffect()
 		// Draw active spots
 		if(spot->state != SPOTLIGHT_IDLE)
 		{
-			float leftBound = spot->x - spot->dw;
+			float leftBound = spot->x - (spot->w / 2.0f);
 
 			// Clip range to end of strip
 			leftBound = (leftBound >= 0) ? leftBound : 0;
