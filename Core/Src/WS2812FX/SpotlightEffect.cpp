@@ -83,12 +83,18 @@ void SpotlightEffect::updateEffect()
 		// Draw active spots
 		if(spot->state != SPOTLIGHT_IDLE)
 		{
-			float leftBound = spot->x - (spot->w / 2.0f);
+			// Shape width to make spot grow more naturally
+			float cosWidth = (-1.0f * (cosf((spot->w / wMax) * 3.141f) / 2.0f) + 0.5f) * wMax;
+
+			// Find left end of spot from current width
+			float leftBound = spot->x - (cosWidth / 2.0f);
 
 			// Clip range to end of strip
 			leftBound = (leftBound >= 0) ? leftBound : 0;
 
-			WS2812_DrawLine(leftBound * NUM_PHYSICAL_LEDS, spot->w * NUM_PHYSICAL_LEDS, spot->color.red, spot->color.green, spot->color.blue, true);
+			//TODO: Fix bug causing left side of spot to flicker when spot->w is close to wMax for certain numbers of LEDs
+			// Bug observed when NUM_PHYSICAL_LEDS is in the interval [66, 126]
+			WS2812_DrawLine(leftBound * NUM_PHYSICAL_LEDS, cosWidth * NUM_PHYSICAL_LEDS, spot->color.red, spot->color.green, spot->color.blue, true);
 		}
 	}
 

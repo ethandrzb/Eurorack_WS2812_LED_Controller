@@ -10,6 +10,7 @@
 
 #include <WS2812FX/WS2812FX.hpp>
 #include <main.h>
+#include <math.h>
 
 extern int16_t NUM_PHYSICAL_LEDS;
 
