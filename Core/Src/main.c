@@ -84,6 +84,12 @@ float cpuUsage = 0.0f;
 volatile bool overrunDetected = false;
 
 uint16_t rawADCData[NUM_CV_INPUTS];
+
+// Software solution to multiple triggering problem on gate EXTI inputs
+// Better PCB design would help this too
+// This parameter might be nice to have in the settings menu
+#define GATE_LIMIT_FRAMES 10
+uint16_t frames_since_last_trigger[NUM_GATE_INPUTS] = {0, 0, 0, 0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -164,16 +170,32 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	{
 		// Handle gate inputs
 		case GATE_IN0_Pin:
-			gateInput0HighCallbackC();
+			if(frames_since_last_trigger[0] >= GATE_LIMIT_FRAMES)
+			{
+				gateInput0HighCallbackC();
+			}
+			frames_since_last_trigger[0] = 0;
 			break;
 		case GATE_IN1_Pin:
-			gateInput1HighCallbackC();
+			if(frames_since_last_trigger[1] >= GATE_LIMIT_FRAMES)
+			{
+				gateInput1HighCallbackC();
+			}
+			frames_since_last_trigger[1] = 0;
 			break;
 		case GATE_IN2_Pin:
-			gateInput2HighCallbackC();
+			if(frames_since_last_trigger[2] >= GATE_LIMIT_FRAMES)
+			{
+				gateInput2HighCallbackC();
+			}
+			frames_since_last_trigger[2] = 0;
 			break;
 		case GATE_IN3_Pin:
-			gateInput3HighCallbackC();
+			if(frames_since_last_trigger[3] >= GATE_LIMIT_FRAMES)
+			{
+				gateInput3HighCallbackC();
+			}
+			frames_since_last_trigger[3] = 0;
 			break;
 
 		// Handle front panel buttons
@@ -333,6 +355,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 		// Actual render (update) step
 		updateEffectC();
+
+		// Update frame counters for gate inputs
+		// Used to prevent double triggers
+		for(int i = 0; i < NUM_GATE_INPUTS; i++)
+		{
+			if(frames_since_last_trigger[i] < GATE_LIMIT_FRAMES)
+			{
+				frames_since_last_trigger[i]++;
+			}
+		}
 
 		// Detect overruns after updating effect
 		overrunDetected = (htim->Instance->SR != 0);
