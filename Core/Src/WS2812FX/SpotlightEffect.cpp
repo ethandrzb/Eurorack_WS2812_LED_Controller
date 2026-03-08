@@ -11,16 +11,23 @@ bool trig0Active = false;
 
 void SpotlightEffect::updateEffect()
 {
+	// Change in spotlight width per iteration
 	uint16_t dwRaw = *(static_cast<uint16_t *>(this->getParameter(0)->getValue()));
+	// Max width
 	float wMax = *(static_cast<float *>(this->getParameter(1)->getValue()));
+	// Maximum number of active spotlights
 	uint16_t maxActiveSpots = *(static_cast<uint16_t *>(this->getParameter(2)->getValue()));
+	// Number of iterations between spotlight spawns in automatic mode
 	uint16_t spawnPeriod = *(static_cast<uint16_t *>(this->getParameter(3)->getValue()));
+	// Spotlight color
 	colorHSV color = *(static_cast<colorHSV *>(this->getParameter(4)->getValue()));
+	// Enables manual mode (disables automatic spawning)
 	bool manualMode = *(static_cast<bool *>(this->getParameter(5)->getValue()));
 
-	static uint16_t iterations = 0;
+	// Number of iterations since last spotlight was spawned in automatic mode
+	static uint16_t spawnIterationCounter = 0;
 
-	// Scale dw
+	// Scale dw to size of single LED (1.0 = 1 LED completely filled)
 	float dwScaled = dwRaw / 1000.0f;
 
 	// Use static frame period
@@ -37,7 +44,7 @@ void SpotlightEffect::updateEffect()
 		{
 			case SPOTLIGHT_IDLE:
 				// This should work, but there might be a data reuse bug in here
-				if(((iterations >= spawnPeriod) && !manualMode) || trig0Active)
+				if(((spawnIterationCounter >= spawnPeriod) && !manualMode) || trig0Active)
 				{
 					spot->state = SPOTLIGHT_INCREASING;
 
@@ -48,9 +55,9 @@ void SpotlightEffect::updateEffect()
 				}
 
 				// Reset spawn triggers
-				if(iterations >= spawnPeriod)
+				if(spawnIterationCounter >= spawnPeriod)
 				{
-					iterations = 0;
+					spawnIterationCounter = 0;
 				}
 
 				if(trig0Active)
@@ -99,7 +106,7 @@ void SpotlightEffect::updateEffect()
 	}
 
 	WS2812_SendAll();
-	iterations++;
+	spawnIterationCounter++;
 }
 
 void SpotlightEffect::trig0Callback()

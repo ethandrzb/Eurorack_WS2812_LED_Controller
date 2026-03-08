@@ -9,11 +9,15 @@
 
 void BlobEffect::updateEffect()
 {
+	// Start position of each blob
 	float startFractions[NUM_BLOBS];
+	// End positions or total length of each blob
 	float endFractions[NUM_BLOBS];
+	// Blob colors
 	colorHSV hsvColors[NUM_BLOBS];
+	// Determines whether a blob will treat endFractions as the end location of the blob (false) or total length of the blob away from the starting point (true)
 	bool constantLengthModes[NUM_BLOBS];
-
+	// Blob colors
 	colorRGB rgbColors[NUM_BLOBS];
 
 	// Retrieve parameters for each meter

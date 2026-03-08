@@ -12,9 +12,13 @@ void SimpleBreathingEffect::updateEffect()
 	static bool direction = true;
 	static float currentValue = 0.0;
 
+	// Frame period (units are 0.1 ms)
 	uint8_t stepDelay = *(static_cast<uint8_t *>(this->getParameter(0)->getValue()));
+	// Value increment to add to current color value each frame
 	float stepSize = *(static_cast<float *>(this->getParameter(1)->getValue()));
+	// Color (value parameter is unused)
 	colorHSV hsv = *(static_cast<colorHSV *>(this->getParameter(2)->getValue()));
+	// Maximum color value
 	float maxValue = *(static_cast<float *>(this->getParameter(3)->getValue()));
 
 	colorRGB rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, hsv.value);

@@ -9,20 +9,29 @@
 
 void CometEffect::updateEffect()
 {
+	// FOR AUTOMATICALLY SPAWNED COMETS
+	///////////////////////////////////
+	// Number of pixels occupied by comet body
 	uint8_t cometSize = *(static_cast<uint8_t *>(this->getParameter(0)->getValue()));
+	// Comet color
 	colorHSV cometColor = *(static_cast<colorHSV *>(this->getParameter(1)->getValue()));
+	// Period between movement increments (I know the name is counter-intuitive)
 	uint8_t speed = *(static_cast<uint8_t *>(this->getParameter(2)->getValue()));
+	// Interval between automatically spawned comets. Setting this to zero disables automatic spawning
 	uint8_t interval = *(static_cast<uint8_t *>(this->getParameter(3)->getValue()));
+	// Determines whether comets travel towards the end of the strip (true) or towards LED index 0 (false)
 	bool direction = *(static_cast<bool *>(this->getParameter(4)->getValue()));
+	///////////////////////////////////
 
-	static uint8_t iterations = 0;
+	// Number of iterations since last spotlight was spawned in automatic mode
+	static uint8_t spawnIterationCounter = 0;
 
 	// Use static frame period
 	TIM7->ARR = 50;
 
-	if((interval > 0) && (iterations > interval))
+	if((interval > 0) && (spawnIterationCounter > interval))
 	{
-		iterations = 0;
+		spawnIterationCounter = 0;
 
 		colorRGB color = WS2812_HSVToRGB(cometColor.hue, cometColor.saturation, cometColor.value);
 
@@ -31,7 +40,7 @@ void CometEffect::updateEffect()
 
 	WS2812_MultiCometEffect();
 	WS2812_SendAll();
-	iterations++;
+	spawnIterationCounter++;
 }
 
 void CometEffect::trig0Callback(void)

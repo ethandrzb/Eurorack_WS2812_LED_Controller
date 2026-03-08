@@ -9,10 +9,18 @@
 
 void MeterEffect::updateEffect()
 {
+	// FOR EACH METER
+	//////////////////////////////////
+	// Fraction of strip to fill
 	float meterFillFractions[NUM_METERS];
+	// Color
 	colorHSV hsvColors[NUM_METERS];
+	// If meter IS NOT mirrored, determines whether meter fills from LED index 0 towards the end (false) or from the end towards LED index 0 (true)
+	// If meter IS mirroed, determines whether the meter fills from the extreme ends of the strip towards the middle (false) or from the middle of the strip towards the extreme ends (true)
 	bool flips[NUM_METERS];
+	// Determines whether the meter should be mirrored across the middle index of the strip
 	bool mirrors[NUM_METERS];
+	//////////////////////////////////
 
 	colorRGB rgbColors[NUM_METERS];
 

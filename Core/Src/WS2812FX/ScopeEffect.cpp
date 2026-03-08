@@ -9,8 +9,10 @@
 
 void ScopeEffect::updateEffect()
 {
+	// Scope trace colors
 	colorHSV hsvColors[NUM_TRACES];
 	colorRGB rgbColors[NUM_TRACES];
+	// Frame period (units are 0.1 ms)
 	uint8_t stepDelay = *(static_cast<uint8_t *>(this->getParameter(0)->getValue()));;
 
 	for(uint8_t i = 0; i < NUM_TRACES; i++)

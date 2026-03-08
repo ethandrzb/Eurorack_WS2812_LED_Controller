@@ -9,10 +9,15 @@
 
 void RainbowEffect::updateEffect()
 {
+	// Difference in hue between neighboring LEDs (low values create longer rainbows; high values squish more colors into a smaller space)
 	int16_t density = *(static_cast<int16_t *>(this->getParameter(0)->getValue()));
+	// Amount to shift starting hue each frame
 	uint8_t scrollHue = *(static_cast<uint8_t *>(this->getParameter(1)->getValue()));
+	// Frame period (units are 0.1 ms)
 	uint8_t stepDelay = *(static_cast<uint8_t *>(this->getParameter(2)->getValue()));
+	// Starting color
 	colorHSV hsv = *(static_cast<colorHSV *>(this->getParameter(3)->getValue()));
+	// Determines if scrolling hue is added to starting color or not
 	bool manualMode = *(static_cast<bool *>(this->getParameter(4)->getValue()));
 
 	static uint16_t currentHue = 0;
