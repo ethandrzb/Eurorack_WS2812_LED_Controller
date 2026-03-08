@@ -914,7 +914,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : GATE_IN1_Pin GATE_IN0_Pin GATE_IN3_Pin GATE_IN2_Pin */
   GPIO_InitStruct.Pin = GATE_IN1_Pin|GATE_IN0_Pin|GATE_IN3_Pin|GATE_IN2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED1_Pin LED2_Pin */
