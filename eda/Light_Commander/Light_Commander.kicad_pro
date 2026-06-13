@@ -416,7 +416,7 @@
         "uuid": "dc725142-0bfd-4f8d-931f-2d32b87c7a54"
       }
     ],
-    "used_designators": "U1-3,R1-24,C1-6,#PWR1-25",
+    "used_designators": "#PWR26-64,D1-4,Q1-6,J1-13,R25-35,SW1,C7-14,U4-5,F1-2,L1-2",
     "variants": []
   },
   "sheets": [
@@ -431,6 +431,14 @@
     [
       "01ca8d8d-2b9e-4cde-ac81-450b8440c775",
       "Analog"
+    ],
+    [
+      "920cdd59-56b0-44e1-bc86-b3c906b66cd8",
+      "UI"
+    ],
+    [
+      "277d24e9-9704-4396-9f41-00501d6543dd",
+      "Power"
     ]
   ],
   "text_variables": {},

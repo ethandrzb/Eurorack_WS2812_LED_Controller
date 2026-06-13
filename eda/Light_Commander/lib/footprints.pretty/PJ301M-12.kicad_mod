@@ -1,0 +1,140 @@
+(footprint "PJ301M-12"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at -2.35 -6.85 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "1badbb6f-8c6c-4575-94ca-e8ad9904f299")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "PJ301M-12"
+		(at 0.1 -9.85 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "8cd8f787-7885-449f-be57-bc4a938bf4c6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5864d82a-8115-4ef9-885a-c01658f2ef59")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "40c2f303-9c44-4e1b-af91-c87bf2e61cba")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_rect
+		(start -4.5 -5.8)
+		(end 4.5 4.2)
+		(stroke
+			(width 0.2)
+			(type default)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "698fc0f0-d6a0-4dd1-831e-4c3186815239")
+	)
+	(fp_arc
+		(start -2.12132 2.12132)
+		(mid 0 -2.999998)
+		(end 2.12132 2.12132)
+		(stroke
+			(width 0.2)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "fe882adc-8b57-4861-96cc-03c1b88e9da7")
+	)
+	(fp_rect
+		(start -5 -6)
+		(end 5 7)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "90c4774f-bf52-4bd1-80f6-31de61f7125d")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0.1 -8.35 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "0bd0ba69-1533-4768-80b7-cbe0fa9e16f0")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "G" thru_hole roundrect
+		(at 0 5.92)
+		(size 2.25 1.25)
+		(drill oval 1.5 0.6)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.25)
+		(uuid "8bb7fd10-8658-4a7f-831e-c1252f756175")
+	)
+	(pad "S" thru_hole roundrect
+		(at 0 3.38)
+		(size 2.25 1.25)
+		(drill oval 1.5 0.6)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.25)
+		(uuid "7a9bd5df-217f-4b7d-b246-cc9a93ee4e02")
+	)
+	(pad "T" thru_hole roundrect
+		(at 0 -4.92)
+		(size 2.25 1.25)
+		(drill oval 1.5 0.5)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.25)
+		(uuid "49124651-cc25-4c86-98c5-f5fce06b0a99")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/lib/3d_models/PJ301M-12_Knurl_nut.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)
