@@ -57,10 +57,11 @@ void mainWhileCpp(void)
 
 	// Collect settings
 	// Fixture has 227 physical LEDs, test strip has 97
-	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(227, "Strip Length", 1, 1024, 1));
+	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(97, "Strip Length", 1, 1024, 1));
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(1, "Downsampling", 1, 25, 1));
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(1, "Fractal", 1, 50, 1));
-	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(4, "Offset", -25, 25, 1));
+	// Fixture has offset of 4 LEDs, test strips has 0
+	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(0, "Offset", -25, 25, 1));
 
 	// Change setting parameter pointers to target variables
 	WS2812SettingParameters[0]->setValuePointer(&NUM_PHYSICAL_LEDS);
