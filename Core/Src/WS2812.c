@@ -82,7 +82,7 @@ void WS2812_DrawLine(float position, float length, uint8_t red, uint8_t green, u
 	// Draw first LED
 	if(remaining > 0.0f)
 	{
-		WS2812_SetLEDAdditive(index, red * firstLEDFraction, green * firstLEDFraction, blue * firstLEDFraction);
+		WS2812_SetLED(index, red * firstLEDFraction, green * firstLEDFraction, blue * firstLEDFraction, additive);
 		index++;
 		remaining -= firstLEDFraction;
 	}
@@ -90,7 +90,7 @@ void WS2812_DrawLine(float position, float length, uint8_t red, uint8_t green, u
 	// Draw middle LEDs
 	while(remaining > 1.0f)
 	{
-		WS2812_SetLEDAdditive(index, red, green, blue);
+		WS2812_SetLED(index, red, green, blue, additive);
 		index++;
 		remaining--;
 	}
@@ -98,7 +98,7 @@ void WS2812_DrawLine(float position, float length, uint8_t red, uint8_t green, u
 	// Draw last LED
 	if(remaining > 0.0f)
 	{
-		WS2812_SetLEDAdditive(index, red * remaining, green * remaining, blue * remaining);
+		WS2812_SetLED(index, red * remaining, green * remaining, blue * remaining, additive);
 	}
 }
 
