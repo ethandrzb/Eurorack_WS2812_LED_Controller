@@ -71,7 +71,7 @@ public:
 		{
 			this->modMatrix[i].modSource = NULL;
 			this->modMatrix[i].modDestination = this->getParameter(i);
-			this->modMatrix[i].modAmount->setValue(100);
+			this->modMatrix[i].modAmount->setValue(0);
 		}
 	}
 

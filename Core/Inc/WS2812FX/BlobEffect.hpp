@@ -56,12 +56,12 @@ public:
 			// Map blob start positions to CV inputs A and B
 			this->modMatrix[2 * i].modSource = NULL;
 			this->modMatrix[2 * i].modDestination = this->getParameter(NUM_BLOB_PARAMETERS * i);
-			this->modMatrix[2 * i].modAmount->setValue(100);
+			this->modMatrix[2 * i].modAmount->setValue(0);
 
 			// Map meter hues to CV inputs C and D
 			this->modMatrix[2 * i + 1].modSource = NULL;
 			this->modMatrix[2 * i + 1].modDestination = this->getParameter(1 + (NUM_BLOB_PARAMETERS * i));
-			this->modMatrix[2 * i + 1].modAmount->setValue(100);
+			this->modMatrix[2 * i + 1].modAmount->setValue(0);
 		}
 	}
 

@@ -55,7 +55,7 @@ public:
 			// Map meter fill amounts to CV inputs A and B
 			this->modMatrix[i].modSource = NULL;
 			this->modMatrix[i].modDestination = this->getParameter(4 * i);
-			this->modMatrix[i].modAmount->setValue(100);
+			this->modMatrix[i].modAmount->setValue(0);
 
 			// Map meter hues to CV inputs C and D
 			this->modMatrix[i + 2].modSource = NULL;

@@ -45,19 +45,19 @@ class CometEffect : public WS2812Effect
 		{
 			this->modMatrix[0].modSource = NULL;
 			this->modMatrix[0].modDestination = this->getParameter(0);
-			this->modMatrix[0].modAmount->setValue(25);
+			this->modMatrix[0].modAmount->setValue(0);
 
 			this->modMatrix[1].modSource = NULL;
 			this->modMatrix[1].modDestination = this->getParameter(2);
-			this->modMatrix[1].modAmount->setValue(25);
+			this->modMatrix[1].modAmount->setValue(0);
 
 			this->modMatrix[2].modSource = NULL;
 			this->modMatrix[2].modDestination = static_cast<ColorHSVEffectParameter *>(this->getParameter(1))->_hue.get();
-			this->modMatrix[2].modAmount->setValue(100);
+			this->modMatrix[2].modAmount->setValue(0);
 
 			this->modMatrix[3].modSource = NULL;
 			this->modMatrix[3].modDestination = this->getParameter(5);
-			this->modMatrix[3].modAmount->setValue(100);
+			this->modMatrix[3].modAmount->setValue(0);
 		}
 
 		void updateEffect() override;
