@@ -24,7 +24,7 @@ public:
 		DROPPING_CURRENT_PIECE
 	} stackerState;
 
-	StackerEffect(uint16_t fallSpeed, uint16_t pieceSize, uint16_t sizeRandomizationAmount, colorHSV hsv, uint16_t hueRandomizationAmount, bool flip, bool manualMode)
+	StackerEffect(uint16_t fallSpeed, uint16_t pieceSize, uint16_t sizeRandomizationAmount, colorHSV hsv, uint16_t hueRandomizationAmount, bool manualMode)
 	{
 		snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Stacker");
 
@@ -43,11 +43,8 @@ public:
 		// Parameter 4: Piece hue randomization amount
 		this->setParameter(NumericEffectParameter<uint16_t>(hueRandomizationAmount, "Hue Random", 0, 100, 1), 4);
 
-		// Parameter 5: Flip
-		this->setParameter(BooleanEffectParameter(flip, "Flip"), 5);
-
-		// Parameter 6: Manual mode
-		this->setParameter(BooleanEffectParameter(manualMode, "Manual mode"), 6);
+		// Parameter 5: Manual mode
+		this->setParameter(BooleanEffectParameter(manualMode, "Manual mode"), 5);
 
 		this->initModMatrixDefaults();
 	}

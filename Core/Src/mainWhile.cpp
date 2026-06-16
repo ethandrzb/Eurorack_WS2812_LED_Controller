@@ -6,6 +6,7 @@
 #include "WS2812FX/ScopeEffect.hpp"
 #include "WS2812FX/BlobEffect.hpp"
 #include "WS2812FX/SpotlightEffect.hpp"
+#include "WS2812FX/StackerEffect.hpp"
 #include "../../Drivers/ssd1306/ssd1306.h"
 #include "main.h"
 
@@ -38,6 +39,7 @@ CometEffect cometEffect = CometEffect(2, hsv, 50, 1);
 ScopeEffect scopeEffect = ScopeEffect(5, hsvScope);
 BlobEffect blobEffect = BlobEffect(0.0f, 0.15f, hsv, true);
 SpotlightEffect spotlightEffect = SpotlightEffect(2, 0.1, 5, 15, hsvSpotlight, false);
+StackerEffect stackerEffect = StackerEffect(12, 4, 0, hsv, 0, false);
 
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 std::vector<std::shared_ptr<NumericEffectParameter<int16_t>>> WS2812SettingParameters;
@@ -54,6 +56,7 @@ void mainWhileCpp(void)
 	fx[4] = &scopeEffect;
 	fx[5] = &blobEffect;
 	fx[6] = &spotlightEffect;
+	fx[7] = &stackerEffect;
 
 	// Collect settings
 	// Fixture has 227 physical LEDs, test strip has 97

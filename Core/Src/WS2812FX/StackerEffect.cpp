@@ -14,8 +14,7 @@ void StackerEffect::updateEffect()
 //	uint16_t heightRandomizationAmount = *(static_cast<uint16_t *>(this->getParameter(2)->getValue()));
 	colorHSV hsv = *(static_cast<colorHSV *>(this->getParameter(3)->getValue()));
 //	uint16_t hueRandomizationAmount = *(static_cast<uint16_t *>(this->getParameter(4)->getValue()));
-//	bool flip = *(static_cast<bool *>(this->getParameter(5)->getValue()));
-//	bool manualMode = *(static_cast<bool *>(this->getParameter(6)->getValue()));
+//	bool manualMode = *(static_cast<bool *>(this->getParameter(5)->getValue()));
 
 	// State variables
 	static stackerState state = CLEAR_TOWER;
@@ -29,7 +28,7 @@ void StackerEffect::updateEffect()
 	TIM7->ARR = speed * 10;
 
 	// If there's room on the strip for a piece of non-zero length
-	if(towerHeight < NUM_LOGICAL_LEDS)
+	if(towerHeight >= NUM_LOGICAL_LEDS)
 	{
 		state = CLEAR_TOWER;
 	}
@@ -95,7 +94,7 @@ void StackerEffect::updateEffect()
 			piecePosition++;
 
 			// Detect collision with top of tower
-			if(piecePosition >= towerHeight)
+			if(piecePosition + pieceHeight > NUM_LOGICAL_LEDS - towerHeight)
 			{
 				// Attach piece to top of tower
 				towerHeight += pieceHeight;
@@ -110,11 +109,6 @@ void StackerEffect::updateEffect()
 					state = CLEAR_TOWER;
 				}
 			}
-			break;
-
-		// This state shouldn't be reachable
-		default:
-			state = CLEAR_TOWER;
 			break;
 	}
 
