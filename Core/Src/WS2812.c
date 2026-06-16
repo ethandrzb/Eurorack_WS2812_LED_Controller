@@ -73,6 +73,7 @@ void WS2812_DrawLine(float position, float length, uint8_t red, uint8_t green, u
 	firstLEDFraction = MIN(firstLEDFraction, length);
 
 	// Clip length to prevent out-of-bounds indexing
+	//TODO: Handle other out-of-bounds indexing case
 	remaining = MIN(length, NUM_LOGICAL_LEDS - position);
 
 	// Cast position to integer index
@@ -99,6 +100,13 @@ void WS2812_DrawLine(float position, float length, uint8_t red, uint8_t green, u
 	{
 		WS2812_SetLEDAdditive(index, red * remaining, green * remaining, blue * remaining);
 	}
+}
+
+void WS2812_DrawLineHSV(float position, float length, colorHSV hsv, bool additive)
+{
+	colorRGB rgb = WS2812_HSVToRGB(hsv.hue, hsv.saturation, hsv.value);
+
+	WS2812_DrawLine(position, length, rgb.red, rgb.green, rgb.blue, additive);
 }
 
 // Sets the color of all LEDs to the specified RGB color
