@@ -21,7 +21,7 @@ void StackerEffect::updateEffect()
 	static uint16_t towerHeight = 0;
 	static uint16_t pieceHeight = 0;
 	static uint16_t pieceHeightFaded = 0;
-	static uint16_t piecePosition = 0;
+	static uint16_t piecePosition = 1;
 	static colorHSV pieceColor = hsv;
 
 	// Apply speed
@@ -46,7 +46,7 @@ void StackerEffect::updateEffect()
 		// Spawn new piece
 		case SPAWN_PIECE:
 			// Reset piece properties
-			piecePosition = 0;
+			piecePosition = 1;
 
 			// TODO: Apply randomization to height
 			pieceHeight = height;
@@ -60,11 +60,11 @@ void StackerEffect::updateEffect()
 			break;
 		case FADING_NEW_PIECE:
 			// Fade piece in until faded height matches real height
-			if(pieceHeightFaded <= pieceHeight)
+			pieceHeightFaded++;
+			if(pieceHeightFaded < pieceHeight)
 			{
 				if(pieceHeightFaded < NUM_LOGICAL_LEDS - towerHeight)
 				{
-					pieceHeightFaded++;
 					WS2812_DrawLineHSV(0.0f, (float)pieceHeightFaded, pieceColor, false);
 				}
 				// Collision occurred before new piece could be completely faded in
@@ -75,6 +75,7 @@ void StackerEffect::updateEffect()
 			}
 			else
 			{
+				WS2812_DrawLineHSV(0.0f, (float)pieceHeight, pieceColor, false);
 				state = DROPPING_CURRENT_PIECE;
 			}
 
