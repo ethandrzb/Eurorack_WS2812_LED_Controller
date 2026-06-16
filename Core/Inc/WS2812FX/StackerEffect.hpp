@@ -17,18 +17,22 @@ using namespace WS2812FX;
 class StackerEffect : public WS2812Effect
 {
 public:
-	const uint8_t NUM_BLOBS = 1;
-	const uint8_t NUM_BLOB_PARAMETERS = 4;
+	typedef enum stackerState{
+		CLEAR_TOWER,
+		SPAWN_PIECE,
+		FADING_NEW_PIECE,
+		DROPPING_CURRENT_PIECE
+	} stackerState;
 
-	StackerEffect(uint16_t fallSpeed, float pieceSize, uint16_t sizeRandomizationAmount, colorHSV hsv, uint16_t hueRandomizationAmount, bool flip, bool manualMode)
+	StackerEffect(uint16_t fallSpeed, uint16_t pieceSize, uint16_t sizeRandomizationAmount, colorHSV hsv, uint16_t hueRandomizationAmount, bool flip, bool manualMode)
 	{
 		snprintf(this->name, WS2812FX_EFFECT_NAME_LEN, "Stacker");
 
 		// Parameter 0: Speed of falling pieces
-		this->setParameter(NumericEffectParameter<uint16_t>(startFraction, "Speed", 1, 100, 1), 0);
+		this->setParameter(NumericEffectParameter<uint16_t>(fallSpeed, "Speed", 1, 100, 1), 0);
 
 		// Parameter 1: Height of falling pieces
-		this->setParameter(NumericEffectParameter<float>(pieceSize, "Height", 0.01f, 0.25f, 0.01f), 1);
+		this->setParameter(NumericEffectParameter<uint16_t>(pieceSize, "Height", 1, 25, 1), 1);
 
 		// Parameter 2: Height randomization amount
 		this->setParameter(NumericEffectParameter<uint16_t>(sizeRandomizationAmount, "Height Random", 0, 100, 1), 2);
