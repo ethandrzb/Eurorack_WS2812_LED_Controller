@@ -59,8 +59,8 @@ void mainWhileCpp(void)
 	fx[7] = &stackerEffect;
 
 	// Collect settings
-	// Fixture has 227 physical LEDs, test strip has 97
-	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(97, "Strip Length", 1, 1024, 1));
+	// Fixture has 227 physical LEDs, test strip has 95
+	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(95, "Strip Length", 1, 1024, 1));
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(1, "Downsampling", 1, 25, 1));
 	WS2812SettingParameters.push_back(std::make_shared<NumericEffectParameter<int16_t>>(1, "Fractal", 1, 50, 1));
 	// Fixture has offset of 4 LEDs, test strips has 0
