@@ -32,7 +32,7 @@ public:
 		this->setParameter(NumericEffectParameter<uint16_t>(fallSpeed, "Speed", 1, 100, 1), 0);
 
 		// Parameter 1: Height of falling pieces
-		this->setParameter(NumericEffectParameter<uint16_t>(pieceSize, "Height", 1, 25, 1), 1);
+		this->setParameter(NumericEffectParameter<uint16_t>(pieceSize, "Height", 1, 50, 1), 1);
 
 		// Parameter 2: Height randomization amount
 		this->setParameter(NumericEffectParameter<uint16_t>(sizeRandomizationAmount, "Height Random", 0, 100, 1), 2);
@@ -52,24 +52,26 @@ public:
 	// Init default mod matrix for this effect
 	void initModMatrixDefaults() override
 	{
-//		// Only pre-map modulation for first two blobs
-//		for(uint8_t i = 0; i < 2; i++)
-//		{
-//			// Map blob start positions to CV inputs A and B
-//			this->modMatrix[2 * i].modSource = NULL;
-//			this->modMatrix[2 * i].modDestination = this->getParameter(NUM_BLOB_PARAMETERS * i);
-//			this->modMatrix[2 * i].modAmount->setValue(0);
-//
-//			// Map meter hues to CV inputs C and D
-//			this->modMatrix[2 * i + 1].modSource = NULL;
-//			this->modMatrix[2 * i + 1].modDestination = this->getParameter(1 + (NUM_BLOB_PARAMETERS * i));
-//			this->modMatrix[2 * i + 1].modAmount->setValue(0);
-//		}
+		this->modMatrix[0].modSource = NULL;
+		this->modMatrix[0].modDestination = this->getParameter(0);
+		this->modMatrix[0].modAmount->setValue(0);
+
+		this->modMatrix[1].modSource = NULL;
+		this->modMatrix[1].modDestination = this->getParameter(1);
+		this->modMatrix[1].modAmount->setValue(0);
+
+		this->modMatrix[2].modSource = NULL;
+		this->modMatrix[2].modDestination = this->getParameter(2);
+		this->modMatrix[2].modAmount->setValue(0);
+
+		this->modMatrix[3].modSource = NULL;
+		this->modMatrix[3].modDestination = this->getParameter(4);
+		this->modMatrix[3].modAmount->setValue(0);
 	}
 
 	void updateEffect() override;
-//	void trig0Callback(void) override;
-//	void trig1Callback(void) override;
+	void trig0Callback(void) override;
+	void trig1Callback(void) override;
 };
 
 #endif /* INC_WS2812FX_STACKEREFFECT_HPP_ */

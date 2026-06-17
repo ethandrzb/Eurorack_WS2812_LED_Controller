@@ -7,17 +7,18 @@
 
 #include <WS2812FX/StackerEffect.hpp>
 
+StackerEffect::stackerState state = StackerEffect::CLEAR_TOWER;
+
 void StackerEffect::updateEffect()
 {
 	uint16_t speed = *(static_cast<uint16_t *>(this->getParameter(0)->getValue()));
 	uint16_t height = *(static_cast<uint16_t *>(this->getParameter(1)->getValue()));
-//	uint16_t heightRandomizationAmount = *(static_cast<uint16_t *>(this->getParameter(2)->getValue()));
+	uint16_t heightRandomizationAmount = *(static_cast<uint16_t *>(this->getParameter(2)->getValue()));
 	colorHSV hsv = *(static_cast<colorHSV *>(this->getParameter(3)->getValue()));
-//	uint16_t hueRandomizationAmount = *(static_cast<uint16_t *>(this->getParameter(4)->getValue()));
-//	bool manualMode = *(static_cast<bool *>(this->getParameter(5)->getValue()));
+	uint16_t hueRandomizationAmount = *(static_cast<uint16_t *>(this->getParameter(4)->getValue()));
+	bool manualMode = *(static_cast<bool *>(this->getParameter(5)->getValue()));
 
 	// State variables
-	static stackerState state = CLEAR_TOWER;
 	static uint16_t towerHeight = 0;
 	static uint16_t pieceHeight = 0;
 	static uint16_t pieceHeightFaded = 0;
@@ -48,15 +49,30 @@ void StackerEffect::updateEffect()
 			// Reset piece properties
 			piecePosition = 1;
 
-			// TODO: Apply randomization to height
+			// Apply randomization to height and clip to max value
 			pieceHeight = height;
+			if(heightRandomizationAmount > 0)
+			{
+				pieceHeight += (rand() % heightRandomizationAmount);
+				pieceHeight = MIN(pieceHeight, 50);
+			}
 
-			// TODO: Apply randomization to color
+			// Apply randomization to color and wrap around color wheel
 			pieceColor = hsv;
+			if(hueRandomizationAmount > 0)
+			{
+				//TODO: Change this to make it properly cover the entire color wheel?
+				// 3 is close enough to the 3.6 scale factor needed without added complexity
+				pieceColor.hue += (rand() % (hueRandomizationAmount * 3));
+				pieceColor.hue %= 360;
+			}
 
 			pieceHeightFaded = 0;
 
-			state = FADING_NEW_PIECE;
+			if(!manualMode)
+			{
+				state = FADING_NEW_PIECE;
+			}
 			break;
 		case FADING_NEW_PIECE:
 			// Fade piece in until faded height matches real height
@@ -113,29 +129,19 @@ void StackerEffect::updateEffect()
 			break;
 	}
 
-//	// Draw blobs
-//	for(uint8_t i = 0; i < NUM_BLOBS; i++)
-//	{
-//		if(constantLengthModes[i])
-//		{
-//			WS2812_DrawLine(startFractions[i] * NUM_LOGICAL_LEDS, endFractions[i] * NUM_LOGICAL_LEDS, rgbColors[i].red, rgbColors[i].green, rgbColors[i].blue, true);
-//		}
-//		else
-//		{
-//			WS2812_DrawLine(startFractions[i] * NUM_LOGICAL_LEDS, fabs(startFractions[i] - endFractions[i]) * NUM_LOGICAL_LEDS, rgbColors[i].red, rgbColors[i].green, rgbColors[i].blue, true);
-//		}
-//	}
-
-
 	WS2812_SendAll();
 }
 
-//void StackerEffect::trig0Callback(void)
-//{
-//
-//}
-//
-//void StackerEffect::trig1Callback(void)
-//{
-//
-//}
+void StackerEffect::trig0Callback(void)
+{
+	//TODO: Update this callback to immediately drop the currently falling piece to the top of the tower and start dropping another
+	if(state != DROPPING_CURRENT_PIECE)
+	{
+		state = FADING_NEW_PIECE;
+	}
+}
+
+void StackerEffect::trig1Callback(void)
+{
+	state = CLEAR_TOWER;
+}
