@@ -26,7 +26,7 @@ void StackerEffect::updateEffect()
 	static colorHSV pieceColor = hsv;
 
 	// Apply speed
-	TIM7->ARR = speed * 10;
+	TIM7->ARR = speed * 5;
 
 	// If there's room on the strip for a piece of non-zero length
 	if(towerHeight >= NUM_LOGICAL_LEDS)

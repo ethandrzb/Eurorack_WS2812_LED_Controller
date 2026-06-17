@@ -39,7 +39,7 @@ CometEffect cometEffect = CometEffect(2, hsv, 50, 1);
 ScopeEffect scopeEffect = ScopeEffect(5, hsvScope);
 BlobEffect blobEffect = BlobEffect(0.0f, 0.15f, hsv, true);
 SpotlightEffect spotlightEffect = SpotlightEffect(2, 0.1, 5, 15, hsvSpotlight, false);
-StackerEffect stackerEffect = StackerEffect(12, 4, 0, hsv, 0, false);
+StackerEffect stackerEffect = StackerEffect(24, 4, 0, hsv, 0, false);
 
 WS2812Effect *fx[WS2812FX_NUM_EFFECTS];
 std::vector<std::shared_ptr<NumericEffectParameter<int16_t>>> WS2812SettingParameters;
