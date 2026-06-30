@@ -29,6 +29,7 @@
 
 ## PCB
 - STM32 F446RE MCU and required circuitry
+  - 8 MHz external crystal
 - Supporting circuitry for
   - CV inputs (and buffers if applicable)
     - +- 5 or 10 Vpp input range
@@ -37,4 +38,5 @@
     - Should handle up to 10 Vpp pulse with no damage
   - MIDI input
 - SWD programming header (either 6-pin or MIPI10)
+- USB C connector for DFU + DFU button
 - USART2 output?

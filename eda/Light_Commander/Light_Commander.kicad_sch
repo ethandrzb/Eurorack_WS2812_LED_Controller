@@ -1447,7 +1447,7 @@
 	)
 	(symbol
 		(lib_id "power:+2V5")
-		(at 215.9 105.41 0)
+		(at 203.2 105.41 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1458,7 +1458,7 @@
 		(fields_autoplaced yes)
 		(uuid "1011ec98-9878-4cc8-896e-edceeacbd288")
 		(property "Reference" "#PWR021"
-			(at 215.9 109.22 0)
+			(at 203.2 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1469,7 +1469,7 @@
 			)
 		)
 		(property "Value" "+12V"
-			(at 215.9 100.33 0)
+			(at 203.2 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1479,7 +1479,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 215.9 105.41 0)
+			(at 203.2 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1490,7 +1490,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 215.9 105.41 0)
+			(at 203.2 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1501,7 +1501,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+2V5\""
-			(at 215.9 105.41 0)
+			(at 203.2 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1925,7 +1925,7 @@
 	)
 	(symbol
 		(lib_id "power:-12V")
-		(at 215.9 110.49 180)
+		(at 203.2 110.49 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1936,7 +1936,7 @@
 		(fields_autoplaced yes)
 		(uuid "52a5c763-3557-490d-8598-70d18762dc86")
 		(property "Reference" "#PWR022"
-			(at 215.9 106.68 0)
+			(at 203.2 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1947,7 +1947,7 @@
 			)
 		)
 		(property "Value" "-12V"
-			(at 215.9 115.57 0)
+			(at 203.2 115.57 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1957,7 +1957,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 215.9 110.49 0)
+			(at 203.2 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1968,7 +1968,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 215.9 110.49 0)
+			(at 203.2 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1979,7 +1979,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"-12V\""
-			(at 215.9 110.49 0)
+			(at 203.2 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2242,7 +2242,7 @@
 	)
 	(symbol
 		(lib_id "power:+2V5")
-		(at 224.79 105.41 0)
+		(at 219.71 105.41 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2251,9 +2251,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "80df1a90-1e73-4a5c-a100-f06194100343")
-		(property "Reference" "#PWR024"
-			(at 224.79 109.22 0)
+		(uuid "78a698a2-9d19-4ded-a474-b786243c1e9f")
+		(property "Reference" "#PWR067"
+			(at 219.71 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2263,8 +2263,8 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
-			(at 224.79 100.33 0)
+		(property "Value" "+5V"
+			(at 219.71 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2274,7 +2274,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 224.79 105.41 0)
+			(at 219.71 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2285,7 +2285,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 224.79 105.41 0)
+			(at 219.71 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2296,7 +2296,85 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+2V5\""
-			(at 224.79 105.41 0)
+			(at 219.71 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "69745c15-33f2-42b1-9c84-8dc947e6a069")
+		)
+		(instances
+			(project "Light_Commander"
+				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
+					(reference "#PWR067")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+2V5")
+		(at 212.09 105.41 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "80df1a90-1e73-4a5c-a100-f06194100343")
+		(property "Reference" "#PWR024"
+			(at 212.09 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 212.09 100.33 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 212.09 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 212.09 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+2V5\""
+			(at 212.09 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2559,7 +2637,7 @@
 	)
 	(symbol
 		(lib_id "power:+2V5")
-		(at 208.28 105.41 0)
+		(at 227.33 105.41 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2570,7 +2648,7 @@
 		(fields_autoplaced yes)
 		(uuid "950be8b5-b9d8-4bd8-a927-4896eb274942")
 		(property "Reference" "#PWR023"
-			(at 208.28 109.22 0)
+			(at 227.33 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2581,7 +2659,7 @@
 			)
 		)
 		(property "Value" "+2V5"
-			(at 208.28 100.33 0)
+			(at 227.33 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2591,7 +2669,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 208.28 105.41 0)
+			(at 227.33 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2602,7 +2680,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 208.28 105.41 0)
+			(at 227.33 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2613,7 +2691,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+2V5\""
-			(at 208.28 105.41 0)
+			(at 227.33 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3603,7 +3681,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 224.79 110.49 0)
+		(at 212.09 110.49 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3614,7 +3692,7 @@
 		(fields_autoplaced yes)
 		(uuid "ef7df1dd-7c47-4070-8fa9-d2a8d2e76020")
 		(property "Reference" "#PWR025"
-			(at 224.79 116.84 0)
+			(at 212.09 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3625,7 +3703,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 224.79 115.57 0)
+			(at 212.09 115.57 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3635,7 +3713,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 224.79 110.49 0)
+			(at 212.09 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3646,7 +3724,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 224.79 110.49 0)
+			(at 212.09 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3657,7 +3735,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 224.79 110.49 0)
+			(at 212.09 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
