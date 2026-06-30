@@ -53,6 +53,7 @@ void StackerEffect::updateEffect()
 			pieceHeight = height;
 			if(heightRandomizationAmount > 0)
 			{
+				// Height randomization is unipolar
 				pieceHeight += (rand() % heightRandomizationAmount);
 				pieceHeight = MIN(pieceHeight, 50);
 			}
@@ -63,7 +64,13 @@ void StackerEffect::updateEffect()
 			{
 				//TODO: Change this to make it properly cover the entire color wheel?
 				// 3 is close enough to the 3.6 scale factor needed without added complexity
-				pieceColor.hue += (rand() % (hueRandomizationAmount * 3));
+				hueRandomizationAmount *= 3;
+
+				// Hue randomization is bipolar
+				// Range is doubled to cover both directions
+				pieceColor.hue += (rand() % (hueRandomizationAmount << 1));
+				// Then shifted back to compensate
+				pieceColor.hue -= hueRandomizationAmount;
 				pieceColor.hue %= 360;
 			}
 
