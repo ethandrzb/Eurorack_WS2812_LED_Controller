@@ -1,0 +1,166 @@
+(footprint "CAS-220TA"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -15 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "51fb4192-55b4-4228-bd85-d6b927502665")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "CAS-220TA"
+		(at 0 -13.5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "35e5037b-17ff-483b-8c63-e79a7f8a41f3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ed3abf4c-46b7-4752-a473-87832414e744")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5ba816ca-bf8d-4af1-8884-fb282ab7a3f1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -2.7 -1.95)
+		(end -2.7 1.95)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "897b6876-fcd7-4779-89f2-4ea1bd39894e")
+	)
+	(fp_line
+		(start 2.7 -1.95)
+		(end 2.7 1.95)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "1beb7ccd-2544-495f-93d5-39a3febdb007")
+	)
+	(fp_circle
+		(center -1.751274 3.047096)
+		(end -1.501274 3.047096)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "ebd9b626-7224-4f65-b637-80252889b456")
+	)
+	(fp_rect
+		(start -3.5 -3)
+		(end 3.5 3)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "d95b3e5d-7824-4841-9c24-00ae4cfe040f")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 -12 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "35ab149d-a2ba-4889-a8e4-6bb9ab641338")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at -1.75 1.85)
+		(size 1 1.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.15)
+		(uuid "0bf8be85-e423-4340-8cd1-706cb22cd0fb")
+	)
+	(pad "2" smd roundrect
+		(at 0 1.85)
+		(size 1 1.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.15)
+		(uuid "e5e8f16a-28cf-4896-ab98-f54f7341fbb1")
+	)
+	(pad "3" smd roundrect
+		(at 1.75 1.85)
+		(size 1 1.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.15)
+		(uuid "e9bab8e6-f9a9-4cc7-8150-ad4718dc3b22")
+	)
+	(pad "4" smd roundrect
+		(at -1.75 -1.85)
+		(size 1 1.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.15)
+		(uuid "5856dc5f-d0d1-47fd-ae64-b778d23c14c0")
+	)
+	(pad "5" smd roundrect
+		(at 0 -1.85)
+		(size 1 1.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.15)
+		(uuid "1d6121f0-e65b-436e-87ce-8df8df7017da")
+	)
+	(pad "6" smd roundrect
+		(at 1.75 -1.85)
+		(size 1 1.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.15)
+		(uuid "7754dab1-5bcd-4f1a-b9a1-b0fece9160e9")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/lib/3d_models/CAS-220TA.stp"
+		(offset
+			(xyz 0 0 2.5)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -0 -0)
+		)
+	)
+)

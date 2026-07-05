@@ -437,6 +437,265 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Switch:SW_DPDT_x2"
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "SW"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "SW_DPDT_x2"
+				(at 0 -5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Switch, dual pole double throw, separate symbols"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "switch dual-pole double-throw DPDT spdt ON-ON"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "SW*DPDT*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "SW_DPDT_x2_0_0"
+				(circle
+					(center -2.032 0)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.032 -2.54)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "SW_DPDT_x2_0_1"
+				(rectangle
+					(start -3.175 3.81)
+					(end 3.175 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.524 0.254) (xy 1.5748 2.286)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.032 2.54)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "SW_DPDT_x2_1_1"
+				(pin passive line
+					(at 5.08 2.54 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -2.54 180)
+					(length 2.54)
+					(name "C"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "SW_DPDT_x2_2_1"
+				(pin passive line
+					(at 5.08 2.54 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -2.54 180)
+					(length 2.54)
+					(name "C"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:+2V5"
 			(power global)
 			(pin_numbers
@@ -807,6 +1066,28 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "TRS MIDI A: Switch up as shown\nTRS MIDI B: Flipped down"
+		(exclude_from_sim no)
+		(at 216.408 101.346 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "052bc5c4-f9f7-48a3-ba00-df865c76eb15")
+	)
+	(text "TRS MIDI A: Switch up as shown\nTRS MIDI B: Flipped down"
+		(exclude_from_sim no)
+		(at 216.408 133.096 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "fc55fd11-4388-425c-95cc-afd3d9c7bb34")
+	)
 	(junction
 		(at 35.56 99.06)
 		(diameter 0)
@@ -814,10 +1095,22 @@
 		(uuid "0c931b9b-c723-4349-8a60-12d69066dd7e")
 	)
 	(junction
+		(at 185.42 92.71)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "15949fef-ce1a-41f1-9d5f-9d46960f15bb")
+	)
+	(junction
 		(at 35.56 149.86)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "21e777bc-bca7-47b2-9036-c45a1396c57b")
+	)
+	(junction
+		(at 181.61 99.06)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "49580c62-55bf-48e0-9caa-dfebd5ddb09e")
 	)
 	(junction
 		(at 86.36 99.06)
@@ -907,6 +1200,16 @@
 	)
 	(wire
 		(pts
+			(xy 181.61 99.06) (xy 180.34 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0c80cc80-264d-4f1e-b7b0-3bc87f76f121")
+	)
+	(wire
+		(pts
 			(xy 27.94 175.26) (xy 38.1 175.26)
 		)
 		(stroke
@@ -914,6 +1217,16 @@
 			(type default)
 		)
 		(uuid "0d3bae95-21ac-4f58-8487-290a3d2f5b78")
+	)
+	(wire
+		(pts
+			(xy 185.42 110.49) (xy 185.42 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "180f38bb-a191-4513-8f60-3f6449f546be")
 	)
 	(wire
 		(pts
@@ -934,6 +1247,16 @@
 			(type default)
 		)
 		(uuid "24759012-1edd-46d3-81db-9b341721a088")
+	)
+	(wire
+		(pts
+			(xy 200.66 95.25) (xy 198.12 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "279baa77-5461-4e3f-bbd2-60287ad22c7d")
 	)
 	(wire
 		(pts
@@ -987,6 +1310,16 @@
 	)
 	(wire
 		(pts
+			(xy 175.26 134.62) (xy 175.26 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "325e902b-1471-4b29-80e5-3567cb0a3716")
+	)
+	(wire
+		(pts
 			(xy 35.56 124.46) (xy 38.1 124.46)
 		)
 		(stroke
@@ -997,6 +1330,16 @@
 	)
 	(wire
 		(pts
+			(xy 175.26 104.14) (xy 175.26 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "350eff0a-11f4-46f6-9668-113e9f9ebe69")
+	)
+	(wire
+		(pts
 			(xy 27.94 147.32) (xy 35.56 147.32)
 		)
 		(stroke
@@ -1004,6 +1347,16 @@
 			(type default)
 		)
 		(uuid "37a67ae5-48b0-4634-b727-5d2e8240cf99")
+	)
+	(wire
+		(pts
+			(xy 198.12 139.7) (xy 200.66 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "498d64dd-5fd2-4e11-aaf3-6d0b080d39f8")
 	)
 	(wire
 		(pts
@@ -1027,6 +1380,16 @@
 	)
 	(wire
 		(pts
+			(xy 181.61 97.79) (xy 187.96 97.79)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5652ac84-692a-4df4-b452-a3141126e28c")
+	)
+	(wire
+		(pts
 			(xy 35.56 172.72) (xy 35.56 149.86)
 		)
 		(stroke
@@ -1047,6 +1410,16 @@
 	)
 	(wire
 		(pts
+			(xy 198.12 107.95) (xy 200.66 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f1dd74b-c82f-4f22-9a1c-8677be48322a")
+	)
+	(wire
+		(pts
 			(xy 78.74 99.06) (xy 86.36 99.06)
 		)
 		(stroke
@@ -1054,6 +1427,16 @@
 			(type default)
 		)
 		(uuid "5fafc37a-5515-416c-8a0d-968d1b25b465")
+	)
+	(wire
+		(pts
+			(xy 181.61 96.52) (xy 180.34 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "61de3096-4f36-448f-a7c7-cb964ff98eb2")
 	)
 	(wire
 		(pts
@@ -1157,6 +1540,16 @@
 	)
 	(wire
 		(pts
+			(xy 185.42 92.71) (xy 187.96 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "96c3d522-57c2-4577-bfc9-5ce4dbaadb87")
+	)
+	(wire
+		(pts
 			(xy 78.74 96.52) (xy 82.55 96.52)
 		)
 		(stroke
@@ -1244,6 +1637,16 @@
 			(type default)
 		)
 		(uuid "adc6e495-a184-403d-b163-b7954ac9a7e7")
+	)
+	(wire
+		(pts
+			(xy 181.61 92.71) (xy 181.61 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ae6a2123-76a6-4c52-802a-79ede4134329")
 	)
 	(wire
 		(pts
@@ -1337,6 +1740,36 @@
 	)
 	(wire
 		(pts
+			(xy 181.61 92.71) (xy 185.42 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d6bce0ee-f220-440b-8ced-4319efbdf0b2")
+	)
+	(wire
+		(pts
+			(xy 187.96 105.41) (xy 181.61 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d7c8b4f1-f12f-4fbf-abdc-276483997589")
+	)
+	(wire
+		(pts
+			(xy 181.61 97.79) (xy 181.61 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d8b9afed-c970-41ce-a357-4508309d06d9")
+	)
+	(wire
+		(pts
 			(xy 130.81 175.26) (xy 129.54 175.26)
 		)
 		(stroke
@@ -1354,6 +1787,26 @@
 			(type default)
 		)
 		(uuid "db85af2a-f81c-4a12-9e8f-e22f16fe820a")
+	)
+	(wire
+		(pts
+			(xy 181.61 99.06) (xy 181.61 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dda1f249-de9d-4038-9af7-cc8c1278dc7e")
+	)
+	(wire
+		(pts
+			(xy 187.96 110.49) (xy 185.42 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dfc798cb-11c9-49f7-812b-555a8c43393b")
 	)
 	(wire
 		(pts
@@ -1397,6 +1850,16 @@
 	)
 	(wire
 		(pts
+			(xy 200.66 127) (xy 198.12 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f85ef491-4d75-416e-8155-0b25dc45441d")
+	)
+	(wire
+		(pts
 			(xy 130.81 124.46) (xy 129.54 124.46)
 		)
 		(stroke
@@ -1424,6 +1887,30 @@
 			(type default)
 		)
 		(uuid "fd8e5a37-96a3-47de-aa53-beb223280f89")
+	)
+	(global_label "MIDI_THRU_PIN_4"
+		(shape input)
+		(at 200.66 127 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0ce031ef-8704-4c0d-92a6-e25df96d75d6")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 219.7924 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
 	)
 	(global_label "GATE2_JACK"
 		(shape input)
@@ -1569,6 +2056,30 @@
 			)
 		)
 	)
+	(global_label "MIDI_IN_PIN_5"
+		(shape input)
+		(at 200.66 107.95 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5e9181be-1ae6-4ac1-b632-525a8c86bb38")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 216.8291 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
 	(global_label "GATE1_JACK"
 		(shape input)
 		(at 38.1 124.46 0)
@@ -1606,6 +2117,30 @@
 		(uuid "82be626c-a23d-4b96-87df-f6f4824eeb08")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 145.2253 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
+	(global_label "MIDI_IN_PIN_4"
+		(shape input)
+		(at 200.66 95.25 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "90ae8343-0ff4-4a0f-8efa-2a38f6c19545")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 216.8291 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1662,6 +2197,30 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+	)
+	(global_label "MIDI_THRU_PIN_5"
+		(shape input)
+		(at 200.66 139.7 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "bc09ce71-9ab8-4059-9c91-6d1e68603376")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 219.7924 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 	)
@@ -1822,7 +2381,7 @@
 	)
 	(symbol
 		(lib_id "power:+2V5")
-		(at 203.2 105.41 0)
+		(at 212.09 44.45 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1833,7 +2392,7 @@
 		(fields_autoplaced yes)
 		(uuid "1011ec98-9878-4cc8-896e-edceeacbd288")
 		(property "Reference" "#PWR021"
-			(at 203.2 109.22 0)
+			(at 212.09 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1844,7 +2403,7 @@
 			)
 		)
 		(property "Value" "+12V"
-			(at 203.2 100.33 0)
+			(at 212.09 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1854,7 +2413,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 203.2 105.41 0)
+			(at 212.09 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1865,7 +2424,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 203.2 105.41 0)
+			(at 212.09 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1876,7 +2435,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+2V5\""
-			(at 203.2 105.41 0)
+			(at 212.09 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2079,6 +2638,110 @@
 		)
 	)
 	(symbol
+		(lib_id "Switch:SW_DPDT_x2")
+		(at 193.04 139.7 0)
+		(mirror y)
+		(unit 2)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "2306b26c-aa96-4614-a613-bc078c5876e1")
+		(property "Reference" "SW4"
+			(at 193.04 133.858 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW_DPDT_x2"
+			(at 193.04 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "footprints:CAS-220TA"
+			(at 193.04 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 193.04 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Switch, dual pole double throw, separate symbols"
+			(at 193.04 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey_PN" "CAS220JCT-ND"
+			(at 193.04 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "fe12650c-9448-4ec0-9ee9-5ddaa046100a")
+		)
+		(pin "2"
+			(uuid "9b3af92e-da35-4516-b5d6-9e8a5573ea79")
+		)
+		(pin "4"
+			(uuid "4fb6639e-9a99-4bc6-852e-77495b6d0c7c")
+		)
+		(pin "5"
+			(uuid "417079ee-fb1e-44a4-a035-41c2bdf88e8c")
+		)
+		(pin "6"
+			(uuid "88452b53-17b2-4f4b-8e7b-8c38c7b67e02")
+		)
+		(pin "3"
+			(uuid "64870b40-1890-47e8-ae33-09eab7ad15f1")
+		)
+		(instances
+			(project "Light_Commander"
+				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
+					(reference "SW4")
+					(unit 2)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 124.46 130.81 0)
 		(unit 1)
@@ -2241,7 +2904,7 @@
 	)
 	(symbol
 		(lib_id "power:+2V5")
-		(at 241.3 105.41 0)
+		(at 250.19 44.45 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2252,7 +2915,7 @@
 		(fields_autoplaced yes)
 		(uuid "2ed4fb8b-e25e-4867-b008-0420ab371775")
 		(property "Reference" "#PWR087"
-			(at 241.3 109.22 0)
+			(at 250.19 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2263,7 +2926,7 @@
 			)
 		)
 		(property "Value" "+5V_LED"
-			(at 241.3 100.33 0)
+			(at 250.19 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2273,7 +2936,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 241.3 105.41 0)
+			(at 250.19 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2284,7 +2947,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 241.3 105.41 0)
+			(at 250.19 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2295,7 +2958,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+2V5\""
-			(at 241.3 105.41 0)
+			(at 250.19 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2396,6 +3059,110 @@
 		)
 	)
 	(symbol
+		(lib_id "Switch:SW_DPDT_x2")
+		(at 193.04 107.95 0)
+		(mirror y)
+		(unit 2)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "47873135-b7e6-41d8-bb9d-5202e7f081f6")
+		(property "Reference" "SW3"
+			(at 193.04 102.108 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW_DPDT_x2"
+			(at 193.04 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "footprints:CAS-220TA"
+			(at 193.04 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 193.04 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Switch, dual pole double throw, separate symbols"
+			(at 193.04 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey_PN" "CAS220JCT-ND"
+			(at 193.04 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "fe12650c-9448-4ec0-9ee9-5ddaa046100a")
+		)
+		(pin "2"
+			(uuid "9b3af92e-da35-4516-b5d6-9e8a5573ea79")
+		)
+		(pin "4"
+			(uuid "cc41390d-f2e6-478b-bc7b-aa25f6996592")
+		)
+		(pin "5"
+			(uuid "28ab44b0-4211-4d5e-9968-d2386bb6eb47")
+		)
+		(pin "6"
+			(uuid "239c1af8-2379-4af5-9ddf-45b9cba0db42")
+		)
+		(pin "3"
+			(uuid "64870b40-1890-47e8-ae33-09eab7ad15f1")
+		)
+		(instances
+			(project "Light_Commander"
+				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
+					(reference "SW3")
+					(unit 2)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Audio:AudioJack2_Ground")
 		(at 22.86 175.26 0)
 		(unit 1)
@@ -2480,7 +3247,7 @@
 	)
 	(symbol
 		(lib_id "power:-12V")
-		(at 203.2 110.49 180)
+		(at 212.09 49.53 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2491,7 +3258,7 @@
 		(fields_autoplaced yes)
 		(uuid "52a5c763-3557-490d-8598-70d18762dc86")
 		(property "Reference" "#PWR022"
-			(at 203.2 106.68 0)
+			(at 212.09 45.72 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2502,7 +3269,7 @@
 			)
 		)
 		(property "Value" "-12V"
-			(at 203.2 115.57 0)
+			(at 212.09 54.61 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2512,7 +3279,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 203.2 110.49 0)
+			(at 212.09 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2523,7 +3290,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 203.2 110.49 0)
+			(at 212.09 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2534,7 +3301,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"-12V\""
-			(at 203.2 110.49 0)
+			(at 212.09 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2551,6 +3318,84 @@
 			(project "Light_Commander"
 				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
 					(reference "#PWR022")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 175.26 135.89 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "54fb3afd-e796-41be-a4dd-f60aa3b29839")
+		(property "Reference" "#PWR0102"
+			(at 175.26 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 175.26 140.97 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 175.26 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 175.26 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 175.26 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2881ffa7-ad02-40ba-a65c-1855f4be0793")
+		)
+		(instances
+			(project "Light_Commander"
+				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
+					(reference "#PWR0102")
 					(unit 1)
 				)
 			)
@@ -2634,6 +3479,84 @@
 			(project "Light_Commander"
 				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
 					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 175.26 105.41 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6664ee14-6eb8-4b00-97e7-f2a7940cd0df")
+		(property "Reference" "#PWR0101"
+			(at 175.26 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 175.26 110.49 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 175.26 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 175.26 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 175.26 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2e08fd98-2291-4ba0-972b-00953bbc7530")
+		)
+		(instances
+			(project "Light_Commander"
+				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
+					(reference "#PWR0101")
 					(unit 1)
 				)
 			)
@@ -2797,7 +3720,7 @@
 	)
 	(symbol
 		(lib_id "power:+2V5")
-		(at 219.71 105.41 0)
+		(at 228.6 44.45 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2808,7 +3731,7 @@
 		(fields_autoplaced yes)
 		(uuid "78a698a2-9d19-4ded-a474-b786243c1e9f")
 		(property "Reference" "#PWR067"
-			(at 219.71 109.22 0)
+			(at 228.6 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2819,7 +3742,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 219.71 100.33 0)
+			(at 228.6 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2829,7 +3752,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 219.71 105.41 0)
+			(at 228.6 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2840,7 +3763,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 219.71 105.41 0)
+			(at 228.6 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2851,7 +3774,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+2V5\""
-			(at 219.71 105.41 0)
+			(at 228.6 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2874,8 +3797,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+2V5")
-		(at 212.09 105.41 0)
+		(lib_id "Connector_Audio:AudioJack2_Ground")
+		(at 175.26 99.06 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2884,10 +3807,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "80df1a90-1e73-4a5c-a100-f06194100343")
-		(property "Reference" "#PWR024"
-			(at 212.09 109.22 0)
-			(hide yes)
+		(uuid "7aa6bde1-48da-476c-bbee-041a3779370a")
+		(property "Reference" "J16"
+			(at 174.625 90.17 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2896,8 +3818,8 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
-			(at 212.09 100.33 0)
+		(property "Value" "MIDI_IN"
+			(at 174.625 92.71 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2906,8 +3828,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 212.09 105.41 0)
+		(property "Footprint" "footprints:PJ301M-12_STEREO"
+			(at 175.26 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2918,7 +3840,91 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 212.09 105.41 0)
+			(at 175.26 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 175.26 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "G"
+			(uuid "20b8ce98-a515-4ef9-9e98-7735e886d54e")
+		)
+		(pin "S"
+			(uuid "90a74c1e-0c92-49d2-8fec-8adeb8f2d258")
+		)
+		(pin "T"
+			(uuid "9adfbf84-39f4-4a5b-a9e5-d62a9f74291d")
+		)
+		(instances
+			(project "Light_Commander"
+				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
+					(reference "J16")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+2V5")
+		(at 220.98 44.45 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "80df1a90-1e73-4a5c-a100-f06194100343")
+		(property "Reference" "#PWR024"
+			(at 220.98 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 220.98 39.37 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 220.98 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 220.98 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2929,7 +3935,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+2V5\""
-			(at 212.09 105.41 0)
+			(at 220.98 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3270,7 +4276,7 @@
 	)
 	(symbol
 		(lib_id "power:+2V5")
-		(at 227.33 105.41 0)
+		(at 236.22 44.45 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3281,7 +4287,7 @@
 		(fields_autoplaced yes)
 		(uuid "950be8b5-b9d8-4bd8-a927-4896eb274942")
 		(property "Reference" "#PWR023"
-			(at 227.33 109.22 0)
+			(at 236.22 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3292,7 +4298,7 @@
 			)
 		)
 		(property "Value" "+2V5"
-			(at 227.33 100.33 0)
+			(at 236.22 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3302,7 +4308,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 227.33 105.41 0)
+			(at 236.22 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3313,7 +4319,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 227.33 105.41 0)
+			(at 236.22 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3324,7 +4330,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+2V5\""
-			(at 227.33 105.41 0)
+			(at 236.22 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3341,6 +4347,110 @@
 			(project "Light_Commander"
 				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
 					(reference "#PWR023")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_DPDT_x2")
+		(at 193.04 127 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "95814aa7-1633-44dc-8d88-6e3c3fb085e8")
+		(property "Reference" "SW4"
+			(at 193.04 121.158 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW_DPDT_x2"
+			(at 193.04 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "footprints:CAS-220TA"
+			(at 193.04 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 193.04 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Switch, dual pole double throw, separate symbols"
+			(at 193.04 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey_PN" "CAS220JCT-ND"
+			(at 193.04 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "dbf336a5-b2fb-47d7-b360-5a21cfa434d5")
+		)
+		(pin "4"
+			(uuid "9df09e16-bda1-4a4f-948b-575cb205c73d")
+		)
+		(pin "1"
+			(uuid "7ab50a15-745c-48d3-a5f2-5603054a3000")
+		)
+		(pin "2"
+			(uuid "1b6500cf-b3ae-4702-ab0e-e3deb455207b")
+		)
+		(pin "5"
+			(uuid "17af8bc9-3493-47cd-9927-9edc54e8ad56")
+		)
+		(pin "6"
+			(uuid "b09545f6-b433-4217-beab-56eddb6d4e45")
+		)
+		(instances
+			(project "Light_Commander"
+				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
+					(reference "SW4")
 					(unit 1)
 				)
 			)
@@ -4074,6 +5184,89 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector_Audio:AudioJack2_Ground")
+		(at 175.26 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d2d85072-513d-4290-842b-b903f63a1d8e")
+		(property "Reference" "J17"
+			(at 174.625 120.65 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MIDI_THRU"
+			(at 174.625 123.19 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "footprints:PJ301M-12_STEREO"
+			(at 175.26 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 175.26 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 175.26 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "G"
+			(uuid "a4a56e16-6a2d-4a19-82b2-dea3d9254efc")
+		)
+		(pin "S"
+			(uuid "61985d3a-0e4d-4c61-86dc-3d8e9345df07")
+		)
+		(pin "T"
+			(uuid "dc548fda-2e31-4760-981a-b54815915aaf")
+		)
+		(instances
+			(project "Light_Commander"
+				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
+					(reference "J17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 124.46 105.41 0)
 		(unit 1)
@@ -4308,6 +5501,110 @@
 		)
 	)
 	(symbol
+		(lib_id "Switch:SW_DPDT_x2")
+		(at 193.04 95.25 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ea252d8c-63c0-489c-9b52-170e2d1a86f9")
+		(property "Reference" "SW3"
+			(at 193.04 89.408 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW_DPDT_x2"
+			(at 193.04 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "footprints:CAS-220TA"
+			(at 193.04 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 193.04 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Switch, dual pole double throw, separate symbols"
+			(at 193.04 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Digikey_PN" "CAS220JCT-ND"
+			(at 193.04 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "3b8c16af-c2ea-4416-9c17-74f421248fff")
+		)
+		(pin "4"
+			(uuid "9df09e16-bda1-4a4f-948b-575cb205c73d")
+		)
+		(pin "1"
+			(uuid "28c44110-d6fb-4a11-b68a-d01f9af57f3e")
+		)
+		(pin "2"
+			(uuid "388726e1-29d5-491d-ac64-6e86376c84c9")
+		)
+		(pin "5"
+			(uuid "17af8bc9-3493-47cd-9927-9edc54e8ad56")
+		)
+		(pin "6"
+			(uuid "b09545f6-b433-4217-beab-56eddb6d4e45")
+		)
+		(instances
+			(project "Light_Commander"
+				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
+					(reference "SW3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Audio:AudioJack2_Ground")
 		(at 22.86 124.46 0)
 		(unit 1)
@@ -4392,7 +5689,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 212.09 110.49 0)
+		(at 220.98 49.53 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4403,7 +5700,7 @@
 		(fields_autoplaced yes)
 		(uuid "ef7df1dd-7c47-4070-8fa9-d2a8d2e76020")
 		(property "Reference" "#PWR025"
-			(at 212.09 116.84 0)
+			(at 220.98 55.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4414,7 +5711,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 212.09 115.57 0)
+			(at 220.98 54.61 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4424,7 +5721,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 212.09 110.49 0)
+			(at 220.98 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4435,7 +5732,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 212.09 110.49 0)
+			(at 220.98 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4446,7 +5743,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 212.09 110.49 0)
+			(at 220.98 49.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
