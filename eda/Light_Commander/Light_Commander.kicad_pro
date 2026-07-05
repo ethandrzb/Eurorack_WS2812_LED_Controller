@@ -598,12 +598,36 @@
           "label": "Datasheet",
           "name": "Datasheet",
           "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Drift",
+          "name": "Drift",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Digikey_PN",
+          "name": "Digikey_PN",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Description",
+          "name": "Description",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "#",
+          "name": "${ITEM_NUMBER}",
+          "show": false
         }
       ],
       "filter_string": "",
       "group_symbols": true,
       "include_excluded_from_bom": true,
-      "name": "Default Editing",
+      "name": "",
       "sort_asc": true,
       "sort_field": "Reference"
     },
@@ -648,7 +672,7 @@
         "uuid": "dc725142-0bfd-4f8d-931f-2d32b87c7a54"
       }
     ],
-    "used_designators": "U10-11,D7-10,#PWR101-133,SW3-9,J16-19,R42-56,C32-38,Q7",
+    "used_designators": "U10-11,D7-10,#PWR85,#PWR101-138,SW3-9,J16-20,R42-58,C32-38,Q7,F3-6",
     "variants": []
   },
   "sheets": [
