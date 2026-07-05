@@ -1576,6 +1576,28 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "CV Buffers, Gain, and Offset Scaling"
+		(exclude_from_sim no)
+		(at 103.378 17.272 0)
+		(effects
+			(font
+				(size 1.905 1.905)
+			)
+			(justify left)
+		)
+		(uuid "a1da6d68-896c-45e8-b798-25c762efad5a")
+	)
+	(text "Opamp Power Rails"
+		(exclude_from_sim no)
+		(at 73.152 144.272 0)
+		(effects
+			(font
+				(size 1.905 1.905)
+			)
+			(justify left)
+		)
+		(uuid "c2f3bbcc-15ac-4b91-8e49-c2fe656cc9ed")
+	)
 	(junction
 		(at 243.84 50.8)
 		(diameter 0)

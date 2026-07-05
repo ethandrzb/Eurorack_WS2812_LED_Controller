@@ -2735,6 +2735,50 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "5V Regulator"
+		(exclude_from_sim no)
+		(at 124.46 69.088 0)
+		(effects
+			(font
+				(size 1.905 1.905)
+			)
+			(justify left)
+		)
+		(uuid "5b701743-80c7-4bdf-b675-7d08f1519c9d")
+	)
+	(text "2.5V Reference"
+		(exclude_from_sim no)
+		(at 85.852 117.094 0)
+		(effects
+			(font
+				(size 1.905 1.905)
+			)
+			(justify left)
+		)
+		(uuid "7e8bb7c5-24dd-47e9-81af-61e7b95a3b28")
+	)
+	(text "Eurorack power, reverse polarity protection, and ESD protection"
+		(exclude_from_sim no)
+		(at 28.702 60.706 0)
+		(effects
+			(font
+				(size 1.905 1.905)
+			)
+			(justify left)
+		)
+		(uuid "f5095b83-8741-4476-9c38-fe3265821900")
+	)
+	(text "3.3V Regulator"
+		(exclude_from_sim no)
+		(at 167.64 70.612 0)
+		(effects
+			(font
+				(size 1.905 1.905)
+			)
+			(justify left)
+		)
+		(uuid "fcba1808-8666-4895-9af4-daf05cd8b46b")
+	)
 	(junction
 		(at 104.14 151.13)
 		(diameter 0)
