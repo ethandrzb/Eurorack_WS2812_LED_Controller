@@ -8077,6 +8077,17 @@
 				)
 			)
 		)
+		(property "Digikey_PN" "PEC11R-4220K-S0024-ND"
+			(at 52.07 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "A"
 			(uuid "d6b00e03-03fc-4136-8edd-9935cf9b4b86")
 		)
