@@ -36,7 +36,9 @@
     - Should handle 10 Vpp with no damage
   - Gate inputs
     - Should handle up to 10 Vpp pulse with no damage
-  - MIDI input
-- SWD programming header (either 6-pin or MIPI10)
+    - Dedicated button for Gate 0
+  - MIDI input and thru
+- SWD programming header (6-pin, MIPI10, or STDC14)
+  - STDC14 is same as MIPI10, but includes pins for a serial port
 - USB C connector for DFU + DFU button
-- USART2 output?
+- USART6 for debugging?

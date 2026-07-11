@@ -5075,6 +5075,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+2V5")
+		(at 247.65 21.59 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "058e633e-e727-4da3-9145-dd1187b3037c")
+		(property "Reference" "#PWR0140"
+			(at 247.65 25.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+2V5"
+			(at 247.65 16.51 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 247.65 21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 247.65 21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+2V5\""
+			(at 247.65 21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "721c4891-03d9-42e9-9079-c97a8ce10d3e")
+		)
+		(instances
+			(project "Light_Commander"
+				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
+					(reference "#PWR0140")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:Fuse")
 		(at 236.22 44.45 90)
 		(unit 1)
@@ -6423,10 +6501,10 @@
 			)
 		)
 		(pin "1"
-			(uuid "fe12650c-9448-4ec0-9ee9-5ddaa046100a")
+			(uuid "fe12650c-9448-4ec0-9ee9-5ddaa046100b")
 		)
 		(pin "2"
-			(uuid "9b3af92e-da35-4516-b5d6-9e8a5573ea79")
+			(uuid "9b3af92e-da35-4516-b5d6-9e8a5573ea7a")
 		)
 		(pin "4"
 			(uuid "cc41390d-f2e6-478b-bc7b-aa25f6996592")
@@ -6438,7 +6516,7 @@
 			(uuid "239c1af8-2379-4af5-9ddf-45b9cba0db42")
 		)
 		(pin "3"
-			(uuid "64870b40-1890-47e8-ae33-09eab7ad15f1")
+			(uuid "64870b40-1890-47e8-ae33-09eab7ad15f2")
 		)
 		(instances
 			(project "Light_Commander"
@@ -7900,84 +7978,6 @@
 			(project "Light_Commander"
 				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
 					(reference "J6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+2V5")
-		(at 247.65 21.59 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "950be8b5-b9d8-4bd8-a927-4896eb274942")
-		(property "Reference" "#PWR023"
-			(at 247.65 25.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+2V5"
-			(at 247.65 16.51 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 247.65 21.59 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 247.65 21.59 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+2V5\""
-			(at 247.65 21.59 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "33e3b4a9-219f-441a-9f66-6d27643c9fff")
-		)
-		(instances
-			(project "Light_Commander"
-				(path "/dc725142-0bfd-4f8d-931f-2d32b87c7a54"
-					(reference "#PWR023")
 					(unit 1)
 				)
 			)
@@ -9767,7 +9767,7 @@
 			(uuid "3b8c16af-c2ea-4416-9c17-74f421248fff")
 		)
 		(pin "4"
-			(uuid "9df09e16-bda1-4a4f-948b-575cb205c73d")
+			(uuid "9df09e16-bda1-4a4f-948b-575cb205c73e")
 		)
 		(pin "1"
 			(uuid "28c44110-d6fb-4a11-b68a-d01f9af57f3e")
@@ -9776,10 +9776,10 @@
 			(uuid "388726e1-29d5-491d-ac64-6e86376c84c9")
 		)
 		(pin "5"
-			(uuid "17af8bc9-3493-47cd-9927-9edc54e8ad56")
+			(uuid "17af8bc9-3493-47cd-9927-9edc54e8ad57")
 		)
 		(pin "6"
-			(uuid "b09545f6-b433-4217-beab-56eddb6d4e45")
+			(uuid "b09545f6-b433-4217-beab-56eddb6d4e46")
 		)
 		(instances
 			(project "Light_Commander"

@@ -70,7 +70,48 @@
         }
       },
       "diff_pair_dimensions": [],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "copper_edge_clearance|100500000|96250000|0490ae5c-289d-423c-9985-968f93a3b983|dc05c1b0-54ba-4353-bcc6-887367945a73",
+          ""
+        ],
+        [
+          "copper_edge_clearance|112200000|96250000|f8d2a919-f3c6-4061-a6b4-b4cc769f2335|3cc77711-28d5-49d3-98fb-8338bfb540a9",
+          ""
+        ],
+        [
+          "copper_edge_clearance|113200000|96250000|f8d2a919-f3c6-4061-a6b4-b4cc769f2335|f709f063-d77d-4a9c-ac9a-6e359eb61192",
+          ""
+        ],
+        [
+          "copper_edge_clearance|124900000|96250000|b8ca95b8-f481-4b9f-894f-30daa6afd557|a33e3a71-a9f1-44e3-9f7c-92d9c1411303",
+          ""
+        ],
+        [
+          "copper_edge_clearance|125900000|96250000|b8ca95b8-f481-4b9f-894f-30daa6afd557|6819674b-61c4-4396-b852-904d1b09c17f",
+          ""
+        ],
+        [
+          "copper_edge_clearance|74100000|96250000|11ef5fbb-4947-4b4a-9b22-dee362ada600|dba4c17e-02fc-44bf-a076-9a2ec9225e16",
+          ""
+        ],
+        [
+          "copper_edge_clearance|75100000|96250000|11ef5fbb-4947-4b4a-9b22-dee362ada600|a43dbaa9-96fc-4204-8953-fdea45e0125b",
+          ""
+        ],
+        [
+          "copper_edge_clearance|86800000|96250000|13e05917-7c76-410d-bc2b-2a2c8eaf30a7|14a9cceb-d853-43b6-b69e-b0c5eeddd18d",
+          ""
+        ],
+        [
+          "copper_edge_clearance|87800000|96250000|13e05917-7c76-410d-bc2b-2a2c8eaf30a7|1a20136d-89da-481b-9627-4884eb6027f3",
+          ""
+        ],
+        [
+          "copper_edge_clearance|99500000|96250000|0490ae5c-289d-423c-9985-968f93a3b983|9d8f4ada-e4f1-43db-b363-eefad1d40ce1",
+          ""
+        ]
+      ],
       "meta": {
         "version": 2
       },
@@ -672,7 +713,7 @@
         "uuid": "dc725142-0bfd-4f8d-931f-2d32b87c7a54"
       }
     ],
-    "used_designators": "U10-11,D7-10,#PWR85,#PWR101-138,SW3-9,J16-20,R42-58,C32-38,Q7,F3-6,N1",
+    "used_designators": "",
     "variants": []
   },
   "sheets": [
