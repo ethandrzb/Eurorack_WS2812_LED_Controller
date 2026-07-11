@@ -24631,14 +24631,6 @@
 		(path "/4e590f9f-f503-4208-b540-3350666c8703/369220a6-33ed-4be0-b2b8-ecef92fc4268")
 		(sheetname "/Digital/")
 		(sheetfile "digital.kicad_sch")
-		(units
-			(unit
-				(name "A")
-				(pins "SH" "A1_B12" "B1_A12" "A4_B9" "B4_A9" "A5" "B5" "A7" "B7" "A6"
-					"B6" "A8" "B8"
-				)
-			)
-		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -24889,7 +24881,7 @@
 			(net "GND")
 			(pinfunction "GND_A1_B12")
 			(pintype "passive")
-			(solder_mask_margin 0.102)
+			(solder_mask_margin 0.07)
 			(uuid "d5420210-4289-4331-824e-490c87c05b78")
 		)
 		(pad "A4_B9" smd rect
@@ -24899,7 +24891,7 @@
 			(net "Net-(D5-A)")
 			(pinfunction "VBUS_A4_B9")
 			(pintype "passive")
-			(solder_mask_margin 0.102)
+			(solder_mask_margin 0.07)
 			(uuid "edbf9817-84eb-438c-96f9-f8fc41dbc5c8")
 		)
 		(pad "A5" smd rect
@@ -24909,7 +24901,7 @@
 			(net "Net-(J14-CC1)")
 			(pinfunction "CC1_A5")
 			(pintype "bidirectional")
-			(solder_mask_margin 0.102)
+			(solder_mask_margin 0.07)
 			(uuid "5bd08bb9-a50d-4a20-91c5-ce7ff9bfde89")
 		)
 		(pad "A6" smd rect
@@ -24919,7 +24911,7 @@
 			(net "Net-(J14-D+-PadA6)")
 			(pinfunction "D+_A6")
 			(pintype "bidirectional")
-			(solder_mask_margin 0.102)
+			(solder_mask_margin 0.07)
 			(uuid "097aa3f8-eab8-4cd1-a83f-6f9f99d2c0d5")
 		)
 		(pad "A7" smd rect
@@ -24929,7 +24921,7 @@
 			(net "Net-(J14-D--PadA7)")
 			(pinfunction "D-_A7")
 			(pintype "bidirectional")
-			(solder_mask_margin 0.102)
+			(solder_mask_margin 0.07)
 			(uuid "630f7ec7-1f49-46d0-ba35-18f435871ae6")
 		)
 		(pad "A8" smd rect
@@ -24939,7 +24931,7 @@
 			(net "unconnected-(J14-SBU1-PadA8)")
 			(pinfunction "SBU1_A8")
 			(pintype "bidirectional+no_connect")
-			(solder_mask_margin 0.102)
+			(solder_mask_margin 0.07)
 			(uuid "99a321c1-836f-4fab-8d85-9adcfcfa5f9b")
 		)
 		(pad "B1_A12" smd rect
@@ -24949,7 +24941,7 @@
 			(net "GND")
 			(pinfunction "GND_B1_A12")
 			(pintype "passive")
-			(solder_mask_margin 0.102)
+			(solder_mask_margin 0.07)
 			(uuid "1c7a61e5-eccb-453e-aae6-dc7226595f31")
 		)
 		(pad "B4_A9" smd rect
@@ -24959,7 +24951,7 @@
 			(net "Net-(D5-A)")
 			(pinfunction "VBUS_B4_A9")
 			(pintype "passive")
-			(solder_mask_margin 0.102)
+			(solder_mask_margin 0.07)
 			(uuid "e53956a5-bb35-438b-b028-aa82172e95c2")
 		)
 		(pad "B5" smd rect
@@ -24969,7 +24961,7 @@
 			(net "Net-(J14-CC2)")
 			(pinfunction "CC2_B5")
 			(pintype "bidirectional")
-			(solder_mask_margin 0.102)
+			(solder_mask_margin 0.07)
 			(uuid "f689b41d-2113-4920-a9f5-70a85a456695")
 		)
 		(pad "B6" smd rect
@@ -24979,7 +24971,7 @@
 			(net "Net-(J14-D+-PadA6)")
 			(pinfunction "D+_B6")
 			(pintype "bidirectional")
-			(solder_mask_margin 0.102)
+			(solder_mask_margin 0.07)
 			(uuid "b4351206-0ea0-43ed-a7b0-c0dd35079737")
 		)
 		(pad "B7" smd rect
@@ -24989,7 +24981,7 @@
 			(net "Net-(J14-D--PadA7)")
 			(pinfunction "D-_B7")
 			(pintype "bidirectional")
-			(solder_mask_margin 0.102)
+			(solder_mask_margin 0.07)
 			(uuid "1b654424-9437-4fef-96b7-0eb37027968e")
 		)
 		(pad "B8" smd rect
@@ -24999,7 +24991,7 @@
 			(net "unconnected-(J14-SBU2-PadB8)")
 			(pinfunction "SBU2_B8")
 			(pintype "bidirectional+no_connect")
-			(solder_mask_margin 0.102)
+			(solder_mask_margin 0.07)
 			(uuid "e1c25605-d3df-4937-b1ff-1f7f48b81fe0")
 		)
 		(pad "SH" thru_hole oval

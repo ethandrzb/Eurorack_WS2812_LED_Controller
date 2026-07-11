@@ -110,6 +110,10 @@
         [
           "copper_edge_clearance|99500000|96250000|0490ae5c-289d-423c-9985-968f93a3b983|9d8f4ada-e4f1-43db-b363-eefad1d40ce1",
           ""
+        ],
+        [
+          "hole_clearance|37670000|54080000|d5420210-4289-4331-824e-490c87c05b78|dceadaf6-9816-4dff-974b-ac4e467073f6",
+          ""
         ]
       ],
       "meta": {
