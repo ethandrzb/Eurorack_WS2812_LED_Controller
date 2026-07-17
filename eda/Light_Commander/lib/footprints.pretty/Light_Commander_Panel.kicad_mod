@@ -8,7 +8,7 @@
 		(unlocked yes)
 		(layer "F.SilkS")
 		(hide yes)
-		(uuid "965ad1c0-0a30-4691-9499-c745e4e57426")
+		(uuid "3f32b294-8825-4f46-aa8f-d39b3042bbde")
 		(effects
 			(font
 				(size 1 1)
@@ -20,7 +20,7 @@
 		(at 0 1 0)
 		(unlocked yes)
 		(layer "F.Fab")
-		(uuid "a35f09f0-c633-4b86-ba45-dc5d2ed8d356")
+		(uuid "fc7987bc-a385-487d-83e5-68b6ee9769ea")
 		(effects
 			(font
 				(size 1 1)
@@ -33,7 +33,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "6a4e43e4-2fe9-48aa-a4a7-05b0ae3d6911")
+		(uuid "c1454543-2ca9-40a0-a036-0e2296860898")
 		(effects
 			(font
 				(size 1 1)
@@ -46,7 +46,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "ecb29444-b454-4836-9b29-81fb11e90440")
+		(uuid "665e6889-38cb-47b5-b66b-48aa094283e1")
 		(effects
 			(font
 				(size 1 1)
@@ -64,13 +64,13 @@
 		)
 		(fill no)
 		(layer "User.2")
-		(uuid "6129cdd9-d7e9-499d-9620-2b044a752936")
+		(uuid "7a63388c-7edb-494e-be03-ceb17a369ba2")
 	)
 	(fp_text user "${REFERENCE}"
 		(at 0 2.5 0)
 		(unlocked yes)
 		(layer "F.Fab")
-		(uuid "e3c7039f-2ffb-4580-96fa-1353701e5744")
+		(uuid "cf7c398f-3897-4db5-a2bc-22ae9cba477c")
 		(effects
 			(font
 				(size 1 1)
@@ -81,7 +81,7 @@
 	(embedded_fonts no)
 	(model "${KIPRJMOD}/Light_Commander_panel.step"
 		(offset
-			(xyz 0 0 9.05)
+			(xyz 0 0 10.05)
 		)
 		(scale
 			(xyz 1 1 1)
