@@ -69,9 +69,9 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define B1_Pin GPIO_PIN_13
-#define B1_GPIO_Port GPIOC
-#define B1_EXTI_IRQn EXTI15_10_IRQn
+#define MIDI_BTN_Pin GPIO_PIN_13
+#define MIDI_BTN_GPIO_Port GPIOC
+#define MIDI_BTN_EXTI_IRQn EXTI15_10_IRQn
 #define GATE_IN1_Pin GPIO_PIN_0
 #define GATE_IN1_GPIO_Port GPIOC
 #define GATE_IN1_EXTI_IRQn EXTI0_IRQn
@@ -103,6 +103,16 @@ void Error_Handler(void);
 #define BACK_BTN_EXTI_IRQn EXTI9_5_IRQn
 #define CV_IN3_Pin GPIO_PIN_4
 #define CV_IN3_GPIO_Port GPIOC
+#define MIDI_LED_Pin GPIO_PIN_1
+#define MIDI_LED_GPIO_Port GPIOB
+#define SETTINGS_LED_Pin GPIO_PIN_2
+#define SETTINGS_LED_GPIO_Port GPIOB
+#define FX_CHANGE_LED_Pin GPIO_PIN_12
+#define FX_CHANGE_LED_GPIO_Port GPIOB
+#define MOD_LED_Pin GPIO_PIN_13
+#define MOD_LED_GPIO_Port GPIOB
+#define BACK_LED_Pin GPIO_PIN_14
+#define BACK_LED_GPIO_Port GPIOB
 #define FX_CHANGE_BTN_Pin GPIO_PIN_10
 #define FX_CHANGE_BTN_GPIO_Port GPIOA
 #define FX_CHANGE_BTN_EXTI_IRQn EXTI15_10_IRQn
