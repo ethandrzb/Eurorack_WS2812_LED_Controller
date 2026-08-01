@@ -2287,7 +2287,7 @@
 		)
 		(uuid "7db4e455-5633-4c6a-aa62-c0d819e02ac8")
 	)
-	(text "TEST RESISTOR ON BREADBOARD BEFORE BUYING"
+	(text "TEST RESISTOR ON BREADBOARD BEFORE BUYING\n\n200 ohm at 3.3V looks good to me!"
 		(exclude_from_sim no)
 		(at 186.944 23.876 0)
 		(effects
