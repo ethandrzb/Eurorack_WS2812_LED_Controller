@@ -42,3 +42,12 @@
   - STDC14 is same as MIPI10, but includes pins for a serial port
 - USB C connector for DFU + DFU button
 - USART6 for debugging?
+### PCB Info
+- JLC Stackup Code: JLC06161H-7628
+- Layer Roles
+  1. Signal/Power (+5V)
+  2. Ground
+  3. Signal/Power (+3V3)
+  4. Ground
+  5. Ground
+  6. Signal/Power
