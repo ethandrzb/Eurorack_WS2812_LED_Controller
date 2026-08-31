@@ -1,7 +1,7 @@
 {
   "board": {
     "active_layer": 2,
-    "active_layer_preset": "",
+    "active_layer_preset": "All Copper Layers",
     "auto_track_width": true,
     "hidden_netclasses": [],
     "hidden_nets": [],
@@ -79,6 +79,8 @@
       false,
       false,
       false,
+      false,
+      false,
       false
     ],
     "col_order": [
@@ -93,7 +95,9 @@
       8,
       9,
       10,
-      11
+      11,
+      12,
+      13
     ],
     "col_widths": [
       162,
@@ -104,6 +108,8 @@
       91,
       91,
       71,
+      91,
+      91,
       91,
       91,
       91,
