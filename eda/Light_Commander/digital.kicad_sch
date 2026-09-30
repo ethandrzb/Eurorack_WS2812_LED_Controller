@@ -7880,6 +7880,26 @@
 		)
 		(uuid "ffa4a08b-ea3d-4f01-97c6-da3698876672")
 	)
+	(label "D+"
+		(at 55.88 156.21 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6c5788e1-a8b1-4119-9d9e-4fd359482082")
+	)
+	(label "D-"
+		(at 55.88 153.67 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "dde74641-4afb-4c7d-a9b3-6ef8a64bfa44")
+	)
 	(global_label "DFU_BTN"
 		(shape input)
 		(at 175.26 60.96 180)
